@@ -3,11 +3,11 @@ import 'package:gohealth/src/interfaces/login_page.dart';
 import 'package:gohealth/src/styles/new_theme.dart';
 
 void main() {
-  runApp(MainApp());
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  MainApp({super.key});
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
