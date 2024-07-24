@@ -1,32 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/src/components/header_bar.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
 
   @override
-  _HomepageState createState() => _HomepageState();
+  HomepageState createState() => HomepageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('GoHealth'),
-      ),
+    return const Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('Olá, Gabriel Oliveira'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Implementar ação de logout
-              },
-              child: const Text('Sair'),
-            ),
-          ],
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[HeaderBar()],
         ),
       ),
     );
