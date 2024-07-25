@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/interfaces/login_page.dart';
-import 'package:gohealth/src/styles/new_theme.dart';
+import 'package:gohealth/src/app/home/home_page.dart';
+import 'package:gohealth/src/app/login_page.dart';
 
 void main() {
-  runApp(MainApp());
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  MainApp({super.key});
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'GoHealth',
-      theme: newTheme,
-      home: const LoginPage(),
-    );
+        title: 'GoHealth',
+        theme: ThemeData(
+          primaryColor: const Color.fromARGB(255, 0, 91, 226),
+          fontFamily: 'Rubik',
+        ),
+        home: const Homepage());
   }
 }

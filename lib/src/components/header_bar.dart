@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/src/app/home/side_menu.dart';
 
 class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
   const HeaderBar({super.key});
@@ -7,18 +8,13 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Theme.of(context).primaryColor,
+      toolbarHeight: 85.0,
       title: Row(
         children: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {
-              // Função para abrir menu
-            },
-          ),
           const Expanded(
             child: Text(
-              'Olá, Gabriel Oliveira',
-              style: TextStyle(fontSize: 20),
+              'Hello, Gabriel Oliveira',
+              style: TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),
           IconButton(
@@ -29,6 +25,7 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
+      iconTheme: const IconThemeData(color: Colors.white),
     );
   }
 
