@@ -13,7 +13,7 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
         children: <Widget>[
           const Expanded(
             child: Text(
-              'Olá, Gabriel Oliveira',
+              'Hello, Gabriel Oliveira',
               style: TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),

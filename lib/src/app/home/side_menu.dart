@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -11,51 +10,53 @@ class SideMenu extends StatefulWidget {
 class SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
+    const TextStyle textStyle = TextStyle(color: Colors.white);
+
     return Drawer(
+      backgroundColor: const Color.fromARGB(255, 0, 91, 226),
       child: ListView(
+        padding: EdgeInsets.zero,
         children: <Widget>[
           const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 0, 91, 226),
-            ),
+            decoration: BoxDecoration(color: Colors.white),
             child: Row(
               children: [
                 CircleAvatar(
                   radius: 35,
-                  backgroundColor: Colors.white,
+                  backgroundColor: Color.fromARGB(255, 0, 91, 226),
                 ),
                 SizedBox(width: 35),
                 Text(
-                  'Perfil do Gabriel',
+                  "Gabriel's Profile",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.normal,
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 0, 91, 226),
                   ),
                 ),
               ],
             ),
           ),
           ListTile(
-            title: const Text('Home'),
+            title: const Text('Home', style: textStyle),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: const Text('Profile'),
+            title: const Text('Profile', style: textStyle),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: const Text('Settings'),
+            title: const Text('Settings', style: textStyle),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: const Text('Logout'),
+            title: const Text('Logout', style: textStyle),
             onTap: () {
               Navigator.pop(context);
             },
