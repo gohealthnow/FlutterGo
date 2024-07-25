@@ -8,6 +8,7 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Theme.of(context).primaryColor,
+      toolbarHeight: 85.0,
       title: Row(
         children: <Widget>[
           const Expanded(
@@ -21,12 +22,10 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: () {
               // Função para notificações
             },
-            style: ButtonStyle(
-              foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
-            ),
           ),
         ],
       ),
+      iconTheme: const IconThemeData(color: Colors.white),
     );
   }
 
