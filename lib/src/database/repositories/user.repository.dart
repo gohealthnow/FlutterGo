@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-const String baseUrl = 'https://api.example.com'; // Substitua pela sua URL base
+final String baseUrl = dotenv.env['BASE_URL'] ?? 'https://api.example.com';
 
 class UserRepository {
   static Future<String> authenticate(GlobalKey<FormState> credentialsFormState,
