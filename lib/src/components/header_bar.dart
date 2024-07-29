@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
   const HeaderBar({super.key});
 
+  final String name = '';
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -10,10 +12,10 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: 85.0,
       title: Row(
         children: <Widget>[
-          const Expanded(
+          Expanded(
             child: Text(
-              'Hello, Gabriel Oliveira',
-              style: TextStyle(fontSize: 20, color: Colors.white),
+              'Hello, $name',
+              style: const TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),
           IconButton(
