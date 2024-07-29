@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/app/home/side_menu.dart';
 
 class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
   const HeaderBar({super.key});

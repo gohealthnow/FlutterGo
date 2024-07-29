@@ -1,25 +1,40 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+const String baseUrl = 'https://api.example.com'; // Substitua pela sua URL base
 
 class UserRepository {
-  final String baseUrl =
-      'https://api.example.com'; // Substitua pela sua URL base
+  static Future<String> authenticate(GlobalKey<FormState> credentialsFormState,
+      TextEditingController email, TextEditingController password) async {
+    if (credentialsFormState.currentState!.validate()) {
+      final response = await http.post(
+        Uri.parse('$baseUrl/user/authenticate'),
+        body: {
+          'email': email.text,
+          'password': password.text,
+        },
+      );
 
-  Future<String> authenticate(String username, String password) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/authenticate'),
-      body: {
-        'username': username,
-        'password': password,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      // Autenticação bem-sucedida, retornar o token JWT
-      return response.body;
+      if (response.statusCode == 200) {
+        // Autenticação bem-sucedida, retornar o token JWT
+        return response.body;
+      } else {
+        // Autenticação falhou, lançar uma exceção ou retornar null
+        throw Exception('Falha na autenticação');
+      }
     } else {
-      // Autenticação falhou, lançar uma exceção ou retornar null
-      throw Exception('Falha na autenticação');
+      // Validação falhou, lançar uma exceção ou retornar null
+      throw Exception('Falha na validação');
     }
+  }
+
+  static Future<bool> checkToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('token') != null) {
+      return true;
+    }
+    return false;
   }
 
   Future<User> getUserProfile(String token) async {

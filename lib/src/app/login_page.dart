@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/components/button_field.dart';
-import 'package:gohealth/src/components/custom_input_field.dart';
+import 'package:gohealth/src/app/home/home_page.dart';
+import 'package:gohealth/src/database/repositories/user.repository.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
-
-  @override
-  _LoginPage createState() => _LoginPage();
-}
-
-class _LoginPage extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +129,46 @@ class _LoginPage extends State<LoginPage> {
                 ],
               ),
               const SizedBox(height: 40),
-              const ButtonField(textButton: "Login"),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all<Color>(
+                      const Color.fromARGB(255, 0, 91, 226)), // Cor de fundo
+                  foregroundColor: WidgetStateProperty.all<Color>(
+                      Colors.white), // Cor do texto
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(8.0), // Bordas arredondadas
+                    ),
+                  ),
+                  elevation: WidgetStateProperty.all<double>(5.0), // Sombra
+                  padding: WidgetStateProperty.all<EdgeInsets>(
+                    const EdgeInsets.symmetric(
+                        horizontal: 130.0, vertical: 15.0), // Tamanho do botão
+                  ),
+                ),
+                onPressed: () {
+                  final Future<String> _token = UserRepository.authenticate(
+                    _formKey,
+                    _emailController,
+                    _passwordController,
+                  );
+
+                  if (_token != null || _token != '') {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Homepage()));
+                  }
+                },
+                child: const Text(
+                  'Entrar',
+                  style: TextStyle(
+                    fontSize: 18.0, // Tamanho do texto
+                    fontWeight: FontWeight.w900, // Deixa o texto em negrito
+                  ),
+                ),
+              ),
               const SizedBox(height: 20),
               const SizedBox(height: 20),
               const Divider(),
