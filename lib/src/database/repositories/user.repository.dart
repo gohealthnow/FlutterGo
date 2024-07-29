@@ -1,14 +1,15 @@
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepository {
   final String baseUrl =
       'https://api.example.com'; // Substitua pela sua URL base
 
-  Future<String> authenticate(String username, String password) async {
+  Future<String> authenticate(String email, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/authenticate'),
+      Uri.parse('$baseUrl/user/authenticate'),
       body: {
-        'username': username,
+        'email': email,
         'password': password,
       },
     );
@@ -20,6 +21,14 @@ class UserRepository {
       // Autenticação falhou, lançar uma exceção ou retornar null
       throw Exception('Falha na autenticação');
     }
+  }
+
+  static Future<bool> checkToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('token') != null) {
+      return true;
+    }
+    return false;
   }
 
   Future<User> getUserProfile(String token) async {
