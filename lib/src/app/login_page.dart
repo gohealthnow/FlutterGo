@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/database/repositories/user.repository.dart';
 
 class LoginPage extends StatefulWidget {
@@ -151,11 +152,18 @@ class LoginViewState extends State<LoginPage> {
                   ),
                 ),
                 onPressed: () {
-                  UserRepository.authenticate(
+                  final Future<String> _token = UserRepository.authenticate(
                     _formKey,
                     _emailController,
                     _passwordController,
                   );
+
+                  if (_token != null || _token != '') {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Homepage()));
+                  }
                 },
                 child: const Text(
                   'Entrar',
