@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/components/button_field.dart';
 import 'package:gohealth/src/components/custom_input_field.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -44,7 +43,35 @@ class RegisterPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 40),
-              const ButtonField(textButton: "Entrar"),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all<Color>(
+                      const Color.fromARGB(255, 0, 91, 226)), // Cor de fundo
+                  foregroundColor: WidgetStateProperty.all<Color>(
+                      Colors.white), // Cor do texto
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(8.0), // Bordas arredondadas
+                    ),
+                  ),
+                  elevation: WidgetStateProperty.all<double>(5.0), // Sombra
+                  padding: WidgetStateProperty.all<EdgeInsets>(
+                    const EdgeInsets.symmetric(
+                        horizontal: 130.0, vertical: 15.0), // Tamanho do botão
+                  ),
+                ),
+                onPressed: () {
+                  // Implementar ação de logi
+                },
+                child: const Text(
+                  'Cadastrar',
+                  style: TextStyle(
+                    fontSize: 18.0, // Tamanho do texto
+                    fontWeight: FontWeight.w900, // Deixa o texto em negrito
+                  ),
+                ),
+              ),
               const SizedBox(height: 20),
               const SizedBox(height: 20),
               const Divider(),

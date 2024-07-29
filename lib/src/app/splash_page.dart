@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/login_page.dart';
 import 'package:gohealth/src/database/repositories/user.repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -22,10 +21,8 @@ class _SplashPageState extends State<SplashPage> {
             MaterialPageRoute(
                 builder: (BuildContext context) => const Homepage()));
       } else {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => const LoginPage()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
       }
     });
   }
