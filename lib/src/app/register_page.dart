@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/components/custom_input_field.dart';
+import 'package:gohealth/src/database/repositories/user.repository.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
+  @override
+  RegisterPageState createState() => RegisterPageState();
+}
+
+class RegisterPageState extends State<RegisterPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +27,84 @@ class RegisterPage extends StatelessWidget {
               const SizedBox(height: 50),
               const FlutterLogo(size: 100),
               const SizedBox(height: 50),
-              const CustomInputField(labelText: "Nome", hintText: "Jonh Doe"),
-              const CustomInputField(
-                labelText: 'Email',
-                hintText: 'jonh_doe@gohealth.com',
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Name",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  TextField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: "Enter your Name",
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 0.0,
+                        horizontal: 10.0,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Email",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  TextField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: "Enter your Email",
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 0.0,
+                        horizontal: 10.0,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
               const CustomInputField(
-                labelText: 'Senha',
-                hintText: 'pao_sem_ceu',
+                labelText: 'Password',
+                hintText: 'Enter your password',
                 obscureText: true,
               ),
               Row(
@@ -46,9 +126,11 @@ class RegisterPage extends StatelessWidget {
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all<Color>(
-                      const Color.fromARGB(255, 0, 91, 226)), // Cor de fundo
+                    const Color.fromARGB(255, 0, 91, 226), // Cor de fundo
+                  ),
                   foregroundColor: WidgetStateProperty.all<Color>(
-                      Colors.white), // Cor do texto
+                    Colors.white, // Cor do texto
+                  ),
                   shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius:
@@ -62,10 +144,21 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // Implementar ação de logi
+                  final Future<String> token = UserRepository.authenticate(
+                    _formKey,
+                    _emailController,
+                    _passwordController,
+                  );
+
+                  if (token != '') {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Homepage()),
+                    );
+                  }
                 },
                 child: const Text(
-                  'Cadastrar',
+                  'Login',
                   style: TextStyle(
                     fontSize: 18.0, // Tamanho do texto
                     fontWeight: FontWeight.w900, // Deixa o texto em negrito
@@ -76,11 +169,15 @@ class RegisterPage extends StatelessWidget {
               const SizedBox(height: 20),
               const Divider(),
               const SizedBox(height: 50),
-              TextButton(
-                onPressed: () {
-                  // Implementar ação de cadastro
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RegisterPage()),
+                  );
                 },
-                child: const Text('Você não se cadastrou? Clique aqui'),
+                child: const Text('Log in to your existing account'),
               ),
             ],
           ),

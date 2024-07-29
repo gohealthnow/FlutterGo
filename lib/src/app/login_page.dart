@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
+import 'package:gohealth/src/app/register_page.dart';
 import 'package:gohealth/src/database/repositories/user.repository.dart';
 
 class LoginPage extends StatefulWidget {
@@ -46,11 +47,11 @@ class _LoginPageState extends State<LoginPage> {
                       } else if (!RegExp(
                               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(_emailController.text)) {
-                        return 'Por favor, digite um e-mail correto';
+                        return 'Please, write an email correct';
                       }
                       return null;
                     },
-                    obscureText: true,
+                    obscureText: false,
                     decoration: const InputDecoration(
                       hintText: 'Enter your email',
                       hintStyle: TextStyle(
@@ -172,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 child: const Text(
-                  'Entrar',
+                  'Login',
                   style: TextStyle(
                     fontSize: 18.0, // Tamanho do texto
                     fontWeight: FontWeight.w900, // Deixa o texto em negrito
@@ -183,9 +184,13 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               const Divider(),
               const SizedBox(height: 50),
-              TextButton(
-                onPressed: () {
-                  // Implementar ação de cadastro
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RegisterPage()),
+                  );
                 },
                 child: const Text('Create an account'),
               ),
