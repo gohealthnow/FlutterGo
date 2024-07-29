@@ -2,8 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/database/repositories/user.repository.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +48,7 @@ class LoginPage extends StatelessWidget {
                           .hasMatch(_emailController.text)) {
                         return 'Por favor, digite um e-mail correto';
                       }
+                      return null;
                     },
                     obscureText: true,
                     decoration: const InputDecoration(
@@ -148,13 +158,13 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  final Future<String> _token = UserRepository.authenticate(
+                  final Future<String> token = UserRepository.authenticate(
                     _formKey,
                     _emailController,
                     _passwordController,
                   );
 
-                  if (_token != null || _token != '') {
+                  if (token != '') {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
