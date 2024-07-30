@@ -3,11 +3,11 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final String baseUrl = dotenv.env['BASE_URL'] ?? 'https://api.example.com';
+const String baseUrl = 'http://localhost:3000';
 
 class UserRepository {
-  static Future<String> authenticate(GlobalKey<FormState> credentialsFormState,
-      TextEditingController email, TextEditingController password) async {
+  static Future<bool> authenticate(
+      TextEditingController email, TextEditingController password, TextEditingController nameController) async {
     final response = await http.post(
       Uri.parse('$baseUrl/user/authenticate'),
       body: {
@@ -20,10 +20,25 @@ class UserRepository {
       // Autenticação bem-sucedida, retornar o token JWT
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('token', response.body);
-      return response.body;
+      return true;
     } else {
-      // Autenticação falhou, lançar uma exceção ou retornar null
-      throw Exception('Falha na autenticação');
+      return false;
+    }
+  }
+
+  static Future<bool> registerUser(TextEditingController email,
+      TextEditingController name, TextEditingController password) async {
+    final response =
+        await http.post(Uri.parse('$baseUrl/user/register'), body: {
+      'email': email.text,
+      'name': name.text,
+      'password': password.text,
+    });
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -40,7 +55,7 @@ class UserRepository {
     if (prefs.getString('token') != null) {
       return prefs.getString('token')!;
     }
-    throw Exception('Token not found');
+    return '';
   }
 
   static Future<User> getUserProfile(String token) async {

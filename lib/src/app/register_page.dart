@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/components/custom_input_field.dart';
 import 'package:gohealth/src/database/repositories/user.repository.dart';
+import 'package:gohealth/src/app/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -14,6 +15,7 @@ class RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,20 +29,22 @@ class RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 50),
               const FlutterLogo(size: 100),
               const SizedBox(height: 50),
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
+                  const Text(
                     "Name",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16.0,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  TextField(
-                    obscureText: true,
-                    decoration: InputDecoration(
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    obscureText: false,
+                    keyboardType: TextInputType.text,
+                    controller: _nameController,
+                    decoration: const InputDecoration(
                       hintText: "Enter your Name",
                       hintStyle: TextStyle(
                         color: Colors.grey,
@@ -77,7 +81,7 @@ class RegisterPageState extends State<RegisterPage> {
                   ),
                   SizedBox(height: 10),
                   TextField(
-                    obscureText: true,
+                    obscureText: false,
                     decoration: InputDecoration(
                       hintText: "Enter your Email",
                       hintStyle: TextStyle(
@@ -119,7 +123,7 @@ class RegisterPageState extends State<RegisterPage> {
                       foregroundColor: const Color.fromRGBO(
                           0, 90, 226, 0.85), // Cor do texto
                     ),
-                    child: const Text('Esqueceu a senha?'),
+                    child: const Text('Forget your Password?'),
                   ),
                 ],
               ),
@@ -145,21 +149,21 @@ class RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 onPressed: () {
-                  final Future<String> token = UserRepository.authenticate(
-                    _formKey,
-                    _emailController,
-                    _passwordController,
-                  );
+                  if (_formKey.currentState!.validate()) {
+                    final Future<bool> token = UserRepository.authenticate(
+                        _emailController, _passwordController, _nameController);
 
-                  if (token != '') {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Homepage()),
-                    );
+                    if (token != '' || token != null) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Homepage()),
+                      );
+                    }
                   }
                 },
                 child: const Text(
-                  'Login',
+                  'Register',
                   style: TextStyle(
                     fontSize: 18.0, // Tamanho do texto
                     fontWeight: FontWeight.w900, // Deixa o texto em negrito
@@ -174,8 +178,7 @@ class RegisterPageState extends State<RegisterPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const RegisterPage()),
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
                   );
                 },
                 child: const Text('Log in to your existing account'),
