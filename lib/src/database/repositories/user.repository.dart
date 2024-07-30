@@ -8,25 +8,22 @@ final String baseUrl = dotenv.env['BASE_URL'] ?? 'https://api.example.com';
 class UserRepository {
   static Future<String> authenticate(GlobalKey<FormState> credentialsFormState,
       TextEditingController email, TextEditingController password) async {
-    if (credentialsFormState.currentState!.validate()) {
-      final response = await http.post(
-        Uri.parse('$baseUrl/user/authenticate'),
-        body: {
-          'email': email.text,
-          'password': password.text,
-        },
-      );
+    final response = await http.post(
+      Uri.parse('$baseUrl/user/authenticate'),
+      body: {
+        'email': email.text,
+        'password': password.text,
+      },
+    );
 
-      if (response.statusCode == 200) {
-        // Autenticação bem-sucedida, retornar o token JWT
-        return response.body;
-      } else {
-        // Autenticação falhou, lançar uma exceção ou retornar null
-        throw Exception('Falha na autenticação');
-      }
+    if (response.statusCode == 200) {
+      // Autenticação bem-sucedida, retornar o token JWT
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', response.body);
+      return response.body;
     } else {
-      // Validação falhou, lançar uma exceção ou retornar null
-      throw Exception('Falha na validação');
+      // Autenticação falhou, lançar uma exceção ou retornar null
+      throw Exception('Falha na autenticação');
     }
   }
 
@@ -38,7 +35,15 @@ class UserRepository {
     return false;
   }
 
-  Future<User> getUserProfile(String token) async {
+  static Future<String> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('token') != null) {
+      return prefs.getString('token')!;
+    }
+    throw Exception('Token not found');
+  }
+
+  static Future<User> getUserProfile(String token) async {
     final response = await http.get(
       Uri.parse('$baseUrl/user/profile'),
       headers: {

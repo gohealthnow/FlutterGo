@@ -158,18 +158,28 @@ class _LoginPageState extends State<LoginPage> {
                         horizontal: 130.0, vertical: 15.0), // Tamanho do botão
                   ),
                 ),
-                onPressed: () {
-                  final Future<String> token = UserRepository.authenticate(
-                    _formKey,
-                    _emailController,
-                    _passwordController,
-                  );
-
-                  if (token != '') {
-                    Navigator.pushReplacement(
+                onPressed: () async {
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+                  if (_formKey.currentState!.validate()) {
+                    String? isLogged = await UserRepository.authenticate(
+                        _formKey, _emailController, _passwordController);
+                    if (!currentFocus.hasPrimaryFocus) {
+                      currentFocus.unfocus();
+                    }
+                    if (isLogged != null) {
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Homepage()));
+                            builder: (context) => const Homepage()),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Invalid email or password'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   }
                 },
                 child: const Text(

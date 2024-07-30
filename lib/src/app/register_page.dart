@@ -64,6 +64,7 @@ class RegisterPageState extends State<RegisterPage> {
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
               const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[

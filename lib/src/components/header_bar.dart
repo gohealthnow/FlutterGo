@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/src/database/repositories/user.repository.dart';
 
 class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
-  const HeaderBar({super.key});
+  final name =
+      UserRepository.getUserProfile(UserRepository.getToken() as String);
 
-  final String name = '';
+  HeaderBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,5 +33,5 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => throw UnimplementedError();
 }
