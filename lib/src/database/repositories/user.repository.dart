@@ -1,15 +1,19 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:gohealth/src/database/models/user.models.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-const String baseUrl = 'http://localhost:3000';
+final String baseUrl = dotenv.env['BASE_URL'] ?? 'http://localhost:3000';
+final String jwtSecret = dotenv.env['JWT_SECRET'] ?? 'http://localhost:3000';
 
 class UserRepository {
   static Future<bool> authenticate(
-      TextEditingController email, TextEditingController password, TextEditingController nameController) async {
+      TextEditingController email, TextEditingController password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/user/authenticate'),
+      Uri.parse('$baseUrl/user/login'),
       body: {
         'email': email.text,
         'password': password.text,
@@ -28,18 +32,38 @@ class UserRepository {
 
   static Future<bool> registerUser(TextEditingController email,
       TextEditingController name, TextEditingController password) async {
-    final response =
-        await http.post(Uri.parse('$baseUrl/user/register'), body: {
-      'email': email.text,
-      'name': name.text,
-      'password': password.text,
-    });
+    final response = await http.post(
+      Uri.parse('$baseUrl/user/register'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode({
+        'email': email.text,
+        'name': name.text,
+        'password': password.text,
+      }),
+    );
 
     if (response.statusCode == 200) {
-      return true;
+      final responseBody = jsonDecode(response.body);
+      final token = responseBody['token'];
+
+      try {
+        // Verify a token (SecretKey for HMAC & PublicKey for all the others)
+        final jwt = JWT.verify(token, SecretKey(jwtSecret));
+
+        jwt.payload;
+      } on JWTExpiredException {
+        print('jwt expired');
+      } on JWTException catch (ex) {
+        print(ex.message); // ex: invalid signature
+      }
     } else {
       return false;
     }
+
+    return false; // Add this line to return a value at the end of the method
   }
 
   static Future<bool> checkToken() async {
@@ -52,9 +76,7 @@ class UserRepository {
 
   static Future<String> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('token') != null) {
-      return prefs.getString('token')!;
-    }
+    if (prefs.getString('token') != null) {}
     return '';
   }
 
@@ -73,21 +95,5 @@ class UserRepository {
       // Falha ao obter o perfil do usuário, lançar uma exceção ou retornar null
       throw Exception('Falha ao obter o perfil do usuário');
     }
-  }
-}
-
-class User {
-  final String id;
-  final String name;
-  final String email;
-
-  User({required this.id, required this.name, required this.email});
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-    );
   }
 }

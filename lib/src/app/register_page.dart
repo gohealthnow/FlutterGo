@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/app/home/home_page.dart';
-import 'package:gohealth/src/components/custom_input_field.dart';
+import 'package:gohealth/src/app/splash_page.dart';
 import 'package:gohealth/src/database/repositories/user.repository.dart';
 import 'package:gohealth/src/app/login_page.dart';
 
@@ -20,7 +19,8 @@ class RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Form(
+        key: _formKey,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -33,7 +33,7 @@ class RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
-                    "Name",
+                    "Full name",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16.0,
@@ -43,9 +43,25 @@ class RegisterPageState extends State<RegisterPage> {
                   TextFormField(
                     obscureText: false,
                     keyboardType: TextInputType.text,
+                    validator: (name) {
+                      if (name == null || name.isEmpty) {
+                        return 'Please enter your name complete';
+                      }
+
+                      final List<String> nameParts = name.split(' ');
+                      final String firstName = nameParts[0];
+                      final String lastName =
+                          nameParts.length > 1 ? nameParts[1] : '';
+
+                      if (firstName.length < 3 || lastName.length < 3) {
+                        return 'Please enter your full name';
+                      }
+
+                      return null;
+                    },
                     controller: _nameController,
                     decoration: const InputDecoration(
-                      hintText: "Enter your Name",
+                      hintText: "Enter your full name",
                       hintStyle: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
@@ -69,20 +85,32 @@ class RegisterPageState extends State<RegisterPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
+                  const Text(
                     "Email",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16.0,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  TextField(
+                  const SizedBox(height: 10),
+                  TextFormField(
                     obscureText: false,
-                    decoration: InputDecoration(
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (email) {
+                      if (email == null || email.isEmpty) {
+                        return 'Please enter your email';
+                      } else if (!RegExp(
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          .hasMatch(email)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
+                    controller: _emailController,
+                    decoration: const InputDecoration(
                       hintText: "Enter your Email",
                       hintStyle: TextStyle(
                         color: Colors.grey,
@@ -107,10 +135,52 @@ class RegisterPageState extends State<RegisterPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const CustomInputField(
-                labelText: 'Password',
-                hintText: 'Enter your password',
-                obscureText: true,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const Text(
+                    "Password",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    obscureText: true,
+                    keyboardType: TextInputType.visiblePassword,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      } else if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
+                    controller: _passwordController,
+                    decoration: const InputDecoration(
+                      hintText: "Enter your Password",
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 0.0,
+                        horizontal: 10.0,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -148,16 +218,28 @@ class RegisterPageState extends State<RegisterPage> {
                         horizontal: 130.0, vertical: 15.0), // Tamanho do botão
                   ),
                 ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    final Future<bool> token = UserRepository.authenticate(
+                onPressed: () async {
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+                  if (_formKey.currentState != null &&
+                      _formKey.currentState!.validate()) {
+                    bool isLogged = await UserRepository.registerUser(
                         _emailController, _passwordController, _nameController);
-
-                    if (token != '' || token != null) {
+                    if (!currentFocus.hasPrimaryFocus) {
+                      currentFocus.unfocus();
+                    }
+                    if (isLogged) {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Homepage()),
+                          builder: (BuildContext context) => const SplashPage(),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Error registering user'),
+                          backgroundColor: Colors.redAccent,
+                        ),
                       );
                     }
                   }

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/register_page.dart';
+import 'package:gohealth/src/app/splash_page.dart';
 import 'package:gohealth/src/database/repositories/user.repository.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -18,7 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Form(
+        key: _formKey,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -42,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: (email) {
-                      if (email!.isEmpty) {
+                      if (email == null || email.isEmpty) {
                         return 'Please enter your email';
                       } else if (!RegExp(
                               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -92,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _passwordController,
                     keyboardType: TextInputType.visiblePassword,
                     validator: (password) {
-                      if (password!.isEmpty) {
+                      if (password == null || password.isEmpty) {
                         return 'Please enter your password';
                       } else if (password.length < 6) {
                         return 'Password must be at least 6 characters';
@@ -160,19 +161,22 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 onPressed: () async {
                   FocusScopeNode currentFocus = FocusScope.of(context);
-                  if (_formKey.currentState!.validate()) {
-                    bool isLogged = await UserRepository.registerUser(
+                  if (_formKey.currentState != null &&
+                      _formKey.currentState!.validate()) {
+                    bool isLogged = await UserRepository.authenticate(
                         _emailController, _passwordController);
                     if (!currentFocus.hasPrimaryFocus) {
                       currentFocus.unfocus();
                     }
-                    if (isLogged != null) {
-                      Navigator.push(
+                    if (isLogged) {
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Homepage()),
+                          builder: (BuildContext context) => const SplashPage(),
+                        ),
                       );
                     } else {
+                      _passwordController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Invalid email or password'),
@@ -180,13 +184,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       );
                     }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Invalid email or password'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
                   }
                 },
                 child: const Text(
