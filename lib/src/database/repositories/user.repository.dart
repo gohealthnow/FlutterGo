@@ -50,10 +50,10 @@ class UserRepository {
       final token = responseBody['token'];
 
       try {
-        // Verify a token (SecretKey for HMAC & PublicKey for all the others)
+        SharedPreferences prefs = await SharedPreferences.getInstance();
         final jwt = JWT.verify(token, SecretKey(jwtSecret));
 
-        jwt.payload;
+        prefs.setString('payload', jsonEncode(jwt.payload));
       } on JWTExpiredException {
         print('jwt expired');
       } on JWTException catch (ex) {
