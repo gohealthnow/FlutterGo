@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:gohealth/src/database/models/user.models.dart';
+import 'dart:js_interop';
+import 'package:gohealth/api/models/user_models.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -45,25 +46,16 @@ class UserRepository {
       }),
     );
 
-    if (response.statusCode == 200) {
-      final responseBody = jsonDecode(response.body);
-      final token = responseBody['token'];
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body[0]);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      try {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        final jwt = JWT.verify(token, SecretKey(jwtSecret));
-
-        prefs.setString('payload', jsonEncode(jwt.payload));
-      } on JWTExpiredException {
-        print('jwt expired');
-      } on JWTException catch (ex) {
-        print(ex.message); // ex: invalid signature
-      }
+      prefs.setString('token', responseBody['token']);
+      prefs.setString('User', responseBody['user'].jsify());
+      return true;
     } else {
       return false;
     }
-
-    return false; // Add this line to return a value at the end of the method
   }
 
   static Future<bool> checkToken() async {
@@ -80,7 +72,7 @@ class UserRepository {
     return '';
   }
 
-  static Future<User> getUserProfile(String token) async {
+  static Future<UserModels> getUserProfile(String token) async {
     final response = await http.get(
       Uri.parse('$baseUrl/user/profile'),
       headers: {
@@ -90,7 +82,7 @@ class UserRepository {
 
     if (response.statusCode == 200) {
       // Perfil do usuário obtido com sucesso, retornar um objeto User
-      return User.fromJson(response.body as Map<String, dynamic>);
+      return UserModels.fromJson(response.body as Map<String, dynamic>);
     } else {
       // Falha ao obter o perfil do usuário, lançar uma exceção ou retornar null
       throw Exception('Falha ao obter o perfil do usuário');

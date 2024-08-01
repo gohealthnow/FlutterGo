@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/src/app/splash_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -57,8 +59,13 @@ class SideMenuState extends State<SideMenu> {
           ),
           ListTile(
             title: const Text('Logout', style: textStyle),
-            onTap: () {
-              Navigator.pop(context);
+            onTap: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.remove('token');
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => const SplashPage()));
             },
           ),
         ],

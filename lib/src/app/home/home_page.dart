@@ -12,10 +12,10 @@ class Homepage extends StatefulWidget {
 class HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       appBar: HeaderBar(),
-      drawer: const SideMenu(),
-      body: const Center(
+      drawer: SideMenu(),
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/app/register_page.dart';
 import 'package:gohealth/src/app/splash_page.dart';
-import 'package:gohealth/src/database/repositories/user.repository.dart';
+import 'package:gohealth/api/repositories/user_repository.dart';
+import 'package:gohealth/src/app/login/login_page.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  LoginPageState createState() => LoginPageState();
+  RegisterPageState createState() => RegisterPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,29 +33,34 @@ class LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
-                    'E-mail',
+                    "Full name",
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 16.0,
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (email) {
-                      if (email == null || email.isEmpty) {
-                        return 'Please enter your email';
-                      } else if (!RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                          .hasMatch(_emailController.text)) {
-                        return 'Please, write an email correct';
+                    obscureText: false,
+                    keyboardType: TextInputType.text,
+                    validator: (name) {
+                      if (name == null || name.isEmpty) {
+                        return 'Please enter your name complete';
                       }
+
+                      final List<String> nameParts = name.split(' ');
+                      final String firstName = nameParts[0];
+                      final String lastName =
+                          nameParts.length > 1 ? nameParts[1] : '';
+
+                      if (firstName.length < 3 || lastName.length < 3) {
+                        return 'Please enter your full name';
+                      }
+
                       return null;
                     },
-                    obscureText: false,
+                    controller: _nameController,
                     decoration: const InputDecoration(
-                      hintText: 'Enter your email',
+                      hintText: "Enter your full name",
                       hintStyle: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
@@ -82,27 +88,75 @@ class LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
-                    'Password',
+                    "Email",
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 16.0,
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
-                    controller: _passwordController,
+                    obscureText: false,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (email) {
+                      if (email == null || email.isEmpty) {
+                        return 'Please enter your email';
+                      } else if (!RegExp(
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          .hasMatch(email)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      hintText: "Enter your Email",
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 0.0,
+                        horizontal: 10.0,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const Text(
+                    "Password",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    obscureText: true,
                     keyboardType: TextInputType.visiblePassword,
-                    validator: (password) {
-                      if (password == null || password.isEmpty) {
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
                         return 'Please enter your password';
-                      } else if (password.length < 6) {
+                      } else if (value.length < 5) {
                         return 'Password must be at least 6 characters';
                       }
                       return null;
                     },
-                    obscureText: true,
+                    controller: _passwordController,
                     decoration: const InputDecoration(
-                      hintText: 'Enter your password',
+                      hintText: "Enter your Password",
                       hintStyle: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
@@ -136,7 +190,7 @@ class LoginPageState extends State<LoginPage> {
                       foregroundColor: const Color.fromRGBO(
                           0, 90, 226, 0.85), // Cor do texto
                     ),
-                    child: const Text('Forget your password?'),
+                    child: const Text('Forget your Password?'),
                   ),
                 ],
               ),
@@ -144,9 +198,11 @@ class LoginPageState extends State<LoginPage> {
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all<Color>(
-                      const Color.fromARGB(255, 0, 91, 226)), // Cor de fundo
+                    const Color.fromARGB(255, 0, 91, 226), // Cor de fundo
+                  ),
                   foregroundColor: WidgetStateProperty.all<Color>(
-                      Colors.white), // Cor do texto
+                    Colors.white, // Cor do texto
+                  ),
                   shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius:
@@ -163,9 +219,9 @@ class LoginPageState extends State<LoginPage> {
                   FocusScopeNode currentFocus = FocusScope.of(context);
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
-                    bool isLogged = await UserRepository.authenticate(
-                        _emailController, _passwordController);
-                    if (!currentFocus.hasPrimaryFocus) {
+                    bool isLogged = await UserRepository.registerUser(
+                        _emailController, _nameController, _passwordController);
+                    if (currentFocus.hasPrimaryFocus) {
                       currentFocus.unfocus();
                     }
                     if (isLogged) {
@@ -176,18 +232,17 @@ class LoginPageState extends State<LoginPage> {
                         ),
                       );
                     } else {
-                      _passwordController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Invalid email or password'),
-                          backgroundColor: Colors.red,
+                          content: Text('Error registering user'),
+                          backgroundColor: Colors.redAccent,
                         ),
                       );
                     }
                   }
                 },
                 child: const Text(
-                  'Login',
+                  'Register',
                   style: TextStyle(
                     fontSize: 18.0, // Tamanho do texto
                     fontWeight: FontWeight.w900, // Deixa o texto em negrito
@@ -202,11 +257,10 @@ class LoginPageState extends State<LoginPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const RegisterPage()),
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
                   );
                 },
-                child: const Text('Create an account'),
+                child: const Text('Log in to your existing account'),
               ),
             ],
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
-import 'package:gohealth/src/app/login_page.dart';
-import 'package:gohealth/src/database/repositories/user.repository.dart';
+import 'package:gohealth/src/app/login/login_page.dart';
+import 'package:gohealth/api/repositories/user_repository.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

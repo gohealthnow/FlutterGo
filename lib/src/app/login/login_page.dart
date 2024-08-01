@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/src/app/register/register_page.dart';
 import 'package:gohealth/src/app/splash_page.dart';
-import 'package:gohealth/src/database/repositories/user.repository.dart';
-import 'package:gohealth/src/app/login_page.dart';
+import 'package:gohealth/api/repositories/user_repository.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  RegisterPageState createState() => RegisterPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class RegisterPageState extends State<RegisterPage> {
+class LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,85 +32,28 @@ class RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
-                    "Full name",
+                    'E-mail',
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 16.0,
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
-                    obscureText: false,
-                    keyboardType: TextInputType.text,
-                    validator: (name) {
-                      if (name == null || name.isEmpty) {
-                        return 'Please enter your name complete';
-                      }
-
-                      final List<String> nameParts = name.split(' ');
-                      final String firstName = nameParts[0];
-                      final String lastName =
-                          nameParts.length > 1 ? nameParts[1] : '';
-
-                      if (firstName.length < 3 || lastName.length < 3) {
-                        return 'Please enter your full name';
-                      }
-
-                      return null;
-                    },
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      hintText: "Enter your full name",
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w300,
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 0.0,
-                        horizontal: 10.0,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.grey,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
-                    "Email",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.0,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    obscureText: false,
+                    controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: (email) {
                       if (email == null || email.isEmpty) {
                         return 'Please enter your email';
                       } else if (!RegExp(
                               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                          .hasMatch(email)) {
-                        return 'Please enter a valid email';
+                          .hasMatch(_emailController.text)) {
+                        return 'Please, write an email correct';
                       }
                       return null;
                     },
-                    controller: _emailController,
+                    obscureText: false,
                     decoration: const InputDecoration(
-                      hintText: "Enter your Email",
+                      hintText: 'Enter your email',
                       hintStyle: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
@@ -139,27 +81,26 @@ class RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
-                    "Password",
+                    'Password',
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 16.0,
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
-                    obscureText: true,
+                    controller: _passwordController,
                     keyboardType: TextInputType.visiblePassword,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
+                    validator: (password) {
+                      if (password == null || password.isEmpty) {
                         return 'Please enter your password';
-                      } else if (value.length < 6) {
+                      } else if (password.length < 5) {
                         return 'Password must be at least 6 characters';
                       }
                       return null;
                     },
-                    controller: _passwordController,
+                    obscureText: true,
                     decoration: const InputDecoration(
-                      hintText: "Enter your Password",
+                      hintText: 'Enter your password',
                       hintStyle: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
@@ -193,7 +134,7 @@ class RegisterPageState extends State<RegisterPage> {
                       foregroundColor: const Color.fromRGBO(
                           0, 90, 226, 0.85), // Cor do texto
                     ),
-                    child: const Text('Forget your Password?'),
+                    child: const Text('Forget your password?'),
                   ),
                 ],
               ),
@@ -201,11 +142,9 @@ class RegisterPageState extends State<RegisterPage> {
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all<Color>(
-                    const Color.fromARGB(255, 0, 91, 226), // Cor de fundo
-                  ),
+                      const Color.fromARGB(255, 0, 91, 226)), // Cor de fundo
                   foregroundColor: WidgetStateProperty.all<Color>(
-                    Colors.white, // Cor do texto
-                  ),
+                      Colors.white), // Cor do texto
                   shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius:
@@ -222,8 +161,8 @@ class RegisterPageState extends State<RegisterPage> {
                   FocusScopeNode currentFocus = FocusScope.of(context);
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
-                    bool isLogged = await UserRepository.registerUser(
-                        _emailController, _passwordController, _nameController);
+                    bool isLogged = await UserRepository.authenticate(
+                        _emailController, _passwordController);
                     if (!currentFocus.hasPrimaryFocus) {
                       currentFocus.unfocus();
                     }
@@ -235,17 +174,18 @@ class RegisterPageState extends State<RegisterPage> {
                         ),
                       );
                     } else {
+                      _passwordController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Error registering user'),
-                          backgroundColor: Colors.redAccent,
+                          content: Text('Invalid email or password'),
+                          backgroundColor: Colors.red,
                         ),
                       );
                     }
                   }
                 },
                 child: const Text(
-                  'Register',
+                  'Login',
                   style: TextStyle(
                     fontSize: 18.0, // Tamanho do texto
                     fontWeight: FontWeight.w900, // Deixa o texto em negrito
@@ -260,10 +200,11 @@ class RegisterPageState extends State<RegisterPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const RegisterPage()),
                   );
                 },
-                child: const Text('Log in to your existing account'),
+                child: const Text('Create an account'),
               ),
             ],
           ),

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/database/repositories/user.repository.dart';
 
 class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
-  final name =
-      UserRepository.getUserProfile(UserRepository.getToken() as String);
-
-  HeaderBar({super.key});
+  const HeaderBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +10,10 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: 85.0,
       title: Row(
         children: <Widget>[
-          Expanded(
+          const Expanded(
             child: Text(
-              'Hello, $name',
-              style: const TextStyle(fontSize: 20, color: Colors.white),
+              'Hello, João Augusto',
+              style: TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),
           IconButton(
@@ -33,5 +29,5 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => throw UnimplementedError();
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
