@@ -7,7 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class UserRepository implements IUser {
   final IClientHttp client;
   final String baseUrl = dotenv.env['BASE_URL'] ?? 'http://localhost:3000';
-  final String jwtSecret = dotenv.env['JWT_SECRET'] ?? 'http://localhost:3000';
+  final String jwtSecret = dotenv.env['JWT_SECRET'] ?? 'secret';
 
   UserRepository(this.client);
 
