@@ -3,7 +3,6 @@ import 'package:gohealth/api/services/client_http_service.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/login/login_page.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
-import 'package:http/http.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
