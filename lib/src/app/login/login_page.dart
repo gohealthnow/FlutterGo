@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gohealth/api/layout/user_view_model.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/api/services/client_http_service.dart';
+import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/login/login_controller.dart';
 import 'package:gohealth/src/app/register/register_page.dart';
-import 'package:gohealth/src/app/splash_page.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
-import 'package:http/http.dart';
+import 'package:gohealth/src/app/splash_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -165,7 +165,26 @@ class LoginPageState extends State<LoginPage> {
                         horizontal: 130.0, vertical: 15.0), // Tamanho do botão
                   ),
                 ),
-                onPressed: () async {},
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    await _controller.login(
+                        _emailController, _passwordController);
+                  }
+                  ValueListenableBuilder<UserModels>(
+                    valueListenable: _controller.userModels,
+                    builder: (context, user, child) {
+                      if (user != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Homepage(),
+                          ),
+                        );
+                      }
+                      return const SplashPage(); // Add a return statement here
+                    },
+                  );
+                },
                 child: const Text(
                   'Login',
                   style: TextStyle(
