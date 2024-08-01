@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:js_interop';
+import 'package:gohealth/api/interfaces/user_interface.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 final String baseUrl = dotenv.env['BASE_URL'] ?? 'http://localhost:3000';
 final String jwtSecret = dotenv.env['JWT_SECRET'] ?? 'http://localhost:3000';
 
-class UserRepository {
+class UserRepository extends IUser {
   static Future<bool> authenticate(
       TextEditingController email, TextEditingController password) async {
     final response = await http.post(
