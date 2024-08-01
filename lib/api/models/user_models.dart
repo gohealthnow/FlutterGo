@@ -1,22 +1,22 @@
 class UserModels {
-  int id;
-  String createdAt;
-  String updatedAt;
-  String email;
-  String password;
-  String name;
+  int? id;
+  String? createdAt;
+  String? updatedAt;
+  String? email;
+  String? password;
+  String? name;
   String? avatar;
   String? bio;
-  String role;
+  String? role;
 
   UserModels({
-    required this.id,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.email,
-    required this.password,
-    required this.name,
-    required this.role,
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.email,
+    this.password,
+    this.name,
+    this.role,
     this.avatar,
     this.bio,
   });
