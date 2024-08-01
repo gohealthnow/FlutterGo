@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/app/splash_page.dart';
-import 'package:gohealth/api/repositories/user_repository.dart';
 import 'package:gohealth/src/app/login/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
