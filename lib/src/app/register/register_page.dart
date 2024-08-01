@@ -215,32 +215,7 @@ class RegisterPageState extends State<RegisterPage> {
                         horizontal: 130.0, vertical: 15.0), // Tamanho do botão
                   ),
                 ),
-                onPressed: () async {
-                  FocusScopeNode currentFocus = FocusScope.of(context);
-                  if (_formKey.currentState != null &&
-                      _formKey.currentState!.validate()) {
-                    bool isLogged = await UserRepository.registerUser(
-                        _emailController, _nameController, _passwordController);
-                    if (currentFocus.hasPrimaryFocus) {
-                      currentFocus.unfocus();
-                    }
-                    if (isLogged) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const SplashPage(),
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Error registering user'),
-                          backgroundColor: Colors.redAccent,
-                        ),
-                      );
-                    }
-                  }
-                },
+                onPressed: () async {},
                 child: const Text(
                   'Register',
                   style: TextStyle(
