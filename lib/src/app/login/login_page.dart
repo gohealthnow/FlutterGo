@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/api/layout/user_view_model.dart';
+import 'package:gohealth/api/models/user_models.dart';
+import 'package:gohealth/api/services/client_http_service.dart';
+import 'package:gohealth/src/app/login/login_controller.dart';
 import 'package:gohealth/src/app/register/register_page.dart';
 import 'package:gohealth/src/app/splash_page.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
+import 'package:http/http.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,6 +19,9 @@ class LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  final _controller =
+      LoginController(UserViewModel(UserRepository(ClientHttpService())));
 
   @override
   Widget build(BuildContext context) {
@@ -157,33 +165,7 @@ class LoginPageState extends State<LoginPage> {
                         horizontal: 130.0, vertical: 15.0), // Tamanho do botão
                   ),
                 ),
-                onPressed: () async {
-                  FocusScopeNode currentFocus = FocusScope.of(context);
-                  if (_formKey.currentState != null &&
-                      _formKey.currentState!.validate()) {
-                    bool isLogged = await UserRepository.authenticate(
-                        _emailController, _passwordController);
-                    if (!currentFocus.hasPrimaryFocus) {
-                      currentFocus.unfocus();
-                    }
-                    if (isLogged) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const SplashPage(),
-                        ),
-                      );
-                    } else {
-                      _passwordController.clear();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Invalid email or password'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  }
-                },
+                onPressed: () async {},
                 child: const Text(
                   'Login',
                   style: TextStyle(
