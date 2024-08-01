@@ -9,5 +9,9 @@ class LoginController {
 
   ValueNotifier<UserModels> get userModels => _repository.userModels;
 
-  void authenticate() {}
+  Future<UserModels> login(
+      TextEditingController email, TextEditingController password) async {
+    await _repository.loadUserCredentials(email, password);
+    return userModels.value;
+  }
 }
