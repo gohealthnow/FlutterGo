@@ -13,7 +13,7 @@ class HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: HeaderBar(),
+      appBar: HeaderBarState(),
       drawer: SideMenu(),
       body: Center(
         child: Column(
