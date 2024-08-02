@@ -1,7 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/api/layout/user_view_model.dart';
+import 'package:gohealth/api/repositories/user_repository.dart';
 
-class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
-  const HeaderBar({super.key});
+class HeaderBarState extends StatefulWidget implements PreferredSizeWidget {
+  const HeaderBarState({super.key});
+
+  @override
+  _HeaderBarState createState() => _HeaderBarState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _HeaderBarState extends State<HeaderBarState> {
+  final _repository = UserViewModel(UserRepository());
+
+  @override
+  void initState() {
+    super.initState();
+    _repository.addListener(_listener);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _repository.userModels.toString();
+    });
+  }
+
+  void _listener() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,5 +54,8 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  void dispose() {
+    _repository.removeListener(_listener);
+    super.dispose();
+  }
 }

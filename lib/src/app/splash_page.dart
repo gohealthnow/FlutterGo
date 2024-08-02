@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/api/services/client_http_service.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/login/login_page.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
@@ -15,7 +14,7 @@ class SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    UserRepository userRepository = UserRepository(ClientHttpService());
+    UserRepository userRepository = UserRepository();
     userRepository.checkToken().then((value) {
       if (value) {
         Navigator.pushReplacement(
