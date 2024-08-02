@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
+import 'package:gohealth/api/services/shared_local_storage_service.dart';
 
 class UserViewModel extends ValueNotifier<UserModels> {
   final UserRepository repository;
@@ -25,6 +26,7 @@ class UserViewModel extends ValueNotifier<UserModels> {
   }
 
   logout() async {
+    SharedLocalStorageService().delete('token');
     userModels.value = UserModels();
   }
 }
