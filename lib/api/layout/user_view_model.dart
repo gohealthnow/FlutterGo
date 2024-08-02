@@ -23,4 +23,8 @@ class UserViewModel extends ValueNotifier<UserModels> {
   getProfile() async {
     userModels.value = await repository.get('profile');
   }
+
+  logout() async {
+    userModels.value = UserModels();
+  }
 }

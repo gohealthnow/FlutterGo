@@ -1,4 +1,5 @@
 import 'package:gohealth/api/interfaces/local_storage_interface.dart';
+import 'package:gohealth/api/models/user_models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedLocalStorageService implements ILocalStorage {
@@ -25,8 +26,8 @@ class SharedLocalStorageService implements ILocalStorage {
       shared.setInt(key, value);
     } else if (value is double) {
       shared.setDouble(key, value);
-    } else {
-      shared.setStringList(key, value);
+    } else if (value is UserModels) {
+      shared.setString(key, value.toJson().toString());
     }
   }
 }

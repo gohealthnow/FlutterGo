@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/api/layout/user_view_model.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/login/login_page.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
@@ -14,18 +15,24 @@ class SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    UserRepository userRepository = UserRepository();
-    userRepository.checkToken().then((value) {
-      if (value) {
+    UserViewModel userRepository = UserViewModel(UserRepository());
+    final isLogged = userRepository.repository.checkToken();
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (isLogged) {
         Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => const Homepage()));
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Homepage(),
+          ),
+        );
       } else {
         Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => const LoginPage()));
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginPage(),
+          ),
+        );
       }
     });
   }

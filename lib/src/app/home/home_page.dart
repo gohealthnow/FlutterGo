@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/app/home/side_menu.dart';
+import 'package:gohealth/src/components/side_menu.dart';
 import 'package:gohealth/src/components/header_bar.dart';
 
 class Homepage extends StatefulWidget {

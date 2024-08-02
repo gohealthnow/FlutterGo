@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gohealth/api/interfaces/user_interface.dart';
 import 'package:gohealth/api/models/user_models.dart';
+import 'package:gohealth/api/services/shared_local_storage_service.dart';
 
 class UserRepository implements IUser {
   late final Dio client;
-  final String baseUrl = "http://192.168.18.242:3000";
-  final String jwtSecret = "AGUeQ8bNvmNyV5grj1x8jl4C92UsSWP3o0WypU30MxrlSlHFfD";
+
+  final String? baseUrl = dotenv.env['BASE_URL'];
+  final String? jwtSecret = dotenv.env['JWT_SECRET'];
 
   UserRepository() {
     client = Dio();
@@ -24,13 +26,15 @@ class UserRepository implements IUser {
         }));
 
     UserModels model = UserModels.fromJson(response.data['user']);
+    SharedLocalStorageService().put('token', response.data['token']);
+    SharedLocalStorageService().put('profile', model);
+
     return model;
   }
 
   @override
-  Future<bool> checkToken() {
-    // TODO: implement checkToken
-    throw UnimplementedError();
+  bool checkToken() {
+    return SharedLocalStorageService().get('token') != null;
   }
 
   @override

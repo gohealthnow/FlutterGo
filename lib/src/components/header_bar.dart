@@ -15,12 +15,14 @@ class HeaderBarState extends StatefulWidget implements PreferredSizeWidget {
 class _HeaderBarState extends State<HeaderBarState> {
   final _repository = UserViewModel(UserRepository());
 
+  String? name;
+
   @override
   void initState() {
     super.initState();
     _repository.addListener(_listener);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _repository.userModels.toString();
+      name = _repository.userModels.value.name!;
     });
   }
 
@@ -35,10 +37,10 @@ class _HeaderBarState extends State<HeaderBarState> {
       toolbarHeight: 85.0,
       title: Row(
         children: <Widget>[
-          const Expanded(
+          Expanded(
             child: Text(
-              'Hello, João Augusto',
-              style: TextStyle(fontSize: 20, color: Colors.white),
+              'Hello, $name',
+              style: const TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),
           IconButton(

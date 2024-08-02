@@ -26,7 +26,6 @@ class UserModels {
         createdAt = json['createdAt'],
         updatedAt = json['updatedAt'],
         email = json['email'],
-        password = json['password'],
         name = json['name'],
         avatar = json['avatar'],
         bio = json['bio'],
