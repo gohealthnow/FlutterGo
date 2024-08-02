@@ -1,22 +1,29 @@
-import 'package:gohealth/api/interfaces/client_http_interface.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gohealth/api/interfaces/user_interface.dart';
 import 'package:gohealth/api/models/user_models.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class UserRepository implements IUser {
-  final IClientHttp client;
-  final String baseUrl = dotenv.env['BASE_URL'] ?? 'http://localhost:3000';
-  final String jwtSecret = dotenv.env['JWT_SECRET'] ?? 'secret';
+  late final Dio client;
+  final String baseUrl = "http://192.168.18.242:3000";
+  final String jwtSecret = "AGUeQ8bNvmNyV5grj1x8jl4C92UsSWP3o0WypU30MxrlSlHFfD";
 
-  UserRepository(this.client);
+  UserRepository() {
+    client = Dio();
+  }
 
   @override
-  Future<UserModels> authenticate(
-      TextEditingController email, TextEditingController password) async {
-    var response = await client.get('$baseUrl/user/authenticate');
+  Future<UserModels> authenticate(String email, String password) async {
+    var response = await client.post('$baseUrl/user/login',
+        data: {
+          'email': email,
+          'password': password,
+        },
+        options: Options(headers: {
+          'Authorization': jwtSecret,
+        }));
 
-    UserModels model = UserModels.fromJson(response['0']);
+    UserModels model = UserModels.fromJson(response.data['user']);
     return model;
   }
 
@@ -45,8 +52,7 @@ class UserRepository implements IUser {
   }
 
   @override
-  Future<bool> registerUser(TextEditingController email,
-      TextEditingController name, TextEditingController password) {
+  Future<bool> registerUser(String email, String name, String password) {
     // TODO: implement registerUser
     throw UnimplementedError();
   }

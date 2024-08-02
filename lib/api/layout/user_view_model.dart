@@ -2,18 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
 
-class UserViewModel {
+class UserViewModel extends ValueNotifier<UserModels> {
   final UserRepository repository;
 
-  UserViewModel(this.repository);
+  UserViewModel(this.repository) : super(UserModels());
 
   final userModels = ValueNotifier<UserModels>(UserModels());
 
-  loadUserCredentials(
-      TextEditingController email, TextEditingController password) async {
+  loadUserCredentials(String email, String password) async {
     userModels.value = await repository.authenticate(
-      TextEditingController(),
-      TextEditingController(),
+      email,
+      password,
     );
+  }
+
+  registerUser(String email, String name, String password) async {
+    await repository.registerUser(email, name, password);
+  }
+
+  getProfile() async {
+    userModels.value = await repository.get('profile');
   }
 }
