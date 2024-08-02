@@ -33,8 +33,9 @@ class UserRepository implements IUser {
   }
 
   @override
-  bool checkToken() {
-    return SharedLocalStorageService().get('token') != null;
+  Future<bool> checkToken() async {
+    final value = await SharedLocalStorageService().get('token');
+    return value != null;
   }
 
   @override
