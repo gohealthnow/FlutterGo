@@ -13,10 +13,10 @@ class SplashPage extends StatefulWidget {
 
 class SplashPageState extends State<SplashPage> {
   @override
-  void initState() {
+  Future<void> initState() async {
     super.initState();
     UserViewModel userRepository = UserViewModel(UserRepository());
-    final isLogged = userRepository.repository.checkToken();
+    bool isLogged = await userRepository.repository.checkToken();
 
     Future.delayed(const Duration(seconds: 2), () {
       if (isLogged) {
