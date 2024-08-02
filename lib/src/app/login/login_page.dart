@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/layout/user_view_model.dart';
 import 'package:gohealth/api/models/user_models.dart';
-import 'package:gohealth/api/services/client_http_service.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/login/login_controller.dart';
 import 'package:gohealth/src/app/register/register_page.dart';
@@ -20,8 +19,7 @@ class LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  final _controller =
-      LoginController(UserViewModel(UserRepository(ClientHttpService())));
+  final _controller = LoginController(UserViewModel(UserRepository()));
 
   @override
   Widget build(BuildContext context) {
@@ -168,19 +166,17 @@ class LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     await _controller.login(
-                        _emailController, _passwordController);
+                        _emailController.text, _passwordController.text);
                   }
                   ValueListenableBuilder<UserModels>(
                     valueListenable: _controller.userModels,
                     builder: (context, user, child) {
-                      if (user != null) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Homepage(),
-                          ),
-                        );
-                      }
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Homepage(),
+                        ),
+                      );
                       return const SplashPage(); // Add a return statement here
                     },
                   );
