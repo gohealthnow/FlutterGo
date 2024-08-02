@@ -7,23 +7,26 @@ import 'package:gohealth/api/services/shared_local_storage_service.dart';
 class UserRepository implements IUser {
   late final Dio client;
 
-  final String? baseUrl = dotenv.env['BASE_URL'];
+  final String baseUrl = dotenv.env['BASE_URL'] ?? 'http://192.168.18.242:3000';
   final String? jwtSecret = dotenv.env['JWT_SECRET'];
 
   UserRepository() {
-    client = Dio();
+    client = Dio(BaseOptions(
+      baseUrl: baseUrl,
+      connectTimeout: const Duration(milliseconds: 5000), // 5 seconds
+      receiveTimeout: const Duration(microseconds: 3000), // 3 segundos
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    ));
   }
 
   @override
   Future<UserModels> authenticate(String email, String password) async {
-    var response = await client.post('$baseUrl/user/login',
-        data: {
-          'email': email,
-          'password': password,
-        },
-        options: Options(headers: {
-          'Authorization': jwtSecret,
-        }));
+    var response = await client.post('$baseUrl/user/login', data: {
+      'email': email,
+      'password': password,
+    });
 
     UserModels model = UserModels.fromJson(response.data['user']);
     SharedLocalStorageService().put('token', response.data['token']);

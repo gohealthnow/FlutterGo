@@ -13,8 +13,12 @@ class SplashPage extends StatefulWidget {
 
 class SplashPageState extends State<SplashPage> {
   @override
-  Future<void> initState() async {
+  void initState() {
     super.initState();
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
     UserViewModel userRepository = UserViewModel(UserRepository());
     bool isLogged = await userRepository.repository.checkToken();
 

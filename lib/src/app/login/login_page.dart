@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/layout/user_view_model.dart';
 import 'package:gohealth/api/models/user_models.dart';
+import 'package:gohealth/api/services/shared_local_storage_service.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/login/login_controller.dart';
 import 'package:gohealth/src/app/register/register_page.dart';
@@ -164,22 +165,29 @@ class LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    await _controller.login(
+                  if (_formKey.currentState != null &&
+                      _formKey.currentState!.validate()) {
+                    print("Formulário validado com sucesso");
+                    final user = await _controller.login(
                         _emailController.text, _passwordController.text);
-                  }
-                  ValueListenableBuilder<UserModels>(
-                    valueListenable: _controller.userModels,
-                    builder: (context, user, child) {
-                      Navigator.pushReplacement(
+                    print("Usuário retornado: ${user.id}");
+
+                    if (user.id != null) {
+                      await Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const Homepage(),
                         ),
                       );
-                      return const SplashPage(); // Add a return statement here
-                    },
-                  );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Invalid email or password'),
+                          backgroundColor: Colors.redAccent,
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: const Text(
                   'Login',
