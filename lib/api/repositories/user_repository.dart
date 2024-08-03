@@ -8,13 +8,11 @@ class UserRepository implements IUser {
   late final Dio client;
 
   final String baseUrl = dotenv.env['BASE_URL'] ?? 'http://192.168.18.242:3000';
-  final String? jwtSecret = dotenv.env['JWT_SECRET'];
+  final String jwtSecret = dotenv.env['JWT_SECRET'] ?? 'jwtSecret';
 
   UserRepository() {
     client = Dio(BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(milliseconds: 5000), // 5 seconds
-      receiveTimeout: const Duration(microseconds: 3000), // 3 segundos
       headers: {
         'Content-Type': 'application/json',
       },
@@ -30,7 +28,7 @@ class UserRepository implements IUser {
 
     UserModels model = UserModels.fromJson(response.data['user']);
     SharedLocalStorageService().put('token', response.data['token']);
-    SharedLocalStorageService().put('profile', model);
+    SharedLocalStorageService().putProfile(model);
 
     return model;
   }
