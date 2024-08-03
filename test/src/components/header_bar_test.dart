@@ -8,10 +8,10 @@ void main() async {
 
   test('teste para saber se o nome é exibido no header com o nome do usuário',
       () async {
-    final _repository = UserViewModel(UserRepository());
+    final repository = UserViewModel(UserRepository());
 
-    expect(_repository.userModels.value.name, isNotNull);
-    expect(_repository.userModels.value.email, isNotNull);
-    expect(_repository.userModels.value.id, isNotNull);
+    expect(repository.userModels.value.name, isNotNull);
+    expect(repository.userModels.value.email, isNotNull);
+    expect(repository.userModels.value.id, isNotNull);
   });
 }

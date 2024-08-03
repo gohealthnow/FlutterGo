@@ -1,11 +1,7 @@
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gohealth/api/layout/user_view_model.dart';
-import 'package:gohealth/api/repositories/user_repository.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HeaderBarState extends StatefulWidget implements PreferredSizeWidget {
   const HeaderBarState({super.key});

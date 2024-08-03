@@ -20,9 +20,27 @@ class UserRepository implements IUser {
   }
 
   @override
-  Future<UserModels> authenticate(String email, String password) async {
+  Future<UserModels> login(String email, String password) async {
     var response = await client.post('$baseUrl/user/login', data: {
       'email': email,
+      'password': password,
+    });
+
+    logout();
+
+    UserModels model = UserModels.fromJson(response.data['user']);
+    SharedLocalStorageService().put('token', response.data['token']);
+    SharedLocalStorageService().putProfile(model);
+
+    return model;
+  }
+
+  @override
+  Future<UserModels> registerUser(
+      String email, String name, String password) async {
+    var response = await client.post('$baseUrl/user/register', data: {
+      'email': email,
+      'name': name,
       'password': password,
     });
 
@@ -33,33 +51,18 @@ class UserRepository implements IUser {
     return model;
   }
 
-  @override
-  Future<bool> checkToken() async {
-    final value = await SharedLocalStorageService().get('token');
-    return value != null;
+  Future<bool> checkToken() {
+    return SharedLocalStorageService().get('token').then((value) {
+      if (value != null) {
+        return true;
+      } else {
+        return false;
+      }
+    });
   }
 
-  @override
-  Future delete(String key) {
-    // TODO: implement delete
-    throw UnimplementedError();
-  }
-
-  @override
-  Future get(String key) {
-    // TODO: implement get
-    throw UnimplementedError();
-  }
-
-  @override
-  Future put(String key, value) {
-    // TODO: implement put
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> registerUser(String email, String name, String password) {
-    // TODO: implement registerUser
-    throw UnimplementedError();
+  logout() {
+    SharedLocalStorageService().delete('token');
+    SharedLocalStorageService().clearProfile();
   }
 }

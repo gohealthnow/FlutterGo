@@ -11,7 +11,7 @@ class UserViewModel extends ValueNotifier<UserModels> {
   final userModels = ValueNotifier<UserModels>(UserModels());
 
   loadUserCredentials(String email, String password) async {
-    userModels.value = await repository.authenticate(
+    userModels.value = await repository.login(
       email,
       password,
     );
@@ -19,10 +19,6 @@ class UserViewModel extends ValueNotifier<UserModels> {
 
   registerUser(String email, String name, String password) async {
     await repository.registerUser(email, name, password);
-  }
-
-  getProfile() async {
-    userModels.value = await repository.get('profile');
   }
 
   logout() async {
