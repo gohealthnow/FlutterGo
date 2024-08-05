@@ -13,10 +13,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Setup Flutter SDK
+      # Setup Flutter SDK with a specific version
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable' # ou especifique uma versão específica
+          flutter-version: '3.13.8' # Substitua pela versão desejada
+
+      # Cache dependencies
+      - name: Cache Pub
+        uses: actions/cache@v3
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
 
       # Install dependencies
       - name: Install dependencies
