@@ -8,13 +8,11 @@ class UserRepository implements IUser {
   late final Dio client;
 
   final String baseUrl = dotenv.env['BASE_URL'] ?? 'http://192.168.18.242:3000';
-  final String? jwtSecret = dotenv.env['JWT_SECRET'];
+  final String jwtSecret = dotenv.env['JWT_SECRET'] ?? 'jwtSecret';
 
   UserRepository() {
     client = Dio(BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(milliseconds: 5000), // 5 seconds
-      receiveTimeout: const Duration(microseconds: 3000), // 3 segundos
       headers: {
         'Content-Type': 'application/json',
       },
@@ -22,46 +20,49 @@ class UserRepository implements IUser {
   }
 
   @override
-  Future<UserModels> authenticate(String email, String password) async {
+  Future<UserModels> login(String email, String password) async {
     var response = await client.post('$baseUrl/user/login', data: {
       'email': email,
       'password': password,
     });
 
+    logout();
+
     UserModels model = UserModels.fromJson(response.data['user']);
     SharedLocalStorageService().put('token', response.data['token']);
-    SharedLocalStorageService().put('profile', model);
+    SharedLocalStorageService().putProfile(model);
 
     return model;
   }
 
   @override
-  Future<bool> checkToken() async {
-    final value = await SharedLocalStorageService().get('token');
-    return value != null;
+  Future<UserModels> registerUser(
+      String email, String name, String password) async {
+    var response = await client.post('$baseUrl/user/register', data: {
+      'email': email,
+      'name': name,
+      'password': password,
+    });
+
+    UserModels model = UserModels.fromJson(response.data['user']);
+    SharedLocalStorageService().put('token', response.data['token']);
+    SharedLocalStorageService().putProfile(model);
+
+    return model;
   }
 
-  @override
-  Future delete(String key) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<bool> checkToken() {
+    return SharedLocalStorageService().get('token').then((value) {
+      if (value != null) {
+        return true;
+      } else {
+        return false;
+      }
+    });
   }
 
-  @override
-  Future get(String key) {
-    // TODO: implement get
-    throw UnimplementedError();
-  }
-
-  @override
-  Future put(String key, value) {
-    // TODO: implement put
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> registerUser(String email, String name, String password) {
-    // TODO: implement registerUser
-    throw UnimplementedError();
+  logout() {
+    SharedLocalStorageService().delete('token');
+    SharedLocalStorageService().clearProfile();
   }
 }

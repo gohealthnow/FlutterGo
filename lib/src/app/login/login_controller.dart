@@ -13,4 +13,8 @@ class LoginController {
     await _repository.loadUserCredentials(email, password);
     return userModels.value;
   }
+
+  void deleteToken() async {
+    await _repository.logout();
+  }
 }

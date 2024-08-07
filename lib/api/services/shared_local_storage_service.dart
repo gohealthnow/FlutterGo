@@ -9,6 +9,36 @@ class SharedLocalStorageService implements ILocalStorage {
     return shared.remove(key);
   }
 
+  Future<UserModels?> getProfile() async {
+    var shared = await SharedPreferences.getInstance();
+    var user = UserModels(
+      id: shared.getInt('id'),
+      createdAt: shared.getString('createdAt'),
+      updatedAt: shared.getString('updatedAt'),
+      email: shared.getString('email'),
+      name: shared.getString('name'),
+      avatar: shared.getString('avatar'),
+      bio: shared.getString('bio'),
+      role: shared.getString('role'),
+    );
+
+    return user;
+  }
+
+  Future<UserModels> putProfile(UserModels user) async {
+    var shared = await SharedPreferences.getInstance();
+
+    for (var key in user.toJson().keys) {
+      if (key == 'id') {
+        shared.setInt(key, user.toJson()[key] as int);
+        continue;
+      }
+      shared.setString(key, user.toJson()[key].toString());
+    }
+
+    return user;
+  }
+
   @override
   Future<String?> get(String key) async {
     var shared = await SharedPreferences.getInstance();
@@ -29,5 +59,12 @@ class SharedLocalStorageService implements ILocalStorage {
     } else if (value is UserModels) {
       shared.setString(key, value.toJson().toString());
     }
+  }
+
+  void clearProfile() {
+    var shared = SharedPreferences.getInstance();
+    shared.then((value) {
+      value.clear();
+    });
   }
 }

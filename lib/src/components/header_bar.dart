@@ -1,6 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:gohealth/api/layout/user_view_model.dart';
-import 'package:gohealth/api/repositories/user_repository.dart';
+import 'package:gohealth/api/services/shared_local_storage_service.dart';
 
 class HeaderBarState extends StatefulWidget implements PreferredSizeWidget {
   const HeaderBarState({super.key});
@@ -13,21 +14,19 @@ class HeaderBarState extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HeaderBarState extends State<HeaderBarState> {
-  final _repository = UserViewModel(UserRepository());
+  final _repository = SharedLocalStorageService();
 
   String? name;
 
   @override
   void initState() {
     super.initState();
-    _repository.addListener(_listener);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      name = _repository.userModels.value.name!;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final user = await _repository.getProfile();
+      setState(() {
+        name = user?.name;
+      });
     });
-  }
-
-  void _listener() {
-    setState(() {});
   }
 
   @override
@@ -39,7 +38,7 @@ class _HeaderBarState extends State<HeaderBarState> {
         children: <Widget>[
           Expanded(
             child: Text(
-              'Hello, $name',
+              name != null ? 'Hello, $name' : '${Random().nextInt(100)}',
               style: const TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),
@@ -53,11 +52,5 @@ class _HeaderBarState extends State<HeaderBarState> {
       ),
       iconTheme: const IconThemeData(color: Colors.white),
     );
-  }
-
-  @override
-  void dispose() {
-    _repository.removeListener(_listener);
-    super.dispose();
   }
 }

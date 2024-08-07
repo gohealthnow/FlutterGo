@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/layout/user_view_model.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
+import 'package:gohealth/api/services/shared_local_storage_service.dart';
 import 'package:gohealth/src/app/splash_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -12,21 +12,20 @@ class SideMenu extends StatefulWidget {
 }
 
 class SideMenuState extends State<SideMenu> {
-  final _repository = UserViewModel(UserRepository());
+  final _repository = SharedLocalStorageService();
 
   String? name;
   @override
   void initState() {
     super.initState();
-    _repository.addListener(_listener);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      name = _repository.userModels.value.name!;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final profile = await _repository.getProfile();
+      setState(() {
+        name = profile?.name?.split(" ")[0];
+      });
     });
   }
 
-  void _listener() {
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +45,16 @@ class SideMenuState extends State<SideMenu> {
                   backgroundColor: Color.fromARGB(255, 0, 91, 226),
                 ),
                 const SizedBox(width: 35),
-                Text(
-                  "$name's Profile",
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    color: Color.fromARGB(255, 0, 91, 226),
+                Expanded(
+                  child: Text(
+                    "$name's Profile",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      color: Color.fromARGB(255, 0, 91, 226),
+                    ),
+                    overflow: TextOverflow
+                        .ellipsis, // Adiciona reticências se o texto for muito longo
                   ),
                 ),
               ],
@@ -78,9 +81,11 @@ class SideMenuState extends State<SideMenu> {
           ListTile(
             title: const Text('Logout', style: textStyle),
             onTap: () async {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              _repository.logout();
-              prefs.remove('token');
+              UserRepository prefs =
+                  UserViewModel(UserRepository()).repository;
+
+              await prefs.logout();
+              _repository.clearProfile();
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

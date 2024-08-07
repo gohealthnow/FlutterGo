@@ -1,12 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/layout/user_view_model.dart';
 import 'package:gohealth/api/models/user_models.dart';
-import 'package:gohealth/api/services/shared_local_storage_service.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/login/login_controller.dart';
 import 'package:gohealth/src/app/register/register_page.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
-import 'package:gohealth/src/app/splash_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,6 +20,12 @@ class LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   final _controller = LoginController(UserViewModel(UserRepository()));
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.deleteToken();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,10 +172,22 @@ class LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
-                    print("Formulário validado com sucesso");
-                    final user = await _controller.login(
-                        _emailController.text, _passwordController.text);
-                    print("Usuário retornado: ${user.id}");
+                    if (kDebugMode) {
+                      print("Formulário validado com sucesso");
+                    }
+                    final user = await _controller
+                        .login(_emailController.text, _passwordController.text)
+                        .then((value) => value)
+                        .catchError((error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Error: $error'),
+                          backgroundColor:
+                              const Color.fromARGB(255, 88, 255, 82),
+                        ),
+                      );
+                      return Future<UserModels>.value(UserModels());
+                    });
 
                     if (user.id != null) {
                       await Navigator.pushReplacement(
