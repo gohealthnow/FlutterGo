@@ -55,17 +55,17 @@ class LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                     validator: (email) {
                       if (email == null || email.isEmpty) {
-                        return 'Please enter your email';
+                        return 'Por favor, digite seu e-mail';
                       } else if (!RegExp(
                               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(_emailController.text)) {
-                        return 'Please, write an email correct';
+                        return 'Por favor, escreva um e-mail correto';
                       }
                       return null;
                     },
                     obscureText: false,
                     decoration: const InputDecoration(
-                      hintText: 'Enter your email',
+                      hintText: 'Digite seu email',
                       hintStyle: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
@@ -93,7 +93,7 @@ class LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
-                    'Password',
+                    'Senha',
                     style: TextStyle(
                       fontSize: 16.0,
                     ),
@@ -104,15 +104,15 @@ class LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.visiblePassword,
                     validator: (password) {
                       if (password == null || password.isEmpty) {
-                        return 'Please enter your password';
+                        return 'Por favor digite sua senha';
                       } else if (password.length < 5) {
-                        return 'Password must be at least 6 characters';
+                        return 'A senha deve ter pelo menos 6 caracteres';
                       }
                       return null;
                     },
                     obscureText: true,
                     decoration: const InputDecoration(
-                      hintText: 'Enter your password',
+                      hintText: 'Digite sua senha',
                       hintStyle: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
@@ -146,7 +146,7 @@ class LoginPageState extends State<LoginPage> {
                       foregroundColor: const Color.fromRGBO(
                           0, 90, 226, 0.85), // Cor do texto
                     ),
-                    child: const Text('Forget your password?'),
+                    child: const Text('Esqueceu sua senha?'),
                   ),
                 ],
               ),
@@ -198,7 +198,7 @@ class LoginPageState extends State<LoginPage> {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Invalid email or password'),
+                          content: Text('Usuário ou senha inválidos'),
                           backgroundColor: Colors.redAccent,
                         ),
                       );
@@ -225,7 +225,11 @@ class LoginPageState extends State<LoginPage> {
                         builder: (context) => const RegisterPage()),
                   );
                 },
-                child: const Text('Create an account'),
+                child: const Text('Crie uma conta',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Color.fromRGBO(0, 90, 226, 0.85),
+                    )),
               ),
             ],
           ),

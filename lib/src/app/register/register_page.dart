@@ -39,7 +39,7 @@ class RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
-                    "Full name",
+                    "Nome completo",
                     style: TextStyle(
                       fontSize: 16.0,
                     ),
@@ -50,7 +50,7 @@ class RegisterPageState extends State<RegisterPage> {
                     keyboardType: TextInputType.text,
                     validator: (name) {
                       if (name == null || name.isEmpty) {
-                        return 'Please enter your name complete';
+                        return 'Por favor, digite seu nome completo';
                       }
 
                       final List<String> nameParts = name.split(' ');
@@ -59,14 +59,14 @@ class RegisterPageState extends State<RegisterPage> {
                           nameParts.length > 1 ? nameParts[1] : '';
 
                       if (firstName.length < 3 || lastName.length < 3) {
-                        return 'Please enter your full name';
+                        return 'Por favor, digite seu nome completo';
                       }
 
                       return null;
                     },
                     controller: _nameController,
                     decoration: const InputDecoration(
-                      hintText: "Enter your full name",
+                      hintText: "Digite seu nome completo",
                       hintStyle: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
@@ -105,17 +105,17 @@ class RegisterPageState extends State<RegisterPage> {
                     keyboardType: TextInputType.emailAddress,
                     validator: (email) {
                       if (email == null || email.isEmpty) {
-                        return 'Please enter your email';
+                        return 'Por favor, digite seu e-mail';
                       } else if (!RegExp(
                               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(email)) {
-                        return 'Please enter a valid email';
+                        return 'Por favor, escreva um e-mail correto';
                       }
                       return null;
                     },
                     controller: _emailController,
                     decoration: const InputDecoration(
-                      hintText: "Enter your Email",
+                      hintText: "Digite seu email",
                       hintStyle: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
@@ -143,7 +143,7 @@ class RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
-                    "Password",
+                    "Senha",
                     style: TextStyle(
                       fontSize: 16.0,
                     ),
@@ -154,15 +154,15 @@ class RegisterPageState extends State<RegisterPage> {
                     keyboardType: TextInputType.visiblePassword,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      } else if (value.length < 5) {
-                        return 'Password must be at least 6 characters';
+                        return 'Por favor, digite sua senha';
+                      } else if (value.length < 6) {
+                        return 'Por favor, digite uma senha com no mínimo 6 caracteres';
                       }
                       return null;
                     },
                     controller: _passwordController,
                     decoration: const InputDecoration(
-                      hintText: "Enter your Password",
+                      hintText: "Digite sua senha",
                       hintStyle: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w300,
@@ -182,21 +182,6 @@ class RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      // Implementar ação de recuperação de senha
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: const Color.fromRGBO(
-                          0, 90, 226, 0.85), // Cor do texto
-                    ),
-                    child: const Text('Forget your Password?'),
                   ),
                 ],
               ),
@@ -251,7 +236,7 @@ class RegisterPageState extends State<RegisterPage> {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Invalid email or password'),
+                          content: Text('Usuário ou senha inválidos'),
                           backgroundColor: Colors.redAccent,
                         ),
                       );
@@ -277,7 +262,7 @@ class RegisterPageState extends State<RegisterPage> {
                     MaterialPageRoute(builder: (context) => const LoginPage()),
                   );
                 },
-                child: const Text('Log in to your existing account'),
+                child: const Text('Entre com sua conta'),
               ),
             ],
           ),

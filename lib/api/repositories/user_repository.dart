@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gohealth/api/interfaces/user_interface.dart';
 import 'package:gohealth/api/models/user_models.dart';
