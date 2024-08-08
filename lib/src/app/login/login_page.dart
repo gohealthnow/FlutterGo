@@ -182,8 +182,7 @@ class LoginPageState extends State<LoginPage> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Error: $error'),
-                          backgroundColor:
-                              const Color.fromARGB(255, 88, 255, 82),
+                          backgroundColor: Colors.redAccent,
                         ),
                       );
                       return Future<UserModels>.value(UserModels());

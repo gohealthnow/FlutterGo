@@ -1,5 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gohealth/api/layout/user_view_model.dart';
+import 'package:gohealth/api/models/user_models.dart';
+import 'package:gohealth/api/repositories/user_repository.dart';
+import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/login/login_page.dart';
+import 'package:gohealth/src/app/register/register_controller.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -13,6 +19,8 @@ class RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+
+  final _controller = RegisterController(UserViewModel(UserRepository()));
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +221,43 @@ class RegisterPageState extends State<RegisterPage> {
                         horizontal: 130.0, vertical: 15.0), // Tamanho do botão
                   ),
                 ),
-                onPressed: () async {},
+                onPressed: () async {
+                  if (_formKey.currentState != null &&
+                      _formKey.currentState!.validate()) {
+                    if (kDebugMode) {
+                      print("Formulário validado com sucesso");
+                    }
+                    UserModels user = await _controller
+                        .registerUser(_nameController.text,
+                            _emailController.text, _passwordController.text)
+                        .then((value) => value)
+                        .catchError((error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Error: $error'),
+                          backgroundColor: Colors.redAccent,
+                        ),
+                      );
+                      return Future<UserModels>.value(UserModels());
+                    });
+
+                    if (user.id != null) {
+                      await Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Homepage(),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Invalid email or password'),
+                          backgroundColor: Colors.redAccent,
+                        ),
+                      );
+                    }
+                  }
+                },
                 child: const Text(
                   'Register',
                   style: TextStyle(

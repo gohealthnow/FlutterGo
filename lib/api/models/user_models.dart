@@ -3,7 +3,6 @@ class UserModels {
   String? createdAt;
   String? updatedAt;
   String? email;
-  String? password;
   String? name;
   String? avatar;
   String? bio;
@@ -14,7 +13,6 @@ class UserModels {
     this.createdAt,
     this.updatedAt,
     this.email,
-    this.password,
     this.name,
     this.role,
     this.avatar,
@@ -37,7 +35,6 @@ class UserModels {
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['email'] = email;
-    data['password'] = password;
     data['name'] = name;
     data['avatar'] = avatar;
     data['bio'] = bio;

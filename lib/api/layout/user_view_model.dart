@@ -17,8 +17,10 @@ class UserViewModel extends ValueNotifier<UserModels> {
     );
   }
 
-  registerUser(String email, String name, String password) async {
+  Future<UserModels> registerUser(
+      String email, String name, String password) async {
     await repository.registerUser(email, name, password);
+    return UserModels();
   }
 
   logout() async {

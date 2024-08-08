@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gohealth/api/interfaces/user_interface.dart';
 import 'package:gohealth/api/models/user_models.dart';
@@ -28,6 +29,10 @@ class UserRepository implements IUser {
 
     logout();
 
+    if (response.statusCode == 401) {
+      throw Exception('Usuário ou senha inválidos');
+    }
+
     UserModels model = UserModels.fromJson(response.data['user']);
     SharedLocalStorageService().put('token', response.data['token']);
     SharedLocalStorageService().putProfile(model);
@@ -43,6 +48,12 @@ class UserRepository implements IUser {
       'name': name,
       'password': password,
     });
+
+    logout();
+
+    if (response.statusCode == 409) {
+      throw Exception('Usuário já cadastrado');
+    }
 
     UserModels model = UserModels.fromJson(response.data['user']);
     SharedLocalStorageService().put('token', response.data['token']);
