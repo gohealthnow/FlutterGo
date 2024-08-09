@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/src/app/splash_page.dart';
 
 class FinalSessionPage extends StatefulWidget {
   const FinalSessionPage({super.key});
@@ -8,10 +9,14 @@ class FinalSessionPage extends StatefulWidget {
 }
 
 class FinalSessionState extends State<FinalSessionPage> {
+  final _formKey = GlobalKey<FormState>();
+  final List<bool> _checklistValues = [false, false, false];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Form(
+        key: _formKey,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 40),
           child: Column(
@@ -20,6 +25,14 @@ class FinalSessionState extends State<FinalSessionPage> {
               const FlutterLogo(
                 size: 500,
               ),
+              CheckboxListTile(
+                  value: _checklistValues[0],
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _checklistValues[0] = value!;
+                    });
+                  },
+                  title: const Text('Primeiro item')),
               Row(
                 children: [
                   TextButton(
@@ -59,7 +72,14 @@ class FinalSessionState extends State<FinalSessionPage> {
                     ],
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SplashPage()));
+                      }
+                    },
                     style: TextButton.styleFrom(
                       foregroundColor: const Color.fromRGBO(
                           0, 90, 226, 0.85), // Cor do texto

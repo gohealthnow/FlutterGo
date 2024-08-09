@@ -5,14 +5,11 @@ import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 
 class UserRepository implements IUser {
-  late final Dio client;
-
-  final String baseUrl = dotenv.env['BASE_URL'] ?? 'http://192.168.18.242:3000';
-  final String jwtSecret = dotenv.env['JWT_SECRET'] ?? 'jwtSecret';
+  late Dio client;
 
   UserRepository() {
     client = Dio(BaseOptions(
-      baseUrl: baseUrl,
+      baseUrl: dotenv.env['BASE_URL'] ?? 'http://10.0.0.7:3000',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -21,7 +18,7 @@ class UserRepository implements IUser {
 
   @override
   Future<UserModels> login(String email, String password) async {
-    var response = await client.post('$baseUrl/user/login', data: {
+    var response = await client.post('/user/login', data: {
       'email': email,
       'password': password,
     });
@@ -42,7 +39,7 @@ class UserRepository implements IUser {
   @override
   Future<UserModels> registerUser(
       String email, String name, String password) async {
-    var response = await client.post('$baseUrl/user/register', data: {
+    var response = await client.post('/user/register', data: {
       'email': email,
       'name': name,
       'password': password,

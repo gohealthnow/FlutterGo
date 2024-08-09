@@ -22,7 +22,7 @@ class SplashPageState extends State<SplashPage> {
     UserViewModel userRepository = UserViewModel(UserRepository());
     bool isLogged = await userRepository.repository.checkToken();
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 0), () {
       if (isLogged) {
         Navigator.pushReplacement(
           context,

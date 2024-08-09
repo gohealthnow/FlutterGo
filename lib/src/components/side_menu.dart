@@ -48,7 +48,7 @@ class SideMenuState extends State<SideMenu> {
                 const SizedBox(width: 35),
                 Expanded(
                   child: Text(
-                    "$name's Profile",
+                    "Perfil de $name",
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.normal,

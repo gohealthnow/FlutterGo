@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 
@@ -38,7 +36,7 @@ class _HeaderBarState extends State<HeaderBarState> {
         children: <Widget>[
           Expanded(
             child: Text(
-              name != null ? 'Hello, $name' : 'null',
+              name != null ? 'Olá, $name' : 'null',
               style: const TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),

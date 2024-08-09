@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/app/home/home_page.dart';
+import 'package:gohealth/src/app/login/login_page.dart';
 import 'package:gohealth/src/app/sessions/final_session.dart';
-import 'package:gohealth/src/app/sessions/first_session.dart';
-import 'package:gohealth/src/app/sessions/second_session.dart';
 import 'package:gohealth/src/app/splash_page.dart';
 import 'package:gohealth/src/styles/theme.dart';
 
@@ -55,7 +53,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             brightness: themeChanger,
             primaryColor: const Color(0xFF005BE2),
             fontFamily: 'Rubik'),
-        home: const FinalSessionPage(),
+        home: const SplashPage(),
       ),
     );
   }
