@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 
-class FirstSessionPage extends StatefulWidget {
-  const FirstSessionPage({super.key});
+class FinalSessionPage extends StatefulWidget {
+  const FinalSessionPage({super.key});
 
   @override
-  State<FirstSessionPage> createState() => FirstSessionState();
+  State<FinalSessionPage> createState() => FinalSessionState();
 }
 
-class FirstSessionState extends State<FirstSessionPage> {
+class FinalSessionState extends State<FinalSessionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Form(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(vertical: 40),
           child: Column(
             children: [
+              const Text('Sua primeira consulta'),
               const FlutterLogo(
                 size: 500,
               ),
-              const Text('GoHealth'),
-              const Text(
-                  'Um aplicativo de consulta de medicamentos e orientação de rotas para conseguir em postos públicos'),
               Row(
                 children: [
                   TextButton(
@@ -38,25 +36,25 @@ class FirstSessionState extends State<FirstSessionPage> {
                         width: 15,
                         height: 15,
                         decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        width: 15,
+                        height: 15,
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        width: 15,
+                        height: 15,
+                        decoration: BoxDecoration(
                             color: Theme.of(context).primaryColorLight),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        width: 15,
-                        height: 15,
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        width: 15,
-                        height: 15,
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor),
                       )
                     ],
                   ),

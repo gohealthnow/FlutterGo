@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class FirstSessionPage extends StatefulWidget {
-  const FirstSessionPage({super.key});
+class SecondSessionPage extends StatefulWidget {
+  const SecondSessionPage({super.key});
 
   @override
-  State<FirstSessionPage> createState() => FirstSessionState();
+  State<SecondSessionPage> createState() => SecondSessionState();
 }
 
-class FirstSessionState extends State<FirstSessionPage> {
+class SecondSessionState extends State<SecondSessionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,9 +19,9 @@ class FirstSessionState extends State<FirstSessionPage> {
               const FlutterLogo(
                 size: 500,
               ),
-              const Text('GoHealth'),
+              const Text('Consulta de produto'),
               const Text(
-                  'Um aplicativo de consulta de medicamentos e orientação de rotas para conseguir em postos públicos'),
+                  'Procure agora mesmo por medicamentos para hipertensão, diabetes, asma, ou colesterol alto. Nós ajudamos a encontrar a farmácia mais próxima com disponibilidade do que você precisa!'),
               Row(
                 children: [
                   TextButton(
@@ -38,7 +38,7 @@ class FirstSessionState extends State<FirstSessionPage> {
                         width: 15,
                         height: 15,
                         decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColorLight),
+                            color: Theme.of(context).primaryColor),
                       ),
                       const SizedBox(
                         width: 5,
@@ -47,7 +47,7 @@ class FirstSessionState extends State<FirstSessionPage> {
                         width: 15,
                         height: 15,
                         decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor),
+                            color: Theme.of(context).primaryColorLight),
                       ),
                       const SizedBox(
                         width: 5,
