@@ -38,7 +38,7 @@ class _HeaderBarState extends State<HeaderBarState> {
         children: <Widget>[
           Expanded(
             child: Text(
-              name != null ? 'Hello, $name' : '${Random().nextInt(100)}',
+              name != null ? 'Hello, $name' : 'null',
               style: const TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),

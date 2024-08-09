@@ -26,23 +26,24 @@ class SideMenuState extends State<SideMenu> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    const TextStyle textStyle = TextStyle(color: Colors.white);
+    const TextStyle textStyle =
+        TextStyle(color: Color.fromARGB(255, 0, 91, 226));
 
     return Drawer(
-      backgroundColor: const Color.fromARGB(255, 0, 91, 226),
+      backgroundColor: Colors.white,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: const BoxDecoration(color: Colors.white),
+            decoration:
+                const BoxDecoration(color: Color.fromARGB(255, 0, 91, 226)),
             child: Row(
               children: [
                 const CircleAvatar(
                   radius: 35,
-                  backgroundColor: Color.fromARGB(255, 0, 91, 226),
+                  backgroundColor: Colors.white,
                 ),
                 const SizedBox(width: 35),
                 Expanded(
@@ -51,12 +52,13 @@ class SideMenuState extends State<SideMenu> {
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.normal,
-                      color: Color.fromARGB(255, 0, 91, 226),
+                      color: Colors.white,
                     ),
                     overflow: TextOverflow
                         .ellipsis, // Adiciona reticências se o texto for muito longo
                   ),
                 ),
+                const FlutterLogo(),
               ],
             ),
           ),
@@ -81,8 +83,7 @@ class SideMenuState extends State<SideMenu> {
           ListTile(
             title: const Text('Logout', style: textStyle),
             onTap: () async {
-              UserRepository prefs =
-                  UserViewModel(UserRepository()).repository;
+              UserRepository prefs = UserViewModel(UserRepository()).repository;
 
               await prefs.logout();
               _repository.clearProfile();

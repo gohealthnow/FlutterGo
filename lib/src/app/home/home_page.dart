@@ -18,14 +18,7 @@ class HomepageState extends State<Homepage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: 50),
-            Text('Bem-vindo ao GoHealth!'),
-            SizedBox(height: 50),
-            Text('Aqui você encontra tudo para sua saúde.'),
-            SizedBox(height: 50),
-            Text('Aproveite!'),
-          ],
+          children: <Widget>[],
         ),
       ),
     );
