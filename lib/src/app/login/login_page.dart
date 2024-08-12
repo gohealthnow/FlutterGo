@@ -189,6 +189,10 @@ class LoginPageState extends State<LoginPage> {
                     });
 
                     if (user.id != null) {
+                      if (kDebugMode) {
+                        print(user.toJson());
+                      }
+
                       await Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
