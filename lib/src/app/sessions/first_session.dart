@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/src/app/sessions/second_session.dart';
 
 class FirstSessionPage extends StatefulWidget {
   const FirstSessionPage({super.key});
@@ -61,7 +62,14 @@ class FirstSessionState extends State<FirstSessionPage> {
                     ],
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SecondSessionPage(),
+                        ),
+                      );
+                    },
                     style: TextButton.styleFrom(
                       foregroundColor: const Color.fromRGBO(
                           0, 90, 226, 0.85), // Cor do texto

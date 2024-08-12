@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:gohealth/api/layout/user_view_model.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
-import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/login/login_page.dart';
 import 'package:gohealth/src/app/register/register_controller.dart';
+import 'package:gohealth/src/app/splash_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -230,7 +230,7 @@ class RegisterPageState extends State<RegisterPage> {
                       await Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const Homepage(),
+                          builder: (context) => const SplashPage(),
                         ),
                       );
                     } else {

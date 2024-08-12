@@ -5,6 +5,7 @@ class UserModels {
   String? email;
   String? name;
   String? avatar;
+  Map? product;
   String? bio;
   String? role;
 
@@ -16,6 +17,7 @@ class UserModels {
     this.name,
     this.role,
     this.avatar,
+    this.product,
     this.bio,
   });
 
@@ -26,6 +28,7 @@ class UserModels {
         email = json['email'],
         name = json['name'],
         avatar = json['avatar'],
+        product = json['product'],
         bio = json['bio'],
         role = json['role'];
 
@@ -37,6 +40,7 @@ class UserModels {
     data['email'] = email;
     data['name'] = name;
     data['avatar'] = avatar;
+    data['product'] = product;
     data['bio'] = bio;
     data['role'] = role;
     return data;

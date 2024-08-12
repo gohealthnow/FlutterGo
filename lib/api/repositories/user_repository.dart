@@ -72,4 +72,20 @@ class UserRepository implements IUser {
     SharedLocalStorageService().delete('token');
     SharedLocalStorageService().clearProfile();
   }
+
+  Future<bool> doesUserHaveProduct(int? id) async {
+    if (id == null) {
+      return false;
+    }
+    try {
+      var response = await client.post('/user/$id');
+      return response.data['user']['product'] != null;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return false;
+      } else {
+        rethrow;
+      }
+    }
+  }
 }

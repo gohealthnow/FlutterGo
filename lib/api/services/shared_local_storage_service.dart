@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:gohealth/api/interfaces/local_storage_interface.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,12 +13,18 @@ class SharedLocalStorageService implements ILocalStorage {
 
   Future<UserModels?> getProfile() async {
     var shared = await SharedPreferences.getInstance();
+    var productString = shared.getString('product');
+    var product = productString != null
+        ? jsonDecode(productString) as Map<String, dynamic>?
+        : null;
+
     var user = UserModels(
       id: shared.getInt('id'),
       createdAt: shared.getString('createdAt'),
       updatedAt: shared.getString('updatedAt'),
       email: shared.getString('email'),
       name: shared.getString('name'),
+      product: product,
       avatar: shared.getString('avatar'),
       bio: shared.getString('bio'),
       role: shared.getString('role'),
@@ -32,10 +40,12 @@ class SharedLocalStorageService implements ILocalStorage {
       if (key == 'id') {
         shared.setInt(key, user.toJson()[key] as int);
         continue;
+      } else {
+        var shared = await SharedPreferences.getInstance();
+        shared.setString(key, user.toJson()[key].toString());
       }
-      shared.setString(key, user.toJson()[key].toString());
     }
-
+  
     return user;
   }
 

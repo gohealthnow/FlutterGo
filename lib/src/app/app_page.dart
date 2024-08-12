@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/app/login/login_page.dart';
-import 'package:gohealth/src/app/sessions/final_session.dart';
 import 'package:gohealth/src/app/splash_page.dart';
 import 'package:gohealth/src/styles/theme.dart';
 

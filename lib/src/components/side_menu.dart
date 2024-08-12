@@ -63,19 +63,19 @@ class SideMenuState extends State<SideMenu> {
             ),
           ),
           ListTile(
-            title: const Text('Home', style: textStyle),
+            title: const Text('Tela Inicial', style: textStyle),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: const Text('Profile', style: textStyle),
+            title: const Text('Perfil', style: textStyle),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: const Text('Settings', style: textStyle),
+            title: const Text('Configuração', style: textStyle),
             onTap: () {
               Navigator.pop(context);
             },
