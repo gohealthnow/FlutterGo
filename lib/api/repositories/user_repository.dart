@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gohealth/api/interfaces/user_interface.dart';
 import 'package:gohealth/api/models/user_models.dart';
@@ -79,6 +80,9 @@ class UserRepository implements IUser {
     }
     try {
       var response = await client.post('/user/$id');
+      if (kDebugMode) {
+        print(response.data);
+      }
       return response.data['user']['product'] != null;
     } on DioException catch (e) {
       if (e.response?.statusCode == 404) {
