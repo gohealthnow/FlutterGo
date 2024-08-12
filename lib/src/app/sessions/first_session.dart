@@ -26,7 +26,9 @@ class FirstSessionState extends State<FirstSessionPage> {
               Row(
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     style: TextButton.styleFrom(
                       foregroundColor: const Color.fromRGBO(
                           0, 90, 226, 0.85), // Cor do texto
