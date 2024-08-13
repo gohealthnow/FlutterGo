@@ -10,7 +10,7 @@ class UserRepository implements IUser {
 
   UserRepository() {
     client = Dio(BaseOptions(
-      baseUrl: dotenv.env['BASE_URL'] ?? 'http://10.0.0.7:3000',
+      baseUrl: dotenv.env['BASE_URL'] ?? 'http://10.0.2.2:3000',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -47,10 +47,6 @@ class UserRepository implements IUser {
     });
 
     logout();
-
-    if (response.statusCode == 409) {
-      throw Exception('Usuário já cadastrado');
-    }
 
     UserModels model = UserModels.fromJson(response.data['user']);
     SharedLocalStorageService().put('token', response.data['token']);
