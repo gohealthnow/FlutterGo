@@ -22,9 +22,7 @@ class FinalSessionState extends State<FinalSessionPage> {
           child: Column(
             children: [
               const Text('Sua primeira consulta'),
-              const FlutterLogo(
-                size: 500,
-              ),
+              Image.asset('assets/images/Final_Session.png'),
               CheckboxListTile(
                   value: _checklistValues[0],
                   onChanged: (bool? value) {

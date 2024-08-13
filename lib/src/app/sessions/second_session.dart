@@ -17,9 +17,7 @@ class SecondSessionState extends State<SecondSessionPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              const FlutterLogo(
-                size: 500,
-              ),
+              Image.asset('assets/images/Second_Session.png'),
               const Text('Consulta de produto'),
               const Text(
                   'Procure agora mesmo por medicamentos para hipertensão, diabetes, asma, ou colesterol alto. Nós ajudamos a encontrar a farmácia mais próxima com disponibilidade do que você precisa!'),

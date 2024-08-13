@@ -17,9 +17,7 @@ class FirstSessionState extends State<FirstSessionPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              const FlutterLogo(
-                size: 500,
-              ),
+              Image.asset('assets/images/First_Session.png'),
               const Text('GoHealth'),
               const Text(
                   'Um aplicativo de consulta de medicamentos e orientação de rotas para conseguir em postos públicos'),
