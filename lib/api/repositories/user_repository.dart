@@ -75,11 +75,13 @@ class UserRepository implements IUser {
       return false;
     }
     try {
-      var response = await client.post('/user/$id');
+      var response = await client.get('/user/$id');
       if (kDebugMode) {
         print(response.data);
       }
-      return response.data['user']['product'] != null;
+      final user = response.data['user'];
+      final products = user['products'];
+      return products == null || products.isEmpty;
     } on DioException catch (e) {
       if (e.response?.statusCode == 404) {
         return false;
