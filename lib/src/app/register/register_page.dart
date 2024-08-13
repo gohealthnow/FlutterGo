@@ -212,10 +212,14 @@ class RegisterPageState extends State<RegisterPage> {
                     if (kDebugMode) {
                       print("Formulário validado com sucesso");
                     }
-                    UserModels user = await _controller
-                        .registerUser(_nameController.text,
-                            _emailController.text, _passwordController.text)
-                        .then((value) => value)
+                    try {
+                      final user = await _controller
+                          .registerUser(
+                            _emailController.text,
+                            _nameController.text,
+                            _passwordController.text,
+                          )
+                          .then((value) => value)
                         .catchError((error) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -225,18 +229,30 @@ class RegisterPageState extends State<RegisterPage> {
                       );
                       return Future<UserModels>.value(UserModels());
                     });
-
-                    if (user.id != null) {
-                      await Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SplashPage(),
-                        ),
-                      );
-                    } else {
+                
+                      if (user.id != null) {
+                        if (kDebugMode) {
+                          print(user.toJson());
+                        }
+                
+                        await Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SplashPage(),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Usuário ou senha inválidos'),
+                            backgroundColor: Colors.redAccent,
+                          ),
+                        );
+                      }
+                    } catch (error) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Usuário ou senha inválidos'),
+                        SnackBar(
+                          content: Text('Error: $error'),
                           backgroundColor: Colors.redAccent,
                         ),
                       );
