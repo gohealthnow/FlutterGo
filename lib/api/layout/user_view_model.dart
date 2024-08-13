@@ -21,10 +21,9 @@ class UserViewModel extends ValueNotifier<UserModels> {
     return await repository.doesUserHaveProduct(id);
   }
 
-  Future<UserModels> registerUser(
+  registerUser(
       String email, String name, String password) async {
-    await repository.registerUser(email, name, password);
-    return UserModels();
+    userModels.value = await repository.registerUser(email, name, password);
   }
 
   logout() async {
