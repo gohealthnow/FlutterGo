@@ -26,7 +26,7 @@ class ProductRepository implements IProduct {
 
   @override
   Future<ProductModels> getbyName(String name) async {
-    var response = await client.get('/product/$name');
+    var response = await client.post('/product/name/$name');
 
     ProductModels model = ProductModels.fromJson(response.data);
 
