@@ -26,10 +26,6 @@ class UserRepository implements IUser {
 
     logout();
 
-    if (response.statusCode == 401) {
-      throw Exception('Usuário ou senha inválidos');
-    }
-
     UserModels model = UserModels.fromJson(response.data['user']);
     SharedLocalStorageService().put('token', response.data['token']);
     SharedLocalStorageService().putProfile(model);
