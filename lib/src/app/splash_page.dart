@@ -27,7 +27,9 @@ class SplashPageState extends State<SplashPage> {
     UserModels? profile = await SharedLocalStorageService().getProfile();
     int? id = profile?.id;
 
-    bool isLogged = await userRepository.repository.checkToken();
+    bool isLogged = await userRepository.repository
+        .checkToken()
+        .timeout(const Duration(seconds: 5), onTimeout: () => false);
 
     bool isFirstSession =
         await userRepository.repository.doesUserHaveProduct(id);

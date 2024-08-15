@@ -179,12 +179,6 @@ class LoginPageState extends State<LoginPage> {
                         .login(_emailController.text, _passwordController.text)
                         .then((value) => value)
                         .catchError((error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Error: $error'),
-                          backgroundColor: Colors.redAccent,
-                        ),
-                      );
                       return Future<UserModels>.value(UserModels());
                     });
 
@@ -206,6 +200,7 @@ class LoginPageState extends State<LoginPage> {
                           backgroundColor: Colors.redAccent,
                         ),
                       );
+                      _passwordController.clear();
                     }
                   }
                 },
