@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:gohealth/api/interfaces/prodcut_interface.dart';
+import 'package:gohealth/api/interfaces/product_interface.dart';
 import 'package:gohealth/api/models/product_models.dart';
 
 class ProductRepository implements IProduct {
@@ -34,11 +34,18 @@ class ProductRepository implements IProduct {
   }
 
   @override
-  Future<ProductModels> getAll() async {
+  Future<List<ProductModels>> getAll() async {
     var response = await client.get('/product');
 
-    ProductModels model = ProductModels.fromJson(response.data);
+    List<ProductModels> model = [];
 
+    if (response.data['products'] is List) {
+      for (var item in response.data['products']) {
+        model.add(ProductModels.fromJson(item));
+      }
     return model;
+    } else {
+      throw Exception('Failed to load products');
+    }
   }
 }

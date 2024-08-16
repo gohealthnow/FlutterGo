@@ -1,23 +1,4 @@
 class ProductModels {
-  Products? products;
-
-  ProductModels({this.products});
-
-  ProductModels.fromJson(Map<String, dynamic> json) {
-    products =
-        json['products'] != null ? Products.fromJson(json['products']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (products != null) {
-      data['products'] = products!.toJson();
-    }
-    return data;
-  }
-}
-
-class Products {
   int? id;
   String? name;
   String? description;
@@ -30,7 +11,7 @@ class Products {
   String? createdAt;
   String? updatedAt;
 
-  Products(
+  ProductModels(
       {this.id,
       this.name,
       this.description,
@@ -43,7 +24,7 @@ class Products {
       this.createdAt,
       this.updatedAt});
 
-  Products.fromJson(Map<String, dynamic> json) {
+  ProductModels.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     description = json['description'];

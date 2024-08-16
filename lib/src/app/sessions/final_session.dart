@@ -1,4 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gohealth/api/layout/product_view_model.dart';
+import 'package:gohealth/api/models/product_models.dart';
+import 'package:gohealth/api/repositories/product_repository.dart';
+import 'package:gohealth/src/app/home/home_page.dart';
+import 'package:gohealth/src/app/sessions/second_session.dart';
 
 class FinalSessionPage extends StatefulWidget {
   const FinalSessionPage({super.key});
@@ -8,15 +14,39 @@ class FinalSessionPage extends StatefulWidget {
 }
 
 class FinalSessionState extends State<FinalSessionPage> {
-  final _formKey = GlobalKey<FormState>();
+  final _repository = ProductRepository();
+
+  final _viewModel = ProductsViewModel(ProductRepository());
+
+  var products = <ProductModels>[];
+
+  var itemSelected = <ProductModels>[];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _viewModel.loadProducts().then((products) {
+        setState(() {
+          this.products = products;
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomSheet: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SecondSessionPage()));
+            },
             style: TextButton.styleFrom(
               foregroundColor:
                   const Color.fromRGBO(0, 90, 226, 0.85), // Cor do texto
@@ -38,8 +68,9 @@ class FinalSessionState extends State<FinalSessionPage> {
               Container(
                 width: 15,
                 height: 15,
-                decoration:
-                    BoxDecoration(color: Theme.of(context).primaryColorLight),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(50)),
               ),
               const SizedBox(
                 width: 5,
@@ -48,7 +79,7 @@ class FinalSessionState extends State<FinalSessionPage> {
                 width: 15,
                 height: 15,
                 decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).primaryColorLight,
                     borderRadius: BorderRadius.circular(50)),
               )
             ],
@@ -69,14 +100,39 @@ class FinalSessionState extends State<FinalSessionPage> {
         ],
       ),
       body: Form(
-        key: _formKey,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 40),
           child: Column(
             children: [
               const Text('Sua primeira consulta'),
               Image.asset('assets/images/Final_Session.png'),
-              
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  return CheckboxListTile(
+                    title: Text(products[index].name!),
+                    value: itemSelected.contains(products[index]),
+                    onChanged: (value) {
+                      setState(() {
+                        if (value!) {
+                          itemSelected.add(products[index]);
+                        } else {
+                          itemSelected.remove(products[index]);
+                        }
+                      });
+                    },
+                  );
+                },
+              ),
+              ElevatedButton(
+                  onPressed: () => {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Homepage()))
+                      },
+                  child: const Text('Finalizar sessão')),
             ],
           ),
         ),

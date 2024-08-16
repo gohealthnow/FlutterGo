@@ -9,7 +9,7 @@ abstract class IProduct {
     throw UnimplementedError();
   }
 
-  Future<ProductModels> getAll() async {
+  Future<List<ProductModels>> getAll() async {
     throw UnimplementedError();
   }
 }

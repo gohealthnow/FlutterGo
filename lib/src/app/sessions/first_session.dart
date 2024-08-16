@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/app/sessions/final_session.dart';
+import 'package:gohealth/src/app/sessions/second_session.dart';
 
 class FirstSessionPage extends StatefulWidget {
   const FirstSessionPage({super.key});
@@ -13,6 +13,7 @@ class FirstSessionState extends State<FirstSessionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomSheet: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             children: [
@@ -20,7 +21,7 @@ class FirstSessionState extends State<FirstSessionPage> {
                 width: 15,
                 height: 15,
                 decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).primaryColorLight,
                     borderRadius: BorderRadius.circular(50)),
               ),
               const SizedBox(
@@ -50,7 +51,7 @@ class FirstSessionState extends State<FirstSessionPage> {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const FinalSessionPage()));
+                      builder: (context) => const SecondSessionPage()));
             },
             style: TextButton.styleFrom(
               foregroundColor:

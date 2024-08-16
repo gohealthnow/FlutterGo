@@ -14,6 +14,7 @@ class SecondSessionState extends State<SecondSessionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomSheet: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextButton(
             onPressed: () {
@@ -44,7 +45,9 @@ class SecondSessionState extends State<SecondSessionPage> {
                 width: 15,
                 height: 15,
                 decoration:
-                    BoxDecoration(color: Theme.of(context).primaryColorLight),
+                    BoxDecoration(
+                    color: Theme.of(context).primaryColorLight,
+                    borderRadius: BorderRadius.circular(50)),
               ),
               const SizedBox(
                 width: 5,
