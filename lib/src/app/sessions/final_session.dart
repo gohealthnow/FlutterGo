@@ -1,8 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/layout/product_view_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/repositories/product_repository.dart';
+import 'package:gohealth/api/repositories/user_repository.dart';
+import 'package:gohealth/api/services/shared_local_storage_service.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/sessions/second_session.dart';
 
@@ -16,6 +17,10 @@ class FinalSessionPage extends StatefulWidget {
 class FinalSessionState extends State<FinalSessionPage> {
   final _repository = ProductRepository();
 
+  final _repositoryUser = SharedLocalStorageService();
+
+  int? _id;
+
   final _viewModel = ProductsViewModel(ProductRepository());
 
   var products = <ProductModels>[];
@@ -25,9 +30,11 @@ class FinalSessionState extends State<FinalSessionPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final user = await _repositoryUser.getProfile();
       _viewModel.loadProducts().then((products) {
         setState(() {
+          _id = user?.id;
           this.products = products;
         });
       });
@@ -127,6 +134,8 @@ class FinalSessionState extends State<FinalSessionPage> {
               ),
               ElevatedButton(
                   onPressed: () => {
+                        for (var item in itemSelected)
+                          {_viewModel.addProductInUser(item, _id!)},
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gohealth/api/interfaces/user_interface.dart';
+import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 
@@ -85,5 +86,10 @@ class UserRepository implements IUser {
         rethrow;
       }
     }
+  }
+
+  void linkProductinUser(ProductModels product, int user) async {
+    await client
+        .post('/user/product', data: {'prodid': product.id, 'id': user});
   }
 }
