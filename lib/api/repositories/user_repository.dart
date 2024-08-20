@@ -77,7 +77,7 @@ class UserRepository implements IUser {
         print(response.data);
       }
       final user = response.data['user'];
-      final products = user['products'];
+      final products = user['Product'];
       return products == null || products.isEmpty;
     } on DioException catch (e) {
       if (e.response?.statusCode == 404) {
