@@ -1,26 +1,21 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gohealth/api/interfaces/user_interface.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/models/user_models.dart';
+import 'package:gohealth/api/services/http_client.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 
 class UserRepository implements IUser {
-  late Dio client;
+  late HttpClient userNetworkClient;
 
   UserRepository() {
-    client = Dio(BaseOptions(
-      baseUrl: dotenv.env['BASE_URL'] ?? 'http://10.0.2.2:3000',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    ));
+    userNetworkClient = HttpClient();
   }
 
   @override
   Future<UserModels> login(String email, String password) async {
-    var response = await client.post('/user/login', data: {
+    var response = await userNetworkClient.client.post('/user/login', data: {
       'email': email,
       'password': password,
     });
@@ -37,7 +32,7 @@ class UserRepository implements IUser {
   @override
   Future<UserModels> registerUser(
       String email, String name, String password) async {
-    var response = await client.post('/user/register', data: {
+    var response = await userNetworkClient.client.post('/user/register', data: {
       'email': email,
       'name': name,
       'password': password,
@@ -72,7 +67,7 @@ class UserRepository implements IUser {
       return false;
     }
     try {
-      var response = await client.get('/user/$id');
+      var response = await userNetworkClient.client.get('/user/$id');
       if (kDebugMode) {
         print(response.data);
       }
@@ -89,7 +84,7 @@ class UserRepository implements IUser {
   }
 
   void linkProductinUser(ProductModels product, int user) async {
-    await client
+    await userNetworkClient.client
         .post('/user/product', data: {'prodid': product.id, 'id': user});
   }
 }

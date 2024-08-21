@@ -1,23 +1,18 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gohealth/api/interfaces/product_interface.dart';
 import 'package:gohealth/api/models/product_models.dart';
+import 'package:gohealth/api/services/http_client.dart';
 
 class ProductRepository implements IProduct {
-  late Dio client;
+
+  late HttpClient repositoryHttpClient;
 
   ProductRepository() {
-    client = Dio(BaseOptions(
-      baseUrl: dotenv.env['BASE_URL'] ?? 'http://10.0.2.2:3000',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    ));
+    repositoryHttpClient = HttpClient();
   }
 
   @override
   Future<ProductModels> getbyId(int id) async {
-    var response = await client.get('/product/$id');
+    var response = await repositoryHttpClient.client.get('/product/$id');
 
     ProductModels model = ProductModels.fromJson(response.data);
 
@@ -26,7 +21,8 @@ class ProductRepository implements IProduct {
 
   @override
   Future<ProductModels> getbyName(String name) async {
-    var response = await client.post('/product/name/$name');
+    var response =
+        await repositoryHttpClient.client.post('/product/name/$name');
 
     ProductModels model = ProductModels.fromJson(response.data);
 
@@ -35,7 +31,7 @@ class ProductRepository implements IProduct {
 
   @override
   Future<List<ProductModels>> getAll() async {
-    var response = await client.get('/product');
+    var response = await repositoryHttpClient.client.get('/product');
 
     List<ProductModels> model = [];
 
