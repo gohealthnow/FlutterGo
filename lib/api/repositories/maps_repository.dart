@@ -1,16 +1,52 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:gohealth/api/services/http_client.dart';
+import 'package:gohealth/src/app/maps/maps_page.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
-class MapsRepository {
+class MapsRepository extends State<MapScreen> {
   late HttpClient client;
+
+  LocationData? currentLocation;
+  List<LatLng> routePoints = [];
+  List<Marker> markers = [];
+  final String orsApiKey =
+      '5b3ce3597851110001cf62482a3bbccce840449baea616641f870310';
+
+  final MapController mapController = MapController();
 
   MapsRepository() {
     client = HttpClient();
+  }
+
+  Future<void> getCurrentLocation() async {
+    var location = Location();
+
+    try {
+      var userLocation = await location.getLocation();
+      setState(() {
+        currentLocation = userLocation;
+        markers.add(
+          Marker(
+            width: 80.0,
+            height: 80.0,
+            point: LatLng(userLocation.latitude!, userLocation.longitude!),
+            child:
+                const Icon(Icons.my_location, color: Colors.blue, size: 40.0),
+          ),
+        );
+      });
+    } on Exception {
+      currentLocation = null;
+    }
+
+    location.onLocationChanged.listen((LocationData newLocation) {
+      setState(() {
+        currentLocation = newLocation;
+      });
+    });
   }
 
   Future<void> getRoute(LatLng destination, LocationData? currentLocation,
@@ -44,24 +80,22 @@ class MapsRepository {
     }
   }
 
-  Future<void> _getCurrentLocation() async {
-    var location = Location();
+  void addDestinationMarker(LatLng point) {
+    setState(() {
+      markers.add(
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: point,
+          child: const Icon(Icons.location_on, color: Colors.red, size: 40.0),
+        ),
+      );
+    });
+    getRoute(point, currentLocation, routePoints, markers);
+  }
 
-    try {
-      var userLocation = await location.getLocation();
-      setState(() {
-        currentLocation = userLocation;
-        markers.add(
-          Marker(
-            width: 80.0,
-            height: 80.0,
-            point: LatLng(userLocation.latitude!, userLocation.longitude!),
-            child:
-                const Icon(Icons.my_location, color: Colors.blue, size: 40.0),
-          ),
-        );
-      });
-    } on Exception {
-      currentLocation = null;
-    }
+  @override
+  Widget build(BuildContext context) {
+    throw UnimplementedError();
+  }
 }
