@@ -11,13 +11,10 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  MapController controller = MapController(
-    initPosition: GeoPoint(latitude: 47.4358055, longitude: 8.4737324),
-    areaLimit: BoundingBox(
-      east: 10.4922941,
-      north: 47.8084648,
-      south: 45.817995,
-      west: 5.9559113,
+  MapController controller = MapController.withUserPosition(
+    trackUserLocation: const UserTrackingOption(
+      enableTracking: true,
+      unFollowUser: false,
     ),
   );
   @override
