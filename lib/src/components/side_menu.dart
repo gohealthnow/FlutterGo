@@ -3,6 +3,7 @@ import 'package:gohealth/api/layout/user_view_model.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
+import 'package:gohealth/src/app/home/maps/maps_page.dart';
 import 'package:gohealth/src/app/splash_page.dart';
 
 class SideMenu extends StatefulWidget {
@@ -82,6 +83,15 @@ class SideMenuState extends State<SideMenu> {
             title: const Text('Configuração', style: textStyle),
             onTap: () {
               Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: const Text('Maps', style: textStyle),
+            onTap: () async {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => const MapPage()));
             },
           ),
           ListTile(

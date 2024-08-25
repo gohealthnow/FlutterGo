@@ -34,7 +34,7 @@ class SplashPageState extends State<SplashPage> {
     bool isFirstSession =
         await userRepository.repository.doesUserHaveProduct(id);
 
-    Future.delayed(const Duration(seconds: 2), () async {
+    Future.delayed(const Duration(seconds: 2), () {
       if (isLogged) {
         if (isFirstSession) {
           Navigator.pushReplacement(
