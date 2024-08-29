@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/src/components/Pharmacy/pharmacy_controller.dart';
 
-class Farmacia extends StatefulWidget {
-  const Farmacia({super.key});
+class PharmacyComponent extends StatefulWidget {
+  const PharmacyComponent({super.key});
 
   @override
-  _FarmaciaState createState() => _FarmaciaState();
+  _PharmacyState createState() => _PharmacyState();
 }
 
-class _FarmaciaState extends State<Farmacia> {
+class _PharmacyState extends State<PharmacyComponent> {
   final PharmacyController controller = PharmacyController();
 
   @override
@@ -32,9 +32,12 @@ class _FarmaciaState extends State<Farmacia> {
                 onTap: () {
                   // * Navegar para a página da farmácia de acordo com ID dela ou sei lá, o jeito que eu vou fazer isso não faço a minima ideia.
                 },
-                child: CircleAvatar(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2),
+                  child: CircleAvatar(
                   backgroundColor: controller.nearbyPharmacies[index],
                   radius: 25,
+                  ),
                 ),
                 );
             },

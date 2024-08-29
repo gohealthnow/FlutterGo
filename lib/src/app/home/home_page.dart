@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/src/components/Pharmacy/pharmacy.dart';
 import 'package:gohealth/src/components/side_menu.dart';
 import 'package:gohealth/src/components/header_bar.dart';
 
@@ -18,7 +19,9 @@ class HomepageState extends State<Homepage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[],
+          children: <Widget>[
+            PharmacyComponent(),
+          ],
         ),
       ),
     );
