@@ -28,18 +28,27 @@ class _PharmacyState extends State<PharmacyComponent> {
             scrollDirection: Axis.horizontal,
             itemCount: controller.nearbyPharmacies.length,
             itemBuilder: (context, index) {
-                return GestureDetector(
+              return GestureDetector(
                 onTap: () {
-                  // * Navegar para a página da farmácia de acordo com ID dela ou sei lá, o jeito que eu vou fazer isso não faço a minima ideia.
+                  // Navegar para a página da farmácia de acordo com ID dela ou outro método
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 2),
-                  child: CircleAvatar(
-                  backgroundColor: controller.nearbyPharmacies[index],
-                  radius: 25,
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
+                      child: Text(
+                        controller.nearbyPharmacies[index].pharmacy?.name ?? '',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
                   ),
                 ),
-                );
+              );
             },
           ),
         ),

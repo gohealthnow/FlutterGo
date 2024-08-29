@@ -1,9 +1,24 @@
-import 'package:flutter/material.dart';
+import 'package:gohealth/api/layout/pharmacy_view_model.dart';
+import 'package:gohealth/api/models/pharmacy_model.dart';
+import 'package:gohealth/api/repositories/pharmacy_repository.dart';
 
 class PharmacyController {
+
+  List<PharmacyModels> nearbyPharmacies = [];
+
+  PharmacyController() {
+    nearbyPharmacies = fetchNearbyPharmacies();
+  }
+
   // Dados simulados; substitua por chamadas à API
   List<String> banners = ['Banner 1', 'Banner 2', 'Banner 3'];
-  List<Color> nearbyPharmacies = [Colors.green, Colors.brown, Colors.grey, Colors.pink, Colors.red];
+
+  List<PharmacyModels> fetchNearbyPharmacies() {
+    PharmacyViewModel viewModel = PharmacyViewModel(PharmacyRepository());
+    return viewModel.loadProducts();
+  }
+
+  // ! ainda não está funcionando a forma de consumir as farmacias proxima do usuario e nem ao menos saber o Km de cada uma delas.
   List<Map<String, String>> bestOffers = [
     {
       'image': 'https://via.placeholder.com/150',
