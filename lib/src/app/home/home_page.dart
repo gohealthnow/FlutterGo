@@ -20,7 +20,7 @@ class HomepageState extends State<Homepage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            PharmacyComponent(),
+            PharmacyComponentState(),
           ],
         ),
       ),
