@@ -1,23 +1,4 @@
 class PharmacyModels {
-  Pharmacy? pharmacy;
-
-  PharmacyModels({this.pharmacy});
-
-  PharmacyModels.fromJson(Map<String, dynamic> json) {
-    pharmacy =
-        json['pharmacy'] != null ? Pharmacy.fromJson(json['pharmacy']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    if (pharmacy != null) {
-      data['pharmacy'] = pharmacy!.toJson();
-    }
-    return data;
-  }
-}
-
-class Pharmacy {
   int? id;
   String? createdAt;
   String? updatedAt;
@@ -27,7 +8,7 @@ class Pharmacy {
   String? email;
   String? image;
 
-  Pharmacy(
+  PharmacyModels(
       {this.id,
       this.createdAt,
       this.updatedAt,
@@ -37,7 +18,7 @@ class Pharmacy {
       this.email,
       this.image});
 
-  Pharmacy.fromJson(Map<String, dynamic> json) {
+  PharmacyModels.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -59,5 +40,10 @@ class Pharmacy {
     data['email'] = email;
     data['image'] = image;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'PharmacyModels{id: $id, createdAt: $createdAt, updatedAt: $updatedAt, name: $name, description: $description, phone: $phone, email: $email, image: $image}';
   }
 }
