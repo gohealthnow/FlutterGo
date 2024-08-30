@@ -4,18 +4,12 @@ import 'package:gohealth/api/repositories/pharmacy_repository.dart';
 
 class PharmacyController {
 
-  List<PharmacyModels> nearbyPharmacies = [];
-
-  PharmacyController() {
-    nearbyPharmacies = fetchNearbyPharmacies();
-  }
-
   // Dados simulados; substitua por chamadas à API
   List<String> banners = ['Banner 1', 'Banner 2', 'Banner 3'];
 
-  List<PharmacyModels> fetchNearbyPharmacies() {
+  Future<List<PharmacyModels>> fetchNearbyPharmacies() async {
     PharmacyViewModel viewModel = PharmacyViewModel(PharmacyRepository());
-    return viewModel.loadProducts();
+    return await viewModel.loadPharmacies();
   }
 
   // ! ainda não está funcionando a forma de consumir as farmacias proxima do usuario e nem ao menos saber o Km de cada uma delas.

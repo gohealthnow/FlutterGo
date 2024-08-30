@@ -1,58 +1,64 @@
-import 'package:flutter/material.dart';
-import 'package:gohealth/src/components/Pharmacy/pharmacy_controller.dart';
+import 'dart:math';
 
-class PharmacyComponent extends StatefulWidget {
-  const PharmacyComponent({super.key});
+import 'package:flutter/material.dart';
+import 'package:gohealth/api/layout/pharmacy_view_model.dart';
+import 'package:gohealth/api/models/pharmacy_model.dart';
+import 'package:gohealth/api/repositories/pharmacy_repository.dart';
+
+class PharmacyComponentState extends StatefulWidget {
+  const PharmacyComponentState({super.key});
 
   @override
-  _PharmacyState createState() => _PharmacyState();
+  State<PharmacyComponentState> createState() => PharmacyComponent();
 }
 
-class _PharmacyState extends State<PharmacyComponent> {
-  final PharmacyController controller = PharmacyController();
+class PharmacyComponent extends State<PharmacyComponentState> {
+  final _repository = PharmacyRepository();
+  final _viewModel = PharmacyViewModel(PharmacyRepository());
+
+  Future<List<PharmacyModels>>? pharmacies;
+
+  @override
+  void initState() {
+    super.initState();
+    pharmacies = _viewModel.loadPharmacies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            'Farmácias perto de você',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ),
-        SizedBox(
-          height: 50,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: controller.nearbyPharmacies.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  // Navegar para a página da farmácia de acordo com ID dela ou outro método
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2),
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Center(
-                      child: Text(
-                        controller.nearbyPharmacies[index].pharmacy?.name ?? '',
-                        style: const TextStyle(fontSize: 16),
+    return FutureBuilder<List<PharmacyModels>>(
+      future: pharmacies,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Text('Erro: ${snapshot.error}');
+        } else {
+          if (snapshot.data!.isEmpty) {
+            return Container();
+          } else {
+            return Expanded(
+              child: ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return CircleAvatar(
+                    backgroundColor:
+                        Random().nextBool() ? Colors.green : Colors.blue,
+                    radius: 50,
+                    child: Text(
+                      snapshot.data![index].name!,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
                       ),
                     ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+                  );
+                },
+              ),
+            );
+          }
+        }
+      },
     );
   }
 }
