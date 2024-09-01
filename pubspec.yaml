@@ -13,14 +13,14 @@ dependencies:
     sdk: flutter
   flutter_dotenv: ^5.1.0
   flutter_modular: ^6.3.4
-  flutter_osm_plugin: ^0.70.4
+  flutter_osm_plugin: ^1.2.0
   flutter_secure_storage: ^4.2.1
   shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
 
 flutter:
   uses-material-design: true
