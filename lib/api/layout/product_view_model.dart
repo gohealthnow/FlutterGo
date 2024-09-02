@@ -10,7 +10,7 @@ class ProductsViewModel extends ValueNotifier<ProductModels> {
 
   final productModels = ValueNotifier<ProductModels>(ProductModels());
 
-  loadProducts() async {
+  Future<List<ProductModels>> loadProducts() async {
     List<ProductModels> model = await repository.getAll();
     for (var item in model) {
       productModels.value = item;
