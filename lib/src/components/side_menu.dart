@@ -91,7 +91,7 @@ class SideMenuState extends State<SideMenu> {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) => const MapPage()));
+                      builder: (BuildContext context) => const MapsPage()));
             },
           ),
           ListTile(
