@@ -42,19 +42,55 @@ class _HeaderBarState extends State<HeaderBarState> {
       title: Row(
         children: <Widget>[
           Expanded(
-            child: Text(
-              name != null ? 'Olá, $name' : 'null',
-              style: const TextStyle(fontSize: 20, color: Colors.white),
+            child: SizedBox(
+              height: 43,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 0),
+                child: TextField(
+                  textAlignVertical: TextAlignVertical
+                      .center, // Alinha o texto verticalmente ao centro
+                  decoration: InputDecoration(
+                    hintText: 'Pesquise aqui',
+                    hintStyle: const TextStyle(
+                        color: Colors.white), // Define a cor do texto do hint
+                    prefixIcon: const Icon(Icons.search,
+                        color: Colors.white), // Define a cor do ícone
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                          color: Colors.white), // Define a cor da borda
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                          color: Colors
+                              .white), // Define a cor da borda quando habilitado
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                          color: Colors
+                              .white), // Define a cor da borda quando focado
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10.0), // Ajusta o preenchimento interno
+                  ),
+                  style: const TextStyle(
+                      color: Colors.white), // Define a cor do texto
+                ),
+              ),
             ),
           ),
-          IconButton(
+        ],
+      ),
+      actions: [
+        IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {
               // Função para notificações
             },
           ),
-        ],
-      ),
+      ],
       iconTheme: const IconThemeData(color: Colors.white),
     );
   }
