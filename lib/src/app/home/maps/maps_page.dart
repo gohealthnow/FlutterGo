@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -24,6 +26,8 @@ class _MapsPageState extends State<MapsPage> {
   LatLng? _selectedPosition;
   LatLng? _mylocation;
   LatLng? _draggedPosition;
+
+  Timer? _debounce;
 
   bool _isDragging = false;
   TextEditingController _titleController = TextEditingController();
@@ -197,7 +201,7 @@ class _MapsPageState extends State<MapsPage> {
     final url =
         'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=5';
 
-    final response = await Dio().get(url);
+    final response = await HttpClient().client.get(url);
     final data = response.data;
 
     if (data.isNotEmpty) {
@@ -215,7 +219,7 @@ class _MapsPageState extends State<MapsPage> {
 
   void _moveToLocation(double lat, double lng) {
     final location = LatLng(lat, lng);
-    _mapController.move(location, 15.0);
+    _mapController.move(location, 18.0);
     setState(() {
       _selectedPosition = location;
       _searchResults = [];
@@ -225,9 +229,21 @@ class _MapsPageState extends State<MapsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _searchController.addListener(() {
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(seconds: 5), () {
       _searchPlaces(_searchController.text);
     });
   }
@@ -266,30 +282,31 @@ class _MapsPageState extends State<MapsPage> {
                 ],
               ),
               MarkerLayer(markers: _markers),
-              if (_isDragging && _draggedPosition != null)
-                MarkerLayer(markers: [
-                  Marker(
-                    point: _draggedPosition!,
-                    width: 80,
-                    height: 80,
-                    child: Icon(
-                      Icons.location_on,
-                      color: Colors.blue,
-                      size: 40,
-                    ),
-                  )
-                ]),
               if (_mylocation != null)
                 MarkerLayer(markers: [
                   Marker(
                     point: _mylocation!,
-                    width: 80,
-                    height: 80,
-                    child: Icon(
-                      Icons.location_on,
+                      width: 40,
+                      height: 40,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(5),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 5,
+                              offset: Offset(0, 2),
+                            )
+                          ],
+                        ),
+                        child: Icon(
+                          Icons.location_searching_rounded,
                       color: Colors.green,
-                      size: 40,
-                    ),
+                          size: 25,
+                        ),
+                      )
                   )
                 ]),
             ],
@@ -305,6 +322,9 @@ class _MapsPageState extends State<MapsPage> {
                   height: 55,
                   child: TextField(
                     controller: _searchController,
+                    onSubmitted: (value) {
+                      _searchPlaces(value);
+                    },
                     decoration: InputDecoration(
                       hintText: 'Pesquisar lugares',
                       filled: true,
@@ -354,62 +374,17 @@ class _MapsPageState extends State<MapsPage> {
               ],
             ),
           ),
-          _isDragging == false
-              ? Positioned(
-                  bottom: 20,
-                  right: 20,
-                  child: FloatingActionButton(
-                    backgroundColor: Colors.indigo,
-                    foregroundColor: Colors.white,
-                    onPressed: () {
-                      _isDragging = true;
-                    },
-                  ))
-              : Positioned(
-                  bottom: 20,
-                  right: 20,
-                  child: FloatingActionButton(
-                    backgroundColor: Colors.redAccent,
-                    foregroundColor: Colors.white,
-                    onPressed: () {
-                      _isDragging = false;
-                      _showMarkerDialog(context, _draggedPosition!);
-                    },
-                    child: Icon(Icons.wrong_location),
-                  ),
-                ),
           Positioned(
             bottom: 20,
             right: 20,
             child: Column(
               children: [
                 FloatingActionButton(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.indigo,
                   onPressed: () {
                     _showCurrentLocation();
                   },
                   child: Icon(Icons.location_searching_rounded),
                 ),
-                if (_isDragging)
-                  Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: FloatingActionButton(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.indigo,
-                      onPressed: () {
-                        if (_draggedPosition != null) {
-                          // adding marker
-                          _showMarkerDialog(context, _draggedPosition!);
-                        }
-                        setState(() {
-                          _isDragging = false;
-                          _draggedPosition = null;
-                        });
-                      },
-                      child: Icon(Icons.check),
-                    ),
-                  ),
               ],
             ),
           ),
