@@ -12,4 +12,27 @@ class HttpClient {
       },
     ));
   }
+
+Future<Response> fetchWithRetry(String url,
+      {int retries = 3, int delay = 1000}) async {
+    int attempt = 0;
+    while (attempt < retries) {
+      try {
+        final response = await Dio().get(url);
+        return response;
+      } on DioException catch (e) {
+        if (e.response?.statusCode == 429) {
+          attempt++;
+          if (attempt >= retries) {
+            rethrow;
+          }
+          await Future.delayed(Duration(milliseconds: delay * attempt));
+        } else {
+          rethrow;
+        }
+      }
+    }
+    throw Exception('Failed to fetch data after $retries attempts');
+  }
+
 }

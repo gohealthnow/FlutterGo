@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 
@@ -19,12 +20,18 @@ class _HeaderBarState extends State<HeaderBarState> {
   @override
   void initState() {
     super.initState();
+    if (name != null) {
+      return;
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final user = await _repository.getProfile();
       setState(() {
         name = user?.name;
       });
     });
+    if (kDebugMode) {
+      print(name);
+    }
   }
 
   @override
