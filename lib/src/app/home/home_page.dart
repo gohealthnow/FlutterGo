@@ -36,7 +36,7 @@ class HomepageState extends State<Homepage> {
             const Padding(
               padding: EdgeInsets.all(10.0),
               child: Text(
-                'Farmácias perto de você',
+                'Produtos perto de você',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
