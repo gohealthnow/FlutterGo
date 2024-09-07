@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -266,7 +265,8 @@ class _MapsPageState extends State<MapsPage> {
             mapController: _mapController,
             children: [
               TileLayer(
-                urlTemplate: 'http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga',
+                urlTemplate:
+                    'http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga',
                 userAgentPackageName: 'com.example.gohealth',
               ),
               RichAttributionWidget(
@@ -285,7 +285,7 @@ class _MapsPageState extends State<MapsPage> {
               if (_mylocation != null)
                 MarkerLayer(markers: [
                   Marker(
-                    point: _mylocation!,
+                      point: _mylocation!,
                       width: 40,
                       height: 40,
                       child: Container(
@@ -303,11 +303,10 @@ class _MapsPageState extends State<MapsPage> {
                         ),
                         child: Icon(
                           Icons.location_searching_rounded,
-                      color: Colors.green,
+                          color: Colors.green,
                           size: 25,
                         ),
-                      )
-                  )
+                      ))
                 ]),
             ],
           ),

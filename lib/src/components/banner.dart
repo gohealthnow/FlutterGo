@@ -5,6 +5,8 @@ import 'package:gohealth/api/layout/product_view_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/repositories/product_repository.dart';
 
+import 'package:gohealth/src/app/sessions/products/product_page.dart';
+
 class BannerComponent extends StatefulWidget {
   const BannerComponent({super.key});
 
@@ -47,30 +49,41 @@ class _BannerComponentState extends State<BannerComponent> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.primaries[
-                                  Random().nextInt(Colors.primaries.length)],
-                              radius: 50,
-                              child: Text(
-                                snapshot.data![index].name!,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  // ! builder: (context) => ProductPage(productId: snapshot.data![index].id),
+                                  builder: (context) => ProductPage(
+                                      productModels: snapshot.data![index])),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.primaries[
+                                    Random().nextInt(Colors.primaries.length)],
+                                radius: 50,
+                                child: Text(
+                                  snapshot.data![index].name!,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              snapshot.data![index].price!.toString(),
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                              const SizedBox(height: 5),
+                              Text(
+                                snapshot.data![index].price!.toString(),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 5),
-                          ],
+                              const SizedBox(height: 5),
+                            ],
+                          ),
                         ),
                       );
                     },
