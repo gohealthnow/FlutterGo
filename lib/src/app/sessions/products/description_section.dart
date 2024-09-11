@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/api/models/product_models.dart';
 
-class DescriptionSection extends StatelessWidget {
+class DescriptionWidget extends StatefulWidget {
+  const DescriptionWidget({Key? key, required this.productModels})
+      : super(key: key);
+
+  @override
+  State<DescriptionWidget> createState() => DescriptionSectionState();
+
+  final ProductModels productModels;
+}
+
+class DescriptionSectionState extends State<DescriptionWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -9,16 +20,19 @@ class DescriptionSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Details',
+            'Descrição',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 8),
           Text(
-            'These are the Mom Jeans you\'ve been looking for. Let loose with this modern interpretation of a classic \'90s style, featuring a flattering high rise and stacked, tapered leg. These jeans are designed to be worn as a relaxed, loose style.',
+            widget.productModels.description.toString(),
             style: TextStyle(fontSize: 16),
           ),
           SizedBox(height: 8),
-          Text('- Waist-emphasizing high rise'),
+          Text(
+            'Peso: ${widget.productModels.weight.toString()}g',
+            style: TextStyle(fontSize: 16),
+          ),
         ],
       ),
     );

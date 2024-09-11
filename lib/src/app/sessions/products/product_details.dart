@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/api/models/product_models.dart';
 
-class ProductDetails extends StatelessWidget {
+class ProductDetailsPage extends StatefulWidget {
+  const ProductDetailsPage({Key? key, required this.productModels})
+      : super(key: key);
+
+  @override
+  State<ProductDetailsPage> createState() => ProductDetails();
+
+  final ProductModels productModels;
+}
+
+
+class ProductDetails extends State<ProductDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -9,30 +21,15 @@ class ProductDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Bershka Mom Jeans',
+            widget.productModels.name ?? 'Nome não disponível',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 8),
           Text(
-            '\$34',
+            "R\$${widget.productModels.price.toString()}",
             style: TextStyle(fontSize: 20, color: Colors.grey),
           ),
           SizedBox(height: 16),
-          Row(
-            children: [
-              ChoiceChip(
-                label: Text('Blue'),
-                selected: true,
-                onSelected: (selected) {},
-              ),
-              SizedBox(width: 8),
-              ChoiceChip(
-                label: Text('Size'),
-                selected: false,
-                onSelected: (selected) {},
-              ),
-            ],
-          ),
         ],
       ),
     );

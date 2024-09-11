@@ -35,9 +35,9 @@ class ProductState extends State<ProductPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ImageCarousel(), // ! productModels: widget.productModels
-            ProductDetails(), // ! productModels: widget.productModels
-            DescriptionSection(), // ! productModels: widget.productModels
+            ImageCarousel(productModels: widget.productModels),
+            ProductDetailsPage(productModels: widget.productModels),
+            DescriptionWidget(productModels: widget.productModels),
           ],
         ),
       ),
@@ -45,7 +45,7 @@ class ProductState extends State<ProductPage> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {},
-          child: Text('Add to cart'),
+          child: Text('Adicionar ao carrinho'),
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(vertical: 16),
           ),

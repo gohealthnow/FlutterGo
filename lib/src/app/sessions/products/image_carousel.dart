@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/api/models/product_models.dart';
 
 class ImageCarousel extends StatefulWidget {
-  const ImageCarousel({Key? key, productModels }) : super(key: key);
+  const ImageCarousel({Key? key, required this.productModels})
+      : super(key: key);
 
   @override
   State<ImageCarousel> createState() => ImageCarouselState();
+
+  final ProductModels productModels;
 }
 
 class ImageCarouselState extends State<ImageCarousel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          Image.network(
-              'https://via.placeholder.com/150'), // Substitua pelas imagens reais
-          Image.network('https://via.placeholder.com/150'),
-          Image.network('https://via.placeholder.com/150'),
-        ],
-      ),
-    );
+        height: 200,
+        child: Column(
+          children: [
+            Expanded(
+                child: Image.network(widget.productModels.image ??
+                    'https://via.placeholder.com/150')),
+          ],
+        ));
   }
 }
