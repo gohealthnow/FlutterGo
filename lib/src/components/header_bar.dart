@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
+import 'package:gohealth/src/app/home/cart/cart_page.dart';
 
 class HeaderBarState extends StatefulWidget implements PreferredSizeWidget {
   const HeaderBarState({super.key});
@@ -85,7 +86,8 @@ class _HeaderBarState extends State<HeaderBarState> {
       ),
       actions: [
         IconButton(onPressed: () {
-           // Função para carrinho
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (BuildContext context) => const CartPage()));
         }, icon: const Icon(Icons.shopping_cart)),
         IconButton(
             icon: const Icon(Icons.notifications),
