@@ -205,7 +205,7 @@ class LoginPageState extends State<LoginPage> {
                   }
                 },
                 child: const Text(
-                  'Login',
+                  'Logar',
                   style: TextStyle(
                     fontSize: 18.0, // Tamanho do texto
                     fontWeight: FontWeight.w900, // Deixa o texto em negrito
