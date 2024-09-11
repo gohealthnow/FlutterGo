@@ -84,6 +84,9 @@ class _HeaderBarState extends State<HeaderBarState> {
         ],
       ),
       actions: [
+        IconButton(onPressed: () {
+           // Função para carrinho
+        }, icon: const Icon(Icons.shopping_cart)),
         IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {

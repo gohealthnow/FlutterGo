@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:gohealth/api/interfaces/local_storage_interface.dart';
+import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -75,6 +76,46 @@ class SharedLocalStorageService implements ILocalStorage {
     var shared = SharedPreferences.getInstance();
     shared.then((value) {
       value.clear();
+    });
+  }
+
+  void saveProduct(ProductModels productModels) {
+    var shared = SharedPreferences.getInstance();
+    shared.then((value) {
+      var products = value.getString('products');
+      List<ProductModels> list = [];
+      if (products != null) {
+        var decoded = jsonDecode(products) as List;
+        list = decoded.map((e) => ProductModels.fromJson(e)).toList();
+      }
+      list.add(productModels);
+      value.setString('products', jsonEncode(list));
+    });
+  }
+
+  Future<List<ProductModels>> getAllProducts() {
+    var shared = SharedPreferences.getInstance();
+    return shared.then((value) {
+      var products = value.getString('products');
+      if (products != null) {
+        var decoded = jsonDecode(products) as List;
+        return decoded.map((e) => ProductModels.fromJson(e)).toList();
+      } else {
+        throw Exception('No products found');
+      }
+    });
+  }
+
+  getSelectedItems() {
+    var shared = SharedPreferences.getInstance();
+    return shared.then((value) {
+      var products = value.getString('products');
+      if (products != null) {
+        var decoded = jsonDecode(products) as List;
+        return decoded.map((e) => e.toString()).toList();
+      } else {
+        throw Exception('No products found');
+      }
     });
   }
 }
