@@ -37,14 +37,14 @@ class SplashPageState extends State<SplashPage> {
     Future.delayed(const Duration(seconds: 2), () {
       if (isLogged) {
         if (isFirstSession) {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const FirstSessionPage(),
             ),
           );
         } else {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const Homepage(),
@@ -52,7 +52,7 @@ class SplashPageState extends State<SplashPage> {
           );
         }
       } else {
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => const LoginPage(),

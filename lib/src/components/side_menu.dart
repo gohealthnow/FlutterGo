@@ -67,7 +67,7 @@ class SideMenuState extends State<SideMenu> {
           ListTile(
             title: const Text('Tela Inicial', style: textStyle),
             onTap: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) => const Homepage()));
@@ -88,7 +88,7 @@ class SideMenuState extends State<SideMenu> {
           ListTile(
             title: const Text('Maps', style: textStyle),
             onTap: () async {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) => const MapsPage()));
@@ -101,7 +101,7 @@ class SideMenuState extends State<SideMenu> {
 
               await prefs.logout();
               _repository.clearProfile();
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) => const SplashPage()));

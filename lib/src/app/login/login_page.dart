@@ -187,7 +187,7 @@ class LoginPageState extends State<LoginPage> {
                         print(user.toJson());
                       }
 
-                      await Navigator.pushReplacement(
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const SplashPage(),

@@ -235,7 +235,7 @@ class RegisterPageState extends State<RegisterPage> {
                           print(user.toJson());
                         }
                 
-                        await Navigator.pushReplacement(
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const SplashPage(),

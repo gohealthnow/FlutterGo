@@ -86,7 +86,7 @@ class _HeaderBarState extends State<HeaderBarState> {
       ),
       actions: [
         IconButton(onPressed: () {
-          Navigator.pushReplacement(
+              Navigator.push(
               context, MaterialPageRoute(builder: (BuildContext context) => const CartPage()));
         }, icon: const Icon(Icons.shopping_cart)),
         IconButton(
