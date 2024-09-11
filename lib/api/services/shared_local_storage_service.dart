@@ -118,4 +118,18 @@ class SharedLocalStorageService implements ILocalStorage {
       }
     });
   }
+
+  void removeProduct(int? id) {
+    var shared = SharedPreferences.getInstance();
+    shared.then((value) {
+      var products = value.getString('products');
+      List<ProductModels> list = [];
+      if (products != null) {
+        var decoded = jsonDecode(products) as List;
+        list = decoded.map((e) => ProductModels.fromJson(e)).toList();
+      }
+      list.removeWhere((element) => element.id == id);
+      value.setString('products', jsonEncode(list));
+    });
+  }
 }

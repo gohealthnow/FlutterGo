@@ -31,8 +31,23 @@ class _CartPageState extends State<CartPage> {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(snapshot.data![index].toString()), // Assuming ProductModels has a toString() method
+                final product = snapshot.data![index];
+                return Card(
+                  margin: const EdgeInsets.all(10.0),
+                  child: ListTile(
+                    leading: Image.network(product.image ?? "https://via.placeholder.com/150", width: 50, height: 50, fit: BoxFit.cover),
+                    title: Text(product.name!),
+                    subtitle: Text('Price: \$${product.price!.toStringAsFixed(2)}'),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        setState(() {
+                          snapshot.data!.removeAt(index);
+                          SharedLocalStorageService().removeProduct(product.id);
+                        });
+                      },
+                    ),
+                  ),
                 );
               },
             );
