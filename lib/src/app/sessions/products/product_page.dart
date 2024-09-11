@@ -48,6 +48,14 @@ class ProductState extends State<ProductPage> {
           onPressed: () {
             // Salvar os dados do produto no carrinho atráves do storage
             SharedLocalStorageService().saveProduct(widget.productModels);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Produto adicionado ao carrinho'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ),
+            );
+            Navigator.pop(context);
           },
           child: Text('Adicionar ao carrinho'),
           style: ElevatedButton.styleFrom(
