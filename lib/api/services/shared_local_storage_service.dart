@@ -132,4 +132,11 @@ class SharedLocalStorageService implements ILocalStorage {
       value.setString('products', jsonEncode(list));
     });
   }
+
+  void clearCart() {
+    var shared = SharedPreferences.getInstance();
+    shared.then((value) {
+      value.remove('products');
+    });
+  }
 }
