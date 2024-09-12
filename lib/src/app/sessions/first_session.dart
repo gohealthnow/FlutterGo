@@ -48,7 +48,7 @@ class FirstSessionState extends State<FirstSessionPage> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const SecondSessionPage()));

@@ -48,7 +48,7 @@ class FinalSessionState extends State<FinalSessionPage> {
         children: [
           TextButton(
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const SecondSessionPage()));
@@ -92,7 +92,7 @@ class FinalSessionState extends State<FinalSessionPage> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const FinalSessionPage()));
@@ -135,7 +135,7 @@ class FinalSessionState extends State<FinalSessionPage> {
                   onPressed: () => {
                         for (var item in itemSelected)
                           {_viewModel.addProductInUser(item, _id!)},
-                        Navigator.pushReplacement(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const Homepage()))

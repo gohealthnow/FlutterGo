@@ -18,7 +18,7 @@ class SecondSessionState extends State<SecondSessionPage> {
         children: [
           TextButton(
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const FirstSessionPage()));
@@ -63,7 +63,7 @@ class SecondSessionState extends State<SecondSessionPage> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const FinalSessionPage()));

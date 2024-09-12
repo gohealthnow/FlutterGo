@@ -235,7 +235,7 @@ class RegisterPageState extends State<RegisterPage> {
                           print(user.toJson());
                         }
                 
-                        await Navigator.pushReplacement(
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const SplashPage(),
@@ -260,9 +260,9 @@ class RegisterPageState extends State<RegisterPage> {
                   }
                 },
                 child: const Text(
-                  'Register',
+                  'Cadastrar',
                   style: TextStyle(
-                    fontSize: 18.0, // Tamanho do texto
+                    fontSize: 12.0, // Tamanho do texto
                     fontWeight: FontWeight.w900, // Deixa o texto em negrito
                   ),
                 ),
