@@ -3,7 +3,6 @@ import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/services/http_client.dart';
 
 class ProductRepository implements IProduct {
-
   late HttpClient repositoryHttpClient;
 
   ProductRepository() {
@@ -39,7 +38,23 @@ class ProductRepository implements IProduct {
       for (var item in response.data['products']) {
         model.add(ProductModels.fromJson(item));
       }
-    return model;
+      return model;
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
+
+  Future<List<ProductModels>> getProductsReserveList(int id) async {
+    var response =
+        await repositoryHttpClient.client.get('/product/stock/$id');
+
+    List<ProductModels> model = [];
+
+    if (response.data['products'] is List) {
+      for (var item in response.data['products']) {
+        model.add(ProductModels.fromJson(item));
+      }
+      return model;
     } else {
       throw Exception('Failed to load products');
     }

@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 import 'package:gohealth/src/app/home/cart/cart_page.dart';
+import 'package:gohealth/src/components/ProductReserve.dart';
 
 class HeaderBarState extends StatefulWidget implements PreferredSizeWidget {
   const HeaderBarState({super.key});
@@ -17,6 +19,8 @@ class _HeaderBarState extends State<HeaderBarState> {
   final _repository = SharedLocalStorageService();
 
   String? name;
+  UserModels? profile;
+  String? productLength;
 
   @override
   void initState() {
@@ -27,12 +31,11 @@ class _HeaderBarState extends State<HeaderBarState> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final user = await _repository.getProfile();
       setState(() {
-        name = user?.name;
+        name = user?.name ?? '';
+        profile = user;
+        productLength = user?.product?.length.toString() ?? '';
       });
     });
-    if (kDebugMode) {
-      print(name);
-    }
   }
 
   @override
@@ -85,16 +88,52 @@ class _HeaderBarState extends State<HeaderBarState> {
         ],
       ),
       actions: [
-        IconButton(onPressed: () {
-              Navigator.push(
-              context, MaterialPageRoute(builder: (BuildContext context) => const CartPage()));
-        }, icon: const Icon(Icons.shopping_cart)),
         IconButton(
-            icon: const Icon(Icons.notifications),
             onPressed: () {
-              // Função para notificações
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => const CartPage()));
             },
-          ),
+            icon: const Icon(Icons.shopping_cart)),
+        Stack(
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.notifications),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        ProductReserve(userModels: profile!),
+                  ),
+                );
+              },
+            ),
+            Positioned(
+              right: 0,
+              child: Container(
+                padding: EdgeInsets.all(0.7),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                constraints: BoxConstraints(
+                  minWidth: 12,
+                  minHeight: 12,
+                ),
+                child: Text(
+                  productLength ?? '',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 8,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        )
       ],
       iconTheme: const IconThemeData(color: Colors.white),
     );

@@ -139,4 +139,8 @@ class SharedLocalStorageService implements ILocalStorage {
       value.remove('products');
     });
   }
+
+  getProductsReserveList(int? id) {
+    
+  }
 }

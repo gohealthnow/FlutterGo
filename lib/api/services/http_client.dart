@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:gohealth/api/models/product_models.dart';
 
 class HttpClient {
   late Dio client;
@@ -13,7 +14,7 @@ class HttpClient {
     ));
   }
 
-Future<Response> fetchWithRetry(String url,
+  Future<Response> fetchWithRetry(String url,
       {int retries = 3, int delay = 1000}) async {
     int attempt = 0;
     while (attempt < retries) {
@@ -34,5 +35,4 @@ Future<Response> fetchWithRetry(String url,
     }
     throw Exception('Failed to fetch data after $retries attempts');
   }
-
 }
