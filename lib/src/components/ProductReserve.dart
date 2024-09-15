@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/api/repositories/product_repository.dart';
-import 'package:gohealth/api/services/http_client.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
-import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/sessions/products/product_page.dart';
 import 'package:gohealth/src/components/header_bar.dart';
+import 'package:gohealth/api/layout/product_view_model.dart';
 import 'package:gohealth/src/components/side_menu.dart';
 
 class ProductReserve extends StatefulWidget {
@@ -20,6 +19,20 @@ class ProductReserve extends StatefulWidget {
 
 class _ProductReserveState extends State<ProductReserve> {
   final _repository = ProductRepository();
+  final _viewModel = ProductsViewModel(ProductRepository());
+
+  Future<List<ProductModels>>? products;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.userModels.id != null) {
+      products = _viewModel.getProductsReserveList(widget.userModels.id!);
+    } else {
+      // Trate o caso onde o id é nulo, se necessário
+      products = Future.value([]); // Exemplo: Retorna uma lista vazia
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +40,7 @@ class _ProductReserveState extends State<ProductReserve> {
       appBar: const HeaderBarState(),
       drawer: const SideMenu(),
       body: FutureBuilder<List<ProductModels>>(
-        future: _repository.getProductsReserveList(widget.userModels.id!),
+        future: products,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
