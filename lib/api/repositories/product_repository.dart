@@ -11,9 +11,9 @@ class ProductRepository implements IProduct {
 
   @override
   Future<ProductModels> getbyId(int id) async {
-    var response = await repositoryHttpClient.client.get('/product/$id');
+    var response = await repositoryHttpClient.client.post('/product/$id');
 
-    ProductModels model = ProductModels.fromJson(response.data);
+    ProductModels model = ProductModels.fromJson(response.data["product"]);
 
     return model;
   }
@@ -45,18 +45,19 @@ class ProductRepository implements IProduct {
   }
 
   Future<List<ProductModels>> getProductsReserveList(int id) async {
-    var response =
-        await repositoryHttpClient.client.get('/product/stock/$id');
+    var response = await repositoryHttpClient.client.get('/product/stock/$id');
 
     List<ProductModels> model = [];
 
-    if (response.data['products'] is List) {
-      for (var item in response.data['products']) {
-        model.add(ProductModels.fromJson(item));
+    for (var item in response.data['products']) {
+      if (item['productId'] != null) {
+        var productIdentifier = item['productId'];
+        var product = await getbyId(productIdentifier);
+        print(product.toString());
+        model.add(product);
       }
-      return model;
-    } else {
-      throw Exception('Failed to load products');
     }
+
+    return model;
   }
 }
