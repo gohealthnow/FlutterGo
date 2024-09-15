@@ -22,6 +22,14 @@ class ProductsViewModel extends ValueNotifier<ProductModels> {
     productModels.value = await repository.getbyName(query);
   }
 
+  Future<ProductModels> getProductById(int id) async {
+    return await repository.getbyId(id);
+  }
+
+  Future<List<ProductModels>> getProductsReserveList(int id) async {
+    return await repository.getProductsReserveList(id);
+  }
+
   addProductInUser(ProductModels product, int user) async {
     UserRepository().linkProductinUser(product, user);
   }
