@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:gohealth/api/models/product_models.dart';
 
 class HttpClient {
   late Dio client;
