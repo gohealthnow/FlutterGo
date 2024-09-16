@@ -53,13 +53,20 @@ class PharmacyComponent extends State<PharmacyComponentState> {
                               backgroundColor: Colors.primaries[
                                   Random().nextInt(Colors.primaries.length)],
                               radius: 50,
-                              child: Text(
-                                snapshot.data![index].name!,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                ),
-                              ),
+                              child: snapshot.data![index].image != null
+                                  ? ClipOval(
+                                      child: Image.network(
+                                        snapshot.data![index].image!,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Text(
+                                      snapshot.data![index].name!,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                      ),
+                                    ),
                             ),
                           ],
                         ),

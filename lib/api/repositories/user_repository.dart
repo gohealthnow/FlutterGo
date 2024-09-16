@@ -87,4 +87,15 @@ class UserRepository implements IUser {
     await userNetworkClient.client
         .post('/user/product', data: {'prodid': product.id, 'id': user});
   }
+
+  Future<UserModels?> getbyId(int id) async {
+    var response = await userNetworkClient.client.get('/user/$id');
+
+    if (response.data['user'] == null) {
+      return UserModels();
+    }
+    
+    UserModels model = UserModels.fromJson(response.data['user']);
+    return model;
+  }
 }

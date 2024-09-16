@@ -2,7 +2,7 @@ class ProductModels {
   int? id;
   String? name;
   String? description;
-  int? price;
+  double? price;
   int? stock;
   String? image;
   double? weight;
