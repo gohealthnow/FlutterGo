@@ -113,10 +113,12 @@ class _HeaderBarState extends State<HeaderBarState> {
               right: 0,
               child: Container(
                 padding: EdgeInsets.all(0.7),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(6),
-                ),
+                decoration: (profile?.product == true)
+                    ? BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(6),
+                      )
+                    : null,
                 constraints: BoxConstraints(
                   minWidth: 12,
                   minHeight: 12,
