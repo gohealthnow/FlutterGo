@@ -60,6 +60,7 @@ void onStart(ServiceInstance service) async {
   socket.onConnect((_) async {
     print('Connected. Socket ID: ${socket.id}');
     var user = await SharedLocalStorageService().getProfile();
+
     if (user != null && user.id != null) {
       socket.emit("id", user.id);
     } else {
@@ -67,26 +68,24 @@ void onStart(ServiceInstance service) async {
     }
   });
 
-  // Listener para o evento 'productAvailable'
-  socket.on('productAvailable', (data) async {
-    final product = await ProductRepository().getbyId(data['productId']);
-    final pharmacy = await PharmacyRepository().getPharmacyById(data['pharmacyId']);
-    print('Produto disponível: $data');
-
-    // Enviar uma notificação para o usuário mesmo inativo ou ativo
-    NotificationService.showNotification(
-      0, // ID da notificação
-      'Produto Disponível', // Título da notificação
-      'Um novo produto está disponível: ${product.name} na farmácia ${pharmacy.name}', // Corpo da notificação
-    );
-  });
-
   socket.onDisconnect((_) {
     print('Disconnected');
   });
 
-  socket.on("stock", (data) {
+  socket.on('productAvailable', (data) async {
     print(data);
+
+    final product = await ProductRepository().getbyId(data['productId']);
+    final pharmacy =
+        await PharmacyRepository().getPharmacyById(data['pharmacyId']);
+    print('Produto disponível: $data');
+
+    // Enviar uma notificação para o usuário mesmo inativo ou ativo
+    await NotificationService.showNotification(
+      0, // ID da notificação
+      'Produto Disponível', // Título da notificação
+      'Um novo produto está disponível: ${product.name} na farmácia ${pharmacy.name}', // Corpo da notificação
+    );
   });
 
   service.on("stop").listen((event) {
