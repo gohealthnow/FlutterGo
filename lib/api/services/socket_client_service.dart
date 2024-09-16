@@ -31,7 +31,7 @@ Future<void> initializeService() async {
     androidConfiguration: AndroidConfiguration(
       autoStart: true,
       onStart: onStart,
-      isForegroundMode: false,
+      isForegroundMode: true,
       autoStartOnBoot: true,
     ),
   );
@@ -73,8 +73,6 @@ void onStart(ServiceInstance service) async {
   });
 
   socket.on('productAvailable', (data) async {
-    print(data);
-
     final product = await ProductRepository().getbyId(data['productId']);
     final pharmacy =
         await PharmacyRepository().getPharmacyById(data['pharmacyId']);
