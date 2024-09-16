@@ -13,7 +13,7 @@ class PharmacyRepository implements IPharmacy {
   Future<PharmacyModels> getPharmacyById(int id) async {
     var response = await repositoryHttpClient.client.get('/pharmacy/$id');
 
-    PharmacyModels model = PharmacyModels.fromJson(response.data);
+    PharmacyModels model = PharmacyModels.fromJson(response.data["pharmacy"]);
 
     return model;
   }
