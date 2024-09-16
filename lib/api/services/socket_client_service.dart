@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/api/repositories/pharmacy_repository.dart';
 import 'package:gohealth/api/repositories/product_repository.dart';
-import 'package:gohealth/api/repositories/user_repository.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter/material.dart';
