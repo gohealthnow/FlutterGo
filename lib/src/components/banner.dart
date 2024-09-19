@@ -80,9 +80,10 @@ class _BannerComponentState extends State<BannerComponent> {
                                         ),
                                       ),
                               ),
+                              Text(snapshot.data![index].name!),
                               const SizedBox(height: 5),
                               Text(
-                                snapshot.data![index].price!.toString(),
+                                "R\$" + snapshot.data![index].price!.toString(),
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,

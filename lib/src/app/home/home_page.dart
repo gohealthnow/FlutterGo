@@ -14,38 +14,45 @@ class Homepage extends StatefulWidget {
 class HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: const HeaderBarState(),
       drawer: const SideMenu(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text(
-                'Farmácias perto de você',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text(
+                  'Farmácias perto de você',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 100),
-              child: const PharmacyComponentState(),
-            ),
-            const Divider(),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text(
-                'Produtos perto de você',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: screenHeight * 0.2, // 20% da altura da tela
+                ),
+                child: const PharmacyComponentState(),
               ),
-            ),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 500),
-              child: const BannerComponent(),
-            ),
-            const Divider(),
-          ],
+              const Divider(),
+              const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text(
+                  'Produtos perto de você',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: screenHeight * 0.6, // 60% da altura da tela
+                ),
+                child: const BannerComponent(),
+              ),
+            ],
+          ),
         ),
       ),
     );

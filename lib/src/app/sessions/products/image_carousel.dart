@@ -16,12 +16,9 @@ class ImageCarouselState extends State<ImageCarousel> {
   Widget build(BuildContext context) {
     return Container(
         height: 200,
-        child: Column(
-          children: [
-            Expanded(
-                child: Image.network(widget.productModels.image ??
-                    'https://via.placeholder.com/150')),
-          ],
+        child: Center(
+          child: Image.network(
+              widget.productModels.image ?? 'https://via.placeholder.com/150'),
         ));
   }
 }
