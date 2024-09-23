@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 import 'package:gohealth/src/app/home/cart/cart_page.dart';
+import 'package:gohealth/src/app/sessions/products/products_list_page.dart';
 import 'package:gohealth/src/components/ProductReserve.dart';
 
 class HeaderBarState extends StatefulWidget implements PreferredSizeWidget {
@@ -80,6 +81,16 @@ class _HeaderBarState extends State<HeaderBarState> {
                   ),
                   style: const TextStyle(
                       color: Colors.white), // Define a cor do texto
+                  onSubmitted: (value) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ProductsListPage(
+                          searchText: value,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
