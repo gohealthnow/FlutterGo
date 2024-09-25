@@ -1,22 +1,27 @@
+import 'package:gohealth/api/models/pharmacy_to_product_model.dart';
+import 'package:gohealth/api/models/user_models.dart';
+
 class ProductModels {
   int? id;
   String? name;
   String? description;
   double? price;
-  int? stock;
   String? image;
   double? weight;
   double? dimensions;
   double? rating;
   String? createdAt;
   String? updatedAt;
+  List<UserModels>? user;
+  List<PharmacyStockItem>? pharmacyProduct;
+  List<Null>? reviews;
+  List<Null>? categories;
 
   ProductModels(
       {this.id,
       this.name,
       this.description,
       this.price,
-      this.stock,
       this.image,
       this.weight,
       this.dimensions,
@@ -29,7 +34,6 @@ class ProductModels {
     name = json['name'];
     description = json['description'];
     price = json['price'];
-    stock = json['stock'];
     image = json['image'];
     weight = json['weight'];
     dimensions = json['dimensions'];
@@ -44,7 +48,6 @@ class ProductModels {
     data['name'] = name;
     data['description'] = description;
     data['price'] = price;
-    data['stock'] = stock;
     data['image'] = image;
     data['weight'] = weight;
     data['dimensions'] = dimensions;

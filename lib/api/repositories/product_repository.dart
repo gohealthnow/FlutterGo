@@ -1,4 +1,6 @@
 import 'package:gohealth/api/interfaces/product_interface.dart';
+import 'package:gohealth/api/models/pharmacy_model.dart';
+import 'package:gohealth/api/models/pharmacy_to_product_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/services/http_client.dart';
 
@@ -59,5 +61,22 @@ class ProductRepository implements IProduct {
     }
 
     return model;
+  }
+
+  Future<Map<String, dynamic>> getProducts(String searchText) async {
+    var response = await repositoryHttpClient.client.get('/product/name/$searchText');
+
+     List<ProductModels> model = List<ProductModels>.from(response.data['product'].map((x) => ProductModels.fromJson(x)));
+     
+     List<PharmacyStockItem> pharmacies = List<PharmacyStockItem>.from(response.data['pharmacies'].map((x) => PharmacyModels.fromJson(x['pharmacy'])));
+
+      for (var item in model) {
+        item.pharmacyProduct = pharmacies.where((element) => element.productId == item.id).toList();
+      }
+
+    return {
+      'model': model,
+      'pharmacies': pharmacies,
+    };
   }
 }
