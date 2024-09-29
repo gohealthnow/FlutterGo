@@ -31,19 +31,26 @@ class _ProductsListPageState extends State<ProductsListPage> {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(snapshot.data![index].name!),
-                  subtitle: Text(snapshot.data![index].description!),
+                final product = snapshot.data![index];
+                return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProductPage(
-                          productModels: snapshot.data![index],
-                        ),
+                        builder: (context) => ProductPage(productModels: product),
                       ),
                     );
                   },
+                  child: Card(
+                    child: ListTile(
+                      leading: Image.network(
+                        product.image ?? 'https://via.placeholder.com/150',
+                        width: 50,
+                      ),
+                      title: Text(product.name!),
+                      subtitle: Text('R\$ ${product.price.toString()}'),
+                    ),
+                  ),
                 );
               },
             );

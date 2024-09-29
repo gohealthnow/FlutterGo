@@ -63,20 +63,22 @@ class ProductRepository implements IProduct {
     return model;
   }
 
-  Future<Map<String, dynamic>> getProducts(String searchText) async {
-    var response = await repositoryHttpClient.client.get('/product/name/$searchText');
+  Future<List<ProductModels>> getProducts(String searchText) async {
+    var response =
+        await repositoryHttpClient.client.get('/product/name/$searchText');
 
-     List<ProductModels> model = List<ProductModels>.from(response.data['product'].map((x) => ProductModels.fromJson(x)));
-     
-     List<PharmacyStockItem> pharmacies = List<PharmacyStockItem>.from(response.data['pharmacies'].map((x) => PharmacyModels.fromJson(x['pharmacy'])));
+    List<ProductModels> model = List<ProductModels>.from(
+        response.data['product'].map((x) => ProductModels.fromJson(x)));
 
-      for (var item in model) {
-        item.pharmacyProduct = pharmacies.where((element) => element.productId == item.id).toList();
-      }
+    List<PharmacyStockItem> pharmacies = List<PharmacyStockItem>.from(response
+        .data['pharmacies']
+        .map((x) => PharmacyModels.fromJson(x['pharmacy'])));
 
-    return {
-      'model': model,
-      'pharmacies': pharmacies,
-    };
+    for (var item in model) {
+      item.pharmacyProduct =
+          pharmacies.where((element) => element.productId == item.id).toList();
+    }
+
+    return model;
   }
 }
