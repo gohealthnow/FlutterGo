@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:gohealth/api/interfaces/local_storage_interface.dart';
+import 'package:gohealth/api/models/pharmacy_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -142,5 +143,19 @@ class SharedLocalStorageService implements ILocalStorage {
 
   getProductsReserveList(int? id) {
     
+  }
+
+  void addProductToCart({required ProductModels product, required PharmacyModels pharmacy}) {
+    var shared = SharedPreferences.getInstance();
+    shared.then((value) {
+      var products = value.getString('products');
+      List<ProductModels> list = [];
+      if (products != null) {
+        var decoded = jsonDecode(products) as List;
+        list = decoded.map((e) => ProductModels.fromJson(e)).toList();
+      }
+      list.add(product);
+      value.setString('products', jsonEncode(list));
+    });
   }
 }
