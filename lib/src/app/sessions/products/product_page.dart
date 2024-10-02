@@ -17,15 +17,15 @@ class ProductPage extends StatefulWidget {
 }
 
 class ProductState extends State<ProductPage> {
-
   final _repository = PharmacyRepository();
 
   List<PharmacyModels> pharmacies = [];
 
-
   Future<List<PharmacyModels>> _fetchPharmacies() async {
-    for (var _ in widget.productModels.pharmacyProduct!) {
-      PharmacyModels pharmacy = await _repository.getPharmacyById(widget.productModels.id!);
+    pharmacies.clear();
+    for (var i in widget.productModels.pharmacyProduct!) {
+      PharmacyModels pharmacy =
+          await _repository.getPharmacyById(i.pharmacyId!);
       pharmacies.add(pharmacy);
     }
     return pharmacies;
@@ -34,9 +34,6 @@ class ProductState extends State<ProductPage> {
   @override
   void initState() {
     super.initState();
-    setState(() async {
-      await _fetchPharmacies();
-    });
   }
 
   @override
@@ -65,69 +62,101 @@ class ProductState extends State<ProductPage> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return FutureBuilder<List<PharmacyModels>>(
-                    future: _fetchPharmacies(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return AlertDialog(
-                          title: Text('Erro'),
-                          content: Text('Erro ao carregar farmácias: ${snapshot.error}'),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text('Fechar'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      } else {
-                        return AlertDialog(
-                          title: Text('Escolha uma farmácia'),
-                          content: SingleChildScrollView(
-                            child: ListBody(
-                              children: snapshot.data!.map((pharmacy) {
-                                return ListTile(
-                                  title: Text(pharmacy.name!),
-                                  subtitle: Text('Telefone: ${pharmacy.phone}'),
-                                  onTap: () {
-                                    // Ação ao selecionar a farmácia
-                                    Navigator.of(context).pop();
-                                    // Adicione aqui a lógica para prosseguir com a compra na farmácia selecionada
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Produto adicionado ao carrinho na farmácia ${pharmacy.name}'),
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return FutureBuilder<List<PharmacyModels>>(
+                  future: _fetchPharmacies(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return AlertDialog(
+                        title: Text('Erro'),
+                        content: Text(
+                            'Erro ao carregar farmácias: ${snapshot.error}'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Fechar'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    } else {
+                      return AlertDialog(
+                        title: Text('Escolha uma farmácia'),
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: snapshot.data!.map((pharmacy) {
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(pharmacy
+                                      .image!), // Supondo que a URL da foto esteja em pharmacy.photoUrl
+                                  backgroundColor: Colors.transparent,
+                                ),
+                                title: Text(
+                                  pharmacy.name!,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: Text('Telefone: ${pharmacy.phone}'),
+                                onTap: () async {
+                                  // Ação ao selecionar a farmácia
+                                  Navigator.of(context).pop();
+                                  // Adicione aqui a lógica para prosseguir com a compra na farmácia selecionada
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Produto adicionado ao carrinho na farmácia ${pharmacy.name}',
                                       ),
+                                    ),
+                                  );
+
+                                  // Verifica se o produto já está no carrinho
+                                  var cartItems = await SharedLocalStorageService().getCartItems();
+                                  var existingItem = cartItems.firstWhere(
+                                    (item) => item.product.id == widget.productModels.id && item.pharmacy.id == pharmacy.id,
+                                    orElse: () => null,
+                                  );
+
+                                  if (existingItem != null) {
+                                    // Incrementa a quantidade se o produto já estiver no carrinho
+                                    SharedLocalStorageService().updateCartItemQuantity(
+                                      product: widget.productModels,
+                                      pharmacy: pharmacy,
+                                      quantity: existingItem.quantity + 1,
                                     );
+                                  } else {
+                                    // Adiciona o produto ao carrinho se não estiver
                                     SharedLocalStorageService().addProductToCart(
                                       product: widget.productModels,
                                       pharmacy: pharmacy,
+                                      quantity: 1,
                                     );
-                                  },
-                                );
-                              }).toList(),
-                            ),
+                                  }
+                                },
+                              );
+                            }).toList(),
                           ),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text('Cancelar'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      }
-                    },
-                  );
-                },
-              );
-            },
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Cancelar'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                );
+              },
+            );
+          },
           child: Text('Adicionar ao carrinho'),
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(vertical: 16),
