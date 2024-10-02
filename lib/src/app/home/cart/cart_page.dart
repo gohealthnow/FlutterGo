@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/product_models.dart';
+import 'package:gohealth/api/repositories/user_repository.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/sessions/products/product_page.dart';
@@ -7,13 +8,15 @@ import 'package:gohealth/src/components/header_bar.dart';
 import 'package:gohealth/src/components/side_menu.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({ Key? key }) : super(key: key);
+  const CartPage({Key? key}) : super(key: key);
 
   @override
   _CartPageState createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
+
+  final _repository = UserRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,8 @@ class _CartPageState extends State<CartPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      // await _repository.buy(SharedLocalStorageService().getAllProducts());
                       SharedLocalStorageService().clearCart();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -45,7 +49,7 @@ class _CartPageState extends State<CartPage> {
                           duration: Duration(seconds: 2),
                         ),
                       );
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const Homepage()));
@@ -98,13 +102,17 @@ class _CartPageState extends State<CartPage> {
                     );
                   },
                   child: Card(
-                  margin: const EdgeInsets.all(10.0),
-                  child: ListTile(
-                    leading: Image.network(product.image ?? "https://via.placeholder.com/150", width: 50, height: 50, fit: BoxFit.cover),
-                    title: Text(product.name!),
+                    margin: const EdgeInsets.all(10.0),
+                    child: ListTile(
+                      leading: Image.network(
+                          product.image ?? "https://via.placeholder.com/150",
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover),
+                      title: Text(product.name!),
                       subtitle: Text(
                           'Preço: R\$${product.price!.toStringAsFixed(2)}'),
-                    trailing: IconButton(
+                      trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {
                           setState(() {
@@ -113,8 +121,8 @@ class _CartPageState extends State<CartPage> {
                                 .removeProduct(product.id);
                           });
                         },
+                      ),
                     ),
-                  ),
                   ),
                 );
               },

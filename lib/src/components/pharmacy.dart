@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/layout/pharmacy_view_model.dart';
@@ -48,10 +47,9 @@ class PharmacyComponent extends State<PharmacyComponentState> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Column(
-                          children: [
+                          children: [ 
                             CircleAvatar(
-                              backgroundColor: Colors.primaries[
-                                  Random().nextInt(Colors.primaries.length)],
+                              backgroundColor: Colors.white,
                               radius: 50,
                               child: snapshot.data![index].image != null
                                   ? ClipOval(

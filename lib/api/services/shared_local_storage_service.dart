@@ -47,7 +47,7 @@ class SharedLocalStorageService implements ILocalStorage {
         shared.setString(key, user.toJson()[key].toString());
       }
     }
-  
+
     return user;
   }
 
@@ -141,11 +141,12 @@ class SharedLocalStorageService implements ILocalStorage {
     });
   }
 
-  getProductsReserveList(int? id) {
-    
-  }
+  getProductsReserveList(int? id) {}
 
-  void addProductToCart({required ProductModels product, required PharmacyModels pharmacy}) {
+  void addProductToCart(
+      {required ProductModels product,
+      required PharmacyModels pharmacy,
+      required int quantity}) {
     var shared = SharedPreferences.getInstance();
     shared.then((value) {
       var products = value.getString('products');
@@ -155,6 +156,56 @@ class SharedLocalStorageService implements ILocalStorage {
         list = decoded.map((e) => ProductModels.fromJson(e)).toList();
       }
       list.add(product);
+      value.setString('products', jsonEncode(list));
+    });
+  }
+
+  getCartItems() {
+    var shared = SharedPreferences.getInstance();
+    return shared.then((value) {
+      var products = value.getString('products');
+      if (products != null) {
+        var decoded = jsonDecode(products) as List;
+        return decoded.map((e) => ProductModels.fromJson(e)).toList();
+      } else {
+        throw Exception('No products found');
+      }
+    });
+  }
+
+  void updateCartItemQuantity(
+      {required ProductModels product,
+      required PharmacyModels pharmacy,
+      required quantity}) {
+    var shared = SharedPreferences.getInstance();
+    shared.then((value) {
+      var products = value.getString('products');
+      List<ProductModels> list = [];
+      if (products != null) {
+        var decoded = jsonDecode(products) as List;
+        list = decoded.map((e) => ProductModels.fromJson(e)).toList();
+      }
+      var existingItem = list.firstWhere(
+        (item) => item.id == product.id,
+        orElse: () => ProductModels(),
+      );
+      list.remove(existingItem);
+      list.add(ProductModels(
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        image: product.image,
+        weight: product.weight,
+        dimensions: product.dimensions,
+        rating: product.rating,
+        createdAt: product.createdAt,
+        updatedAt: product.updatedAt,
+        user: product.user,
+        pharmacyProduct: product.pharmacyProduct,
+        reviews: product.reviews,
+        categories: product.categories,
+      ));
       value.setString('products', jsonEncode(list));
     });
   }

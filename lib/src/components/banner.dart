@@ -40,8 +40,9 @@ class _BannerComponentState extends State<BannerComponent> {
               } else if (snapshot.hasError) {
                 return Text('Erro: ${snapshot.error}');
               } else {
-                if (snapshot.data!.isEmpty) {
-                  return Container();
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(
+                      child: Text('Nenhum produto encontrado.'));
                 } else {
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
