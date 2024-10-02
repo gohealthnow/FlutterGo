@@ -94,8 +94,25 @@ class UserRepository implements IUser {
     if (response.data['user'] == null) {
       return UserModels();
     }
-    
+
     UserModels model = UserModels.fromJson(response.data['user']);
     return model;
+  }
+
+  buy(
+      {required int id,
+      required int productId,
+      required int quantity,
+      required int pharid}) async {
+    var response = await userNetworkClient.client.post('/product/buy', data: {
+      'id': id,
+      'prodid': productId,
+      'pharid': pharid,
+      'quantity': quantity
+    });
+
+    if (response.statusCode == 400) {
+      throw Exception('Erro ao comprar produto');
+    }
   }
 }
