@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/pharmacy_model.dart';
-import 'package:gohealth/api/models/pharmacy_to_product_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/repositories/pharmacy_repository.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
@@ -92,86 +91,52 @@ class ProductState extends State<ProductPage> {
                           child: ListBody(
                             children: snapshot.data!.map((pharmacy) {
                               return ListTile(
-                                leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(pharmacy
-                                      .image!), // Supondo que a URL da foto esteja em pharmacy.photoUrl
-                                  backgroundColor: Colors.transparent,
-                                ),
-                                title: Text(
-                                  pharmacy.name!,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                  leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(pharmacy
+                                        .image!), // Supondo que a URL da foto esteja em pharmacy.photoUrl
+                                    backgroundColor: Colors.transparent,
                                   ),
-                                ),
-                                subtitle: Text('Telefone: ${pharmacy.phone}'),
-                                onTap: () async {
-                                  // Ação ao selecionar a farmácia
-                                  Navigator.of(context).pop();
-                                
-                                  // Obter a quantidade disponível do produto na farmácia
-                                  int availableQuantity = await PharmacyStockItem().getAvailableQuantity(pharmacy.id, widget.productModels.id);
-                                
-                                  // Exibir um Dialog para o usuário selecionar a quantidade desejada
-                                  int? selectedQuantity = await showDialog<int>(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      int quantity = 1;
-                                      return AlertDialog(
-                                        title: Text('Selecione a quantidade'),
-                                        content: StatefulBuilder(
-                                          builder: (BuildContext context, StateSetter setState) {
-                                            return DropdownButton<int>(
-                                              value: quantity,
-                                              items: List.generate(availableQuantity, (index) => index + 1)
-                                                  .map<DropdownMenuItem<int>>((int value) {
-                                                return DropdownMenuItem<int>(
-                                                  value: value,
-                                                  child: Text(value.toString()),
-                                                );
-                                              }).toList(),
-                                              onChanged: (int? newValue) {
-                                                setState(() {
-                                                  quantity = newValue!;
-                                                });
-                                              },
-                                            );
-                                          },
+                                  title: Text(
+                                    pharmacy.name!,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  subtitle: Text('Telefone: ${pharmacy.phone}'),
+                                  onTap: () async {
+                                    // Ação ao selecionar a farmácia
+                                    Navigator.of(context).pop();
+
+                                    try {
+                                      SharedLocalStorageService()
+                                          .addProductToCart(
+                                            product: widget.productModels,
+                                            pharmacy: pharmacy,
+                                            quantity: 1,
+                                          )
+                                          .toString();
+
+                                      final product = widget.productModels.name;
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              '$product adicionado ao carrinho'),
+                                          backgroundColor: Colors.green,
                                         ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: Text('Cancelar'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: Text('Confirmar'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop(quantity);
-                                            },
-                                          ),
-                                        ],
                                       );
-                                    },
-                                  );
-                                
-                                  if (selectedQuantity != null) {
-                                    // Adicione aqui a lógica para prosseguir com a compra na farmácia selecionada
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'Produto adicionado ao carrinho na farmácia ${pharmacy.name} com quantidade $selectedQuantity',
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Erro ao adicionar ao carrinho: $e'),
+                                          backgroundColor: Colors.red,
                                         ),
-                                      ),
-                                    );
-                                    SharedLocalStorageService().addProductToCart(
-                                      product: widget.productModels,
-                                      pharmacy: pharmacy,
-                                      quantity: selectedQuantity,
-                                    );
-                                  }
-                                },
-                              );
+                                      );
+                                    }
+                                  });
                             }).toList(),
                           ),
                         ),

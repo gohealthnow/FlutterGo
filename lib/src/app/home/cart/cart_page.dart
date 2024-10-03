@@ -15,7 +15,9 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  final _repository = UserRepository();
+  final _repositoryUser = UserRepository();
+
+  final _sharedLocalStorageService = SharedLocalStorageService();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class _CartPageState extends State<CartPage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder<List<ProductModels>>(
-          future: SharedLocalStorageService().getAllProducts(),
+          future: SharedLocalStorageService().getProductsForCart(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const SizedBox.shrink();
@@ -39,7 +41,29 @@ class _CartPageState extends State<CartPage> {
                 children: [
                   ElevatedButton(
                     onPressed: () async {
-                      // await _repository.buy(SharedLocalStorageService().getAllProducts());
+                      final cartItens =
+                          await _sharedLocalStorageService.fetchAllCartItems();
+
+                      final user =
+                          await _sharedLocalStorageService.getProfile();
+
+                      if (user != null && user.id != null) {
+                        for (var item in cartItens) {
+                          await _repositoryUser.buy(
+                              id: user.id!,
+                              productId: item.product.id!,
+                              quantity: item.quantity,
+                              pharid: item.pharmacy.id!);
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Erro ao obter perfil do usuário'),
+                            backgroundColor: Colors.red,
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
                       SharedLocalStorageService().clearCart();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -77,7 +101,7 @@ class _CartPageState extends State<CartPage> {
         ),
       ),
       body: FutureBuilder<List<ProductModels>>(
-        future: SharedLocalStorageService().getAllProducts(),
+        future: SharedLocalStorageService().getProductsForCart(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -118,7 +142,7 @@ class _CartPageState extends State<CartPage> {
                           setState(() {
                             snapshot.data!.removeAt(index);
                             SharedLocalStorageService()
-                                .removeProduct(product.id);
+                                .removeProductTocart(id: product.id!);
                           });
                         },
                       ),
