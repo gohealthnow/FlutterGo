@@ -17,6 +17,8 @@ class ProductModels {
   List<Null>? reviews;
   List<Null>? categories;
 
+  int? quantity;
+
   ProductModels(
       {this.id,
       this.name,
