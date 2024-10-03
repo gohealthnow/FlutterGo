@@ -63,6 +63,18 @@ class ProductRepository implements IProduct {
     return model;
   }
 
+  Future<List<PharmacyStockItem>> getQuantity(int productId, int pharmacyId) async {
+    var response = await repositoryHttpClient.client.get('/product/stock/$productId/$pharmacyId');
+
+    List<PharmacyStockItem> model = [];
+
+    for (var item in response.data['products']) {
+      model.add(PharmacyStockItem.fromJson(item));
+    }
+
+    return model;
+  }
+
   Future<List<ProductModels>> getProducts(String searchText) async {
     var response =
         await repositoryHttpClient.client.get('/product/name/$searchText');
