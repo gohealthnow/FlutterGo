@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/pharmacy_model.dart';
+import 'package:gohealth/api/models/pharmacy_to_product_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/repositories/pharmacy_repository.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
@@ -106,35 +107,67 @@ class ProductState extends State<ProductPage> {
                                 onTap: () async {
                                   // Ação ao selecionar a farmácia
                                   Navigator.of(context).pop();
-                                  // Adicione aqui a lógica para prosseguir com a compra na farmácia selecionada
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Produto adicionado ao carrinho na farmácia ${pharmacy.name}',
+                                
+                                  // Obter a quantidade disponível do produto na farmácia
+                                  int availableQuantity = await PharmacyStockItem().getAvailableQuantity(pharmacy.id, widget.productModels.id);
+                                
+                                  // Exibir um Dialog para o usuário selecionar a quantidade desejada
+                                  int? selectedQuantity = await showDialog<int>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      int quantity = 1;
+                                      return AlertDialog(
+                                        title: Text('Selecione a quantidade'),
+                                        content: StatefulBuilder(
+                                          builder: (BuildContext context, StateSetter setState) {
+                                            return DropdownButton<int>(
+                                              value: quantity,
+                                              items: List.generate(availableQuantity, (index) => index + 1)
+                                                  .map<DropdownMenuItem<int>>((int value) {
+                                                return DropdownMenuItem<int>(
+                                                  value: value,
+                                                  child: Text(value.toString()),
+                                                );
+                                              }).toList(),
+                                              onChanged: (int? newValue) {
+                                                setState(() {
+                                                  quantity = newValue!;
+                                                });
+                                              },
+                                            );
+                                          },
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: Text('Cancelar'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('Confirmar'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop(quantity);
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                
+                                  if (selectedQuantity != null) {
+                                    // Adicione aqui a lógica para prosseguir com a compra na farmácia selecionada
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Produto adicionado ao carrinho na farmácia ${pharmacy.name} com quantidade $selectedQuantity',
+                                        ),
                                       ),
-                                    ),
-                                  );
-
-                                  // Verifica se o produto já está no carrinho
-                                  var cartItems = await SharedLocalStorageService().getCartItems();
-                                  var existingItem = cartItems.firstWhere(
-                                    (item) => item.product.id == widget.productModels.id && item.pharmacy.id == pharmacy.id,
-                                    orElse: () => null,
-                                  );
-
-                                  if (existingItem != null) {
-                                    // Incrementa a quantidade se o produto já estiver no carrinho
-                                    SharedLocalStorageService().updateCartItemQuantity(
-                                      product: widget.productModels,
-                                      pharmacy: pharmacy,
-                                      quantity: existingItem.quantity + 1,
                                     );
-                                  } else {
-                                    // Adiciona o produto ao carrinho se não estiver
                                     SharedLocalStorageService().addProductToCart(
                                       product: widget.productModels,
                                       pharmacy: pharmacy,
-                                      quantity: 1,
+                                      quantity: selectedQuantity,
                                     );
                                   }
                                 },
