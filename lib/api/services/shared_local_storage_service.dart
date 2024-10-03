@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:gohealth/api/interfaces/local_storage_interface.dart';
 import 'package:gohealth/api/models/pharmacy_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
@@ -107,19 +108,6 @@ class SharedLocalStorageService implements ILocalStorage {
     });
   }
 
-  getSelectedItems() {
-    var shared = SharedPreferences.getInstance();
-    return shared.then((value) {
-      var products = value.getString('products');
-      if (products != null) {
-        var decoded = jsonDecode(products) as List;
-        return decoded.map((e) => e.toString()).toList();
-      } else {
-        throw Exception('No products found');
-      }
-    });
-  }
-
   void removeProduct(int? id) {
     var shared = SharedPreferences.getInstance();
     shared.then((value) {
@@ -141,8 +129,6 @@ class SharedLocalStorageService implements ILocalStorage {
     });
   }
 
-  getProductsReserveList(int? id) {}
-
   void addProductToCart(
       {required ProductModels product,
       required PharmacyModels pharmacy,
@@ -160,23 +146,10 @@ class SharedLocalStorageService implements ILocalStorage {
     });
   }
 
-  getCartItems() {
-    var shared = SharedPreferences.getInstance();
-    return shared.then((value) {
-      var products = value.getString('products');
-      if (products != null) {
-        var decoded = jsonDecode(products) as List;
-        return decoded.map((e) => ProductModels.fromJson(e)).toList();
-      } else {
-        throw Exception('No products found');
-      }
-    });
-  }
-
   void updateCartItemQuantity(
       {required ProductModels product,
       required PharmacyModels pharmacy,
-      required quantity}) {
+      required quantity}) async {
     var shared = SharedPreferences.getInstance();
     shared.then((value) {
       var products = value.getString('products');
@@ -207,6 +180,19 @@ class SharedLocalStorageService implements ILocalStorage {
         categories: product.categories,
       ));
       value.setString('products', jsonEncode(list));
+    });
+  }
+
+  Future<List<ProductModels>> getCartItems() {
+    var shared = SharedPreferences.getInstance();
+    return shared.then((value) {
+      var products = value.getString('products');
+      if (products != null) {
+        var decoded = jsonDecode(products) as List;
+        return decoded.map((e) => ProductModels.fromJson(e)).toList();
+      } else {
+        return [];
+      }
     });
   }
 }
