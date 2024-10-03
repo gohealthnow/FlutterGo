@@ -21,4 +21,8 @@ class PharmacyStockItem {
     data['quantity'] = this.quantity;
     return data;
   }
+
+  getAvailableQuantity(int? pharmacyId, int? productId) {
+   
+  }
 }
