@@ -22,7 +22,4 @@ class PharmacyStockItem {
     return data;
   }
 
-  getAvailableQuantity(int? pharmacyId, int? productId) {
-   
-  }
 }
