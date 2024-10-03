@@ -15,7 +15,6 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-
   final _repository = UserRepository();
 
   @override
@@ -83,6 +82,7 @@ class _CartPageState extends State<CartPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            print(snapshot.data);
             return const Center(child: Text('Nenhum produto no carrinho'));
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
