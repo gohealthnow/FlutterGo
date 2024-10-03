@@ -29,12 +29,12 @@ class SplashPageState extends State<SplashPage> {
 
     bool isLogged = await userRepository.repository
         .checkToken()
-        .timeout(const Duration(seconds: 5), onTimeout: () => false);
+        .timeout(const Duration(seconds: 0), onTimeout: () => false);
 
     bool isFirstSession =
         await userRepository.repository.doesUserHaveProduct(id);
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 0), () {
       if (isLogged) {
         if (isFirstSession) {
           Navigator.push(
