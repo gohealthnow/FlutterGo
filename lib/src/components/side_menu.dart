@@ -100,7 +100,6 @@ class SideMenuState extends State<SideMenu> {
               UserRepository prefs = UserViewModel(UserRepository()).repository;
 
               await prefs.logout();
-              _repository.clearProfile();
               Navigator.push(
                   context,
                   MaterialPageRoute(

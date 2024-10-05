@@ -55,7 +55,6 @@ class _BannerComponentState extends State<BannerComponent> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  // ! builder: (context) => ProductPage(productId: snapshot.data![index].id),
                                   builder: (context) => ProductPage(
                                       productModels: snapshot.data![index])),
                             );
