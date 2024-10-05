@@ -44,7 +44,10 @@ class ProductState extends State<ProductPage> {
         actions: [
           IconButton(
             icon: Icon(Icons.more_vert),
-            onPressed: () {},
+            onPressed: () {
+              // Ação de criar uma avaliação
+              
+            },
           ),
         ],
       ),
