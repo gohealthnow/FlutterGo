@@ -178,7 +178,12 @@ class LoginPageState extends State<LoginPage> {
                         .login(_emailController.text, _passwordController.text)
                         .then((value) => value)
                         .catchError((error) {
-                      return null;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Erro ao fazer login'),
+                              backgroundColor: Colors.redAccent,
+                            ),
+                          );
                     });
 
                     if (user.id != null) {
