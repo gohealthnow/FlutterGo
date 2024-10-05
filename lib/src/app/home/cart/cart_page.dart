@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/product_models.dart';
+import 'package:gohealth/api/repositories/user_repository.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/sessions/products/product_page.dart';
@@ -7,13 +8,16 @@ import 'package:gohealth/src/components/header_bar.dart';
 import 'package:gohealth/src/components/side_menu.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({ Key? key }) : super(key: key);
+  const CartPage({Key? key}) : super(key: key);
 
   @override
   _CartPageState createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
+  final _repositoryUser = UserRepository();
+
+  final _sharedLocalStorageService = SharedLocalStorageService();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,7 @@ class _CartPageState extends State<CartPage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder<List<ProductModels>>(
-          future: SharedLocalStorageService().getAllProducts(),
+          future: SharedLocalStorageService().getProductsForCart(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const SizedBox.shrink();
@@ -36,7 +40,30 @@ class _CartPageState extends State<CartPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      final cartItens =
+                          await _sharedLocalStorageService.fetchAllCartItems();
+
+                      final user =
+                          await _sharedLocalStorageService.getProfile();
+
+                      if (user != null && user.id != null) {
+                        for (var item in cartItens) {
+                          await _repositoryUser.buy(
+                              id: user.id!,
+                              productId: item.product.id!,
+                              quantity: item.quantity,
+                              pharid: item.pharmacy.id!);
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Erro ao obter perfil do usuário'),
+                            backgroundColor: Colors.red,
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
                       SharedLocalStorageService().clearCart();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -45,7 +72,7 @@ class _CartPageState extends State<CartPage> {
                           duration: Duration(seconds: 2),
                         ),
                       );
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const Homepage()));
@@ -74,11 +101,12 @@ class _CartPageState extends State<CartPage> {
         ),
       ),
       body: FutureBuilder<List<ProductModels>>(
-        future: SharedLocalStorageService().getAllProducts(),
+        future: SharedLocalStorageService().getProductsForCart(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            print(snapshot.data);
             return const Center(child: Text('Nenhum produto no carrinho'));
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -98,23 +126,27 @@ class _CartPageState extends State<CartPage> {
                     );
                   },
                   child: Card(
-                  margin: const EdgeInsets.all(10.0),
-                  child: ListTile(
-                    leading: Image.network(product.image ?? "https://via.placeholder.com/150", width: 50, height: 50, fit: BoxFit.cover),
-                    title: Text(product.name!),
+                    margin: const EdgeInsets.all(10.0),
+                    child: ListTile(
+                      leading: Image.network(
+                          product.image ?? "https://via.placeholder.com/150",
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover),
+                      title: Text(product.name!),
                       subtitle: Text(
                           'Preço: R\$${product.price!.toStringAsFixed(2)}'),
-                    trailing: IconButton(
+                      trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {
                           setState(() {
                             snapshot.data!.removeAt(index);
                             SharedLocalStorageService()
-                                .removeProduct(product.id);
+                                .removeProductTocart(id: product.id!);
                           });
                         },
+                      ),
                     ),
-                  ),
                   ),
                 );
               },

@@ -33,7 +33,7 @@ class _HeaderBarState extends State<HeaderBarState> {
       setState(() {
         name = user?.name ?? '';
         profile = user;
-        productLength = user?.product?.length.toString() ?? '';
+        productLength = user?.products?.length.toString() ?? '';
       });
     });
   }
@@ -82,6 +82,34 @@ class _HeaderBarState extends State<HeaderBarState> {
                   style: const TextStyle(
                       color: Colors.white), // Define a cor do texto
                   onSubmitted: (value) {
+                    if (value.isEmpty) {
+                      return;
+                    }
+
+                    if (value.length < 3) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Digite pelo menos 3 caracteres'),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      return;
+                    }
+
+                    if (value.contains(
+                        RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]'))) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content:
+                              Text('Caracteres especiais não são permitidos'),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      return;
+                    }
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -124,7 +152,7 @@ class _HeaderBarState extends State<HeaderBarState> {
               right: 0,
               child: Container(
                 padding: EdgeInsets.all(0.7),
-                decoration: (profile?.product == true)
+                decoration: (profile?.products == true)
                     ? BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(6),

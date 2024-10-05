@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:gohealth/api/interfaces/local_storage_interface.dart';
+import 'package:gohealth/api/models/pharmacy_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/models/user_models.dart';
+import 'package:gohealth/api/repositories/pharmacy_to_product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedLocalStorageService implements ILocalStorage {
@@ -21,14 +23,25 @@ class SharedLocalStorageService implements ILocalStorage {
 
     var user = UserModels(
       id: shared.getInt('id'),
-      createdAt: shared.getString('createdAt'),
-      updatedAt: shared.getString('updatedAt'),
+      createdAt: shared.getString('createdAt') != null
+          ? DateTime.parse(shared.getString('createdAt')!)
+          : null,
+      updatedAt: shared.getString('updatedAt') != null
+          ? DateTime.parse(shared.getString('updatedAt')!)
+          : null,
       email: shared.getString('email'),
       name: shared.getString('name'),
-      product: product,
+      products: product != null
+          ? (product['products'] as List)
+              .map((e) => ProductModels.fromJson(e))
+              .toList()
+          : null,
       avatar: shared.getString('avatar'),
       bio: shared.getString('bio'),
-      role: shared.getString('role'),
+      role: shared.getString('role') != null
+          ? Role.values.firstWhere(
+              (e) => e.toString() == 'Role.' + shared.getString('role')!)
+          : null,
     );
 
     return user;
@@ -46,7 +59,7 @@ class SharedLocalStorageService implements ILocalStorage {
         shared.setString(key, user.toJson()[key].toString());
       }
     }
-  
+
     return user;
   }
 
@@ -79,68 +92,126 @@ class SharedLocalStorageService implements ILocalStorage {
     });
   }
 
-  void saveProduct(ProductModels productModels) {
-    var shared = SharedPreferences.getInstance();
-    shared.then((value) {
-      var products = value.getString('products');
-      List<ProductModels> list = [];
-      if (products != null) {
-        var decoded = jsonDecode(products) as List;
-        list = decoded.map((e) => ProductModels.fromJson(e)).toList();
-      }
-      list.add(productModels);
-      value.setString('products', jsonEncode(list));
-    });
-  }
-
-  Future<List<ProductModels>> getAllProducts() {
+  Future<List<CartItem>> fetchAllCartItems() {
     var shared = SharedPreferences.getInstance();
     return shared.then((value) {
-      var products = value.getString('products');
+      var products = value.getString('cart');
+      List<CartItem> list = [];
       if (products != null) {
         var decoded = jsonDecode(products) as List;
-        return decoded.map((e) => ProductModels.fromJson(e)).toList();
-      } else {
-        throw Exception('No products found');
+        list = decoded.map((e) => CartItem.fromJson(e)).toList();
       }
+      return list;
     });
   }
 
-  getSelectedItems() {
+  Future<List<ProductModels>> getProductsForCart() {
     var shared = SharedPreferences.getInstance();
     return shared.then((value) {
-      var products = value.getString('products');
+      var products = value.getString('cart');
+      List<CartItem> list = [];
       if (products != null) {
         var decoded = jsonDecode(products) as List;
-        return decoded.map((e) => e.toString()).toList();
-      } else {
-        throw Exception('No products found');
+        list = decoded.map((e) => CartItem.fromJson(e)).toList();
       }
+      return list.map((e) => e.product).toList();
     });
   }
 
-  void removeProduct(int? id) {
+  void removeProductTocart({required int id}) {
     var shared = SharedPreferences.getInstance();
     shared.then((value) {
-      var products = value.getString('products');
-      List<ProductModels> list = [];
+      var products = value.getString('cart');
+      List<CartItem> list = [];
       if (products != null) {
         var decoded = jsonDecode(products) as List;
-        list = decoded.map((e) => ProductModels.fromJson(e)).toList();
+        list = decoded.map((e) => CartItem.fromJson(e)).toList();
       }
-      list.removeWhere((element) => element.id == id);
-      value.setString('products', jsonEncode(list));
+      list.removeWhere((element) => element.product.id == id);
+      value.setString('cart', jsonEncode(list.map((e) => e.toJson()).toList()));
     });
   }
 
   void clearCart() {
     var shared = SharedPreferences.getInstance();
     shared.then((value) {
-      value.remove('products');
+      value.remove('cart');
     });
   }
 
-  getProductsReserveList(int? id) {
-    
+  addProductToCart(
+      {required ProductModels product,
+      required PharmacyModels pharmacy,
+      required int quantity}) {
+    final _repositoryStock = PharmacyUserRepository();
+
+    var shared = SharedPreferences.getInstance();
+    shared.then((value) async {
+      var products = value.getString('cart');
+      List<CartItem> list = [];
+      if (products != null) {
+        var decoded = jsonDecode(products) as List;
+        list = decoded.map((e) => CartItem.fromJson(e)).toList();
+      }
+
+      // Obter a quantidade disponível do produto na farmácia
+      int availableQuantity = (await _repositoryStock.getAvailableQuantity(
+        pharmacy.id!,
+        product.id!,
+      ));
+
+      // Verificar se a quantidade solicitada é maior que a disponível
+      if (quantity > availableQuantity || availableQuantity <= 0) {
+        throw Exception('Quantidade indisponível');
+      }
+
+      // Verificar se o produto já está no carrinho
+
+      var index = list.indexWhere((element) =>
+          element.product.id == product.id &&
+          element.pharmacy.id == pharmacy.id);
+
+      if (index >= 0) {
+        list[index].quantity += quantity;
+      } else {
+        list.add(new CartItem(
+            product: product, pharmacy: pharmacy, quantity: quantity));
+      }
+
+      value.setString('cart', jsonEncode(list.map((e) => e.toJson()).toList()));
+    });
+  }
+}
+
+class CartItem {
+  final ProductModels product;
+  final PharmacyModels pharmacy;
+  int quantity;
+
+  CartItem({
+    required this.product,
+    required this.pharmacy,
+    required this.quantity,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'product': product.toJson(),
+      'pharmacy': pharmacy.toJson(),
+      'quantity': quantity,
+    };
+  }
+
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      product: ProductModels.fromJson(json['product']),
+      pharmacy: PharmacyModels.fromJson(json['pharmacy']),
+      quantity: json['quantity'],
+    );
+  }
+
+  @override
+  String toString() {
+    return 'CartItem{product: $product, pharmacy: $pharmacy, quantity: $quantity}';
   }
 }

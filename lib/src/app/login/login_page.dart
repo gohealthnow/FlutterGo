@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/layout/user_view_model.dart';
-import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/src/app/login/login_controller.dart';
 import 'package:gohealth/src/app/register/register_page.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
@@ -179,7 +178,12 @@ class LoginPageState extends State<LoginPage> {
                         .login(_emailController.text, _passwordController.text)
                         .then((value) => value)
                         .catchError((error) {
-                      return Future<UserModels>.value(UserModels());
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Erro ao fazer login'),
+                              backgroundColor: Colors.redAccent,
+                            ),
+                          );
                     });
 
                     if (user.id != null) {

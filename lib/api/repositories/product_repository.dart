@@ -1,4 +1,5 @@
 import 'package:gohealth/api/interfaces/product_interface.dart';
+import 'package:gohealth/api/models/pharmacy_to_product_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/services/http_client.dart';
 
@@ -56,6 +57,33 @@ class ProductRepository implements IProduct {
         print(product.toString());
         model.add(product);
       }
+    }
+
+    return model;
+  }
+
+  Future<List<PharmacyStockItem>> getQuantity(
+      int productId, int pharmacyId) async {
+    var response = await repositoryHttpClient.client
+        .get('/product/stock/$productId/$pharmacyId');
+
+    List<PharmacyStockItem> model = [];
+
+    for (var item in response.data['products']) {
+      model.add(PharmacyStockItem.fromJson(item));
+    }
+
+    return model;
+  }
+
+  Future<List<ProductModels>> getProducts(String searchText) async {
+    var response =
+        await repositoryHttpClient.client.post('/product/name/$searchText');
+
+    List<ProductModels> model = [];
+
+    for (var item in response.data['products']) {
+      model.add(ProductModels.fromJson(item));
     }
 
     return model;

@@ -80,7 +80,7 @@ class _ProductReserveState extends State<ProductReserve> {
                           setState(() {
                             snapshot.data!.removeAt(index);
                             SharedLocalStorageService()
-                                .removeProduct(product.id);
+                                .removeProductTocart(id: product.id!);
                           });
                         },
                       ),
