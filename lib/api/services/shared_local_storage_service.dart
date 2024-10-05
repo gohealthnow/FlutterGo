@@ -23,14 +23,25 @@ class SharedLocalStorageService implements ILocalStorage {
 
     var user = UserModels(
       id: shared.getInt('id'),
-      createdAt: shared.getString('createdAt'),
-      updatedAt: shared.getString('updatedAt'),
+      createdAt: shared.getString('createdAt') != null
+          ? DateTime.parse(shared.getString('createdAt')!)
+          : null,
+      updatedAt: shared.getString('updatedAt') != null
+          ? DateTime.parse(shared.getString('updatedAt')!)
+          : null,
       email: shared.getString('email'),
       name: shared.getString('name'),
-      product: product,
+      products: product != null
+          ? (product['products'] as List)
+              .map((e) => ProductModels.fromJson(e))
+              .toList()
+          : null,
       avatar: shared.getString('avatar'),
       bio: shared.getString('bio'),
-      role: shared.getString('role'),
+      role: shared.getString('role') != null
+          ? Role.values.firstWhere(
+              (e) => e.toString() == 'Role.' + shared.getString('role')!)
+          : null,
     );
 
     return user;
