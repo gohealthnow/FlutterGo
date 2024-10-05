@@ -1,5 +1,4 @@
 import 'package:gohealth/api/interfaces/product_interface.dart';
-import 'package:gohealth/api/models/pharmacy_model.dart';
 import 'package:gohealth/api/models/pharmacy_to_product_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/services/http_client.dart';
@@ -63,8 +62,10 @@ class ProductRepository implements IProduct {
     return model;
   }
 
-  Future<List<PharmacyStockItem>> getQuantity(int productId, int pharmacyId) async {
-    var response = await repositoryHttpClient.client.get('/product/stock/$productId/$pharmacyId');
+  Future<List<PharmacyStockItem>> getQuantity(
+      int productId, int pharmacyId) async {
+    var response = await repositoryHttpClient.client
+        .get('/product/stock/$productId/$pharmacyId');
 
     List<PharmacyStockItem> model = [];
 
@@ -77,18 +78,12 @@ class ProductRepository implements IProduct {
 
   Future<List<ProductModels>> getProducts(String searchText) async {
     var response =
-        await repositoryHttpClient.client.get('/product/name/$searchText');
+        await repositoryHttpClient.client.post('/product/name/$searchText');
 
-    List<ProductModels> model = List<ProductModels>.from(
-        response.data['product'].map((x) => ProductModels.fromJson(x)));
+    List<ProductModels> model = [];
 
-    List<PharmacyStockItem> pharmacies = List<PharmacyStockItem>.from(response
-        .data['pharmacies']
-        .map((x) => PharmacyModels.fromJson(x['pharmacy'])));
-
-    for (var item in model) {
-      item.pharmacyProduct =
-          pharmacies.where((element) => element.productId == item.id).toList();
+    for (var item in response.data['products']) {
+      model.add(ProductModels.fromJson(item));
     }
 
     return model;
