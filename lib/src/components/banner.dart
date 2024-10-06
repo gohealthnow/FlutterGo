@@ -31,7 +31,9 @@ class _BannerComponentState extends State<BannerComponent> {
         return value.where((element) => element.promotion == true).toList();
       });
     } else {
-      products = _viewModel.loadProducts();
+      products = _viewModel.loadProducts().then((value) {
+        return value.where((element) => element.promotion == false).toList();
+      });
     }
   }
 
