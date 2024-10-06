@@ -49,7 +49,20 @@ class HomepageState extends State<Homepage> {
                 constraints: BoxConstraints(
                   maxHeight: screenHeight * 0.6, // 60% da altura da tela
                 ),
-                child: const BannerComponent(),
+                child: const BannerComponent(hasPromotion: false),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text(
+                  'Produtos em promoção',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: screenHeight * 0.6, // 60% da altura da tela
+                ),
+                child: const BannerComponent(hasPromotion: true),
               ),
             ],
           ),
