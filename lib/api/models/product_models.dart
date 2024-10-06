@@ -9,6 +9,7 @@ class ProductModels {
   String? image;
   double? weight;
   double? dimensions;
+  bool? promotion;
   double? rating;
   String? createdAt;
   String? updatedAt;
@@ -26,6 +27,7 @@ class ProductModels {
       this.weight,
       this.dimensions,
       this.rating,
+      this.promotion,
       this.createdAt,
       this.updatedAt,
       this.user,
@@ -44,6 +46,7 @@ class ProductModels {
       dimensions: json['dimensions'],
       rating: json['rating'],
       createdAt: json['createdAt'],
+      promotion: json['promotion'],
       updatedAt: json['updatedAt'],
       categories: json['categories'] != null
           ? (json['categories'] as List).map((i) => i.toString()).toList()
@@ -71,6 +74,7 @@ class ProductModels {
       'image': image,
       'weight': weight,
       'dimensions': dimensions,
+      'promotion': promotion,
       'rating': rating,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
