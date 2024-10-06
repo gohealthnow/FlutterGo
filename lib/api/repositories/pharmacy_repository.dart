@@ -33,4 +33,25 @@ class PharmacyRepository implements IPharmacy {
       throw Exception('Failed to load products');
     }
   }
+
+  Future<bool> createPharmacy(
+      {required String name,
+      required String image,
+      required String cep,
+      required String email,
+      required String phone}) async {
+    var response =
+        await repositoryHttpClient.client.post('/pharmacy/create', data: {
+      'name': name,
+      if (image.isNotEmpty) 'imageurl': image,
+      'cep': cep,
+      'phone': phone,
+      'email': email,
+    });
+
+    print(response.data);
+
+    return response.statusCode == 200 || response.statusCode == 201;
+  }
+
 }

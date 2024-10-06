@@ -20,6 +20,10 @@ class UserRepository implements IUser {
       'password': password,
     });
 
+    if(response.statusCode == 401) {
+      throw Exception('Erro ao logar');
+    }
+
     logout();
 
     UserModels model = UserModels.fromJson(response.data['user']);

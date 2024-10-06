@@ -8,7 +8,9 @@ import 'package:gohealth/api/repositories/product_repository.dart';
 import 'package:gohealth/src/app/sessions/products/product_page.dart';
 
 class BannerComponent extends StatefulWidget {
-  const BannerComponent({super.key});
+  final bool hasPromotion;
+
+  const BannerComponent({super.key, required this.hasPromotion});
 
   @override
   _BannerComponentState createState() => _BannerComponentState();
@@ -24,6 +26,13 @@ class _BannerComponentState extends State<BannerComponent> {
   void initState() {
     super.initState();
     products = _viewModel.loadProducts();
+    if (widget.hasPromotion) {
+      products = _viewModel.loadProducts().then((value) {
+        return value.where((element) => element.promotion == true).toList();
+      });
+    } else {
+      products = _viewModel.loadProducts();
+    }
   }
 
   @override
