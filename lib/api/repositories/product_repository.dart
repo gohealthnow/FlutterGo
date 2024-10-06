@@ -1,4 +1,5 @@
 import 'package:gohealth/api/interfaces/product_interface.dart';
+import 'package:gohealth/api/models/pharmacy_model.dart';
 import 'package:gohealth/api/models/pharmacy_to_product_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/services/http_client.dart';
@@ -87,5 +88,27 @@ class ProductRepository implements IProduct {
     }
 
     return model;
+  }
+
+  Future<bool> createProduct(ProductModels product) async {
+    var response =
+        await repositoryHttpClient.client.post('/product/create', data: {
+      "name": product.name,
+      "price": product.price,
+    });
+
+    return response.statusCode == 200 || response.statusCode == 201;
+  }
+
+  Future<bool> updateStock(
+      {required ProductModels product,
+      required PharmacyModels pharmacy,
+      required int quantity}) async {
+    var response = await repositoryHttpClient.client
+        .put('/product/update/stock/${product.id}/${pharmacy.id}', data: {
+      "quantity": quantity,
+    });
+
+    return response.statusCode == 200 || response.statusCode == 201;
   }
 }

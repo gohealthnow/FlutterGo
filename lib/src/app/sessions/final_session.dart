@@ -112,25 +112,26 @@ class FinalSessionState extends State<FinalSessionPage> {
             children: [
               const Text('Sua primeira consulta'),
               Image.asset('assets/images/Final_Session.png'),
-              ListView.builder(
+                ListView.builder(
                 shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: products.length,
                 itemBuilder: (context, index) {
                   return CheckboxListTile(
-                    title: Text(products[index].name!),
-                    value: itemSelected.contains(products[index]),
-                    onChanged: (value) {
-                      setState(() {
-                        if (value!) {
-                          itemSelected.add(products[index]);
-                        } else {
-                          itemSelected.remove(products[index]);
-                        }
-                      });
-                    },
+                  title: Text(products[index].name!),
+                  value: itemSelected.contains(products[index]),
+                  onChanged: (value) {
+                    setState(() {
+                    if (value!) {
+                      itemSelected.add(products[index]);
+                    } else {
+                      itemSelected.remove(products[index]);
+                    }
+                    });
+                  },
                   );
                 },
-              ),
+                ),
               ElevatedButton(
                   onPressed: () => {
                         for (var item in itemSelected)
