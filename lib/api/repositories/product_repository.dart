@@ -111,4 +111,14 @@ class ProductRepository implements IProduct {
 
     return response.statusCode == 200 || response.statusCode == 201;
   }
+
+  Future<bool> createProductPromotion({required ProductModels product}) async {
+    var response = await repositoryHttpClient.client
+        .put('/product/update/${product.id}', data: {
+      "price": product.price,
+      "promotion": product.promotion == true ? false : true,
+    });
+
+    return response.statusCode == 200 || response.statusCode == 201;
+  }
 }
