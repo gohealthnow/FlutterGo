@@ -71,7 +71,6 @@ class _ProductFormState extends State<ProductForm> {
               if (value == null || value.isEmpty) {
                 return 'Por favor, insira o preço do produto';
               }
-              value = value.replaceAll(',', '.');
               if (double.tryParse(value) == null) {
                 return 'Por favor, insira um preço válido';
               }
