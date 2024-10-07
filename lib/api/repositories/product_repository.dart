@@ -121,4 +121,5 @@ class ProductRepository implements IProduct {
 
     return response.statusCode == 200 || response.statusCode == 201;
   }
+
 }

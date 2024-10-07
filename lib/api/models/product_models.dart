@@ -59,8 +59,8 @@ class ProductModels {
               .map((i) => PharmacyStockItem.fromJson(i))
               .toList()
           : null,
-      reviews: json['review'] != null
-          ? (json['review'] as List).map((i) => Review.fromJson(i)).toList()
+      reviews: json['reviews'] != null
+          ? (json['reviews'] as List).map((i) => Review.fromJson(i)).toList()
           : null,
     );
   }
@@ -80,7 +80,7 @@ class ProductModels {
       'updatedAt': updatedAt,
       'user': user?.map((v) => v.toJson()).toList(),
       'PharmacyProduct': pharmacyProduct?.map((v) => v.toJson()).toList(),
-      'review': reviews?.map((v) => v.toJson()).toList(),
+      'reviews': reviews?.map((v) => v.toJson()).toList(),
     };
   }
 }
@@ -92,8 +92,6 @@ class Order {
   int quantity;
   DateTime createdAt;
   DateTime updatedAt;
-  ProductModels product;
-  UserModels user;
 
   Order({
     required this.id,
@@ -102,8 +100,6 @@ class Order {
     required this.quantity,
     required this.createdAt,
     required this.updatedAt,
-    required this.product,
-    required this.user,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -114,8 +110,6 @@ class Order {
       quantity: json['quantity'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
-      product: ProductModels.fromJson(json['product']),
-      user: UserModels.fromJson(json['user']),
     );
   }
 
@@ -127,8 +121,6 @@ class Order {
       'quantity': quantity,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
-      'product': product.toJson(),
-      'user': user.toJson(),
     };
   }
 }
@@ -139,7 +131,7 @@ class Review {
   DateTime updatedAt;
   String title;
   String body;
-  double rating;
+  int rating;
 
   Review({
     required this.id,
