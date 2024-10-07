@@ -20,7 +20,7 @@ class UserRepository implements IUser {
       'password': password,
     });
 
-    if(response.statusCode == 401) {
+    if (response.statusCode == 401) {
       throw Exception('Erro ao logar');
     }
 
@@ -103,18 +103,49 @@ class UserRepository implements IUser {
     return model;
   }
 
-  buy(
+  purchaseItem(
       {required int id,
       required int productId,
       required int quantity,
       required int pharid}) async {
-    var response = await userNetworkClient.client.post('/user/product/buy', data: {
-      'id': id,
-      'prodid': productId,
-      'pharid': pharid,
-      'quantity': quantity
-    });
+    var response = await userNetworkClient.client.post('/user/product/buy',
+        data: {
+          'id': id,
+          'prodid': productId,
+          'pharid': pharid,
+          'quantity': quantity
+        });
 
     return response.data;
+  }
+
+  Future<List<Order>> getOrder({required UserModels user}) async {
+    var response = await userNetworkClient.client.post("/user/order", data: {
+      'id': user.id,
+    });
+
+    List<Order> model = [];
+
+    for (var item in response.data['order']) {
+      print(item);
+      model.add(Order.fromJson(item));
+    }
+
+    return model;
+  }
+
+  Future<bool> createReview(
+      {required int user,
+      required int product,
+      required String review,
+      required int rating}) async {
+    var response = await userNetworkClient.client.post('/user/review', data: {
+      'id': user,
+      'prodid': product,
+      'rating': rating,
+      'comment': review
+    });
+
+    return response.statusCode == 200 || response.statusCode == 201;
   }
 }
