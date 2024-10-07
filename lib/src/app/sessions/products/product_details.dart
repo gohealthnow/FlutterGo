@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/product_models.dart';
+import 'dart:math' as math;
 
 class ProductDetailsPage extends StatefulWidget {
   const ProductDetailsPage({Key? key, required this.productModels})
@@ -15,25 +16,38 @@ class ProductDetails extends State<ProductDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            widget.productModels.name ?? 'Nome não disponível',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
+          Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  Icon(Icons.medication,
+                      color:
+                          Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+                              .withOpacity(1.0)),
+                  SizedBox(width: 8),
+                  Text(
+                    "${widget.productModels.name!}",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              )),
           SizedBox(height: 8),
           Text(
             "R\$${widget.productModels.price.toString()}",
             style: TextStyle(fontSize: 20, color: Colors.grey),
           ),
           SizedBox(height: 16),
-          Text(
-            'Avaliações',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 8),
+          widget.productModels.reviews != null &&
+                  widget.productModels.reviews!.isNotEmpty
+              ? Text(
+                  'Avaliações',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                )
+              : SizedBox.shrink(),
           widget.productModels.reviews != null &&
                   widget.productModels.reviews!.isNotEmpty
               ? Column(
@@ -44,25 +58,28 @@ class ProductDetails extends State<ProductDetailsPage> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Text(
-                                review.title,
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Icon(Icons.star, color: Colors.yellow),
                             Row(
-                              children:
-                                  List.generate(review.rating.toInt(), (index) {
-                                return Icon(Icons.star, color: Colors.yellow);
+                              children: List.generate(5, (index) {
+                              return Icon(
+                                Icons.star,
+                                color: index < review.rating.clamp(0, 5).toInt()
+                                  ? Colors.yellow
+                                  : Colors.grey,
+                                size: 30,
+                              );
                               }),
                             ),
                             Expanded(
-                                child: Text(
-                              review.body,
-                              style: TextStyle(fontSize: 16),
-                            ))
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    review.body,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       );
@@ -129,7 +146,7 @@ class ProductDetails extends State<ProductDetailsPage> {
                       ),
                   ],
                 )
-              : Container()
+              : SizedBox.shrink(),
         ],
       ),
     );
