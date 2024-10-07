@@ -15,24 +15,33 @@ class DescriptionSectionState extends State<DescriptionWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Descrição',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 8),
-          Text(
-            widget.productModels.description.toString(),
-            style: TextStyle(fontSize: 16),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Peso: ${widget.productModels.weight.toString()}g',
-            style: TextStyle(fontSize: 16),
-          ),
+          widget.productModels.description != null
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Descrição',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      widget.productModels.description.toString(),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                )
+              : SizedBox.shrink(),
+          widget.productModels.weight != null
+              ? Text(
+                  'Peso: ${widget.productModels.weight.toString()}g',
+                  style: TextStyle(fontSize: 16),
+                )
+              : SizedBox.shrink()
         ],
       ),
     );

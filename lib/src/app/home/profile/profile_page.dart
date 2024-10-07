@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
-import 'package:gohealth/src/app/home/profile/pharmacy_form_create.dart';
-import 'package:gohealth/src/app/home/profile/product_form_create.dart';
-import 'package:gohealth/src/app/home/profile/stock_update.dart';
-import 'package:gohealth/src/app/splash_page.dart';
+import 'package:gohealth/src/app/home/profile/forms/pharmacy_form_create.dart';
+import 'package:gohealth/src/app/home/profile/forms/product_form_create.dart';
+import 'package:gohealth/src/app/home/profile/forms/product_promotion_add.dart';
+import 'package:gohealth/src/app/home/profile/forms/stock_update.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -55,6 +55,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: EdgeInsets.all(12),
                             child: StockUpdate(),
                           ),
+                          Divider(),
+                          Padding(
+                              padding: EdgeInsets.all(12),
+                              child: ProductPromotionAdd()),
                         ]
                       ],
                     );

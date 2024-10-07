@@ -47,10 +47,11 @@ class HomepageState extends State<Homepage> {
               ),
               ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: screenHeight * 0.6, // 60% da altura da tela
+                  maxHeight: screenHeight * 0.2, // 60% da altura da tela
                 ),
                 child: const BannerComponent(hasPromotion: false),
               ),
+              Divider(),
               const Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Text(
@@ -60,7 +61,7 @@ class HomepageState extends State<Homepage> {
               ),
               ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: screenHeight * 0.6, // 60% da altura da tela
+                  maxHeight: screenHeight * 0.2, // 60% da altura da tela
                 ),
                 child: const BannerComponent(hasPromotion: true),
               ),

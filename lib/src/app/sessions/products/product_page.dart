@@ -3,6 +3,7 @@ import 'package:gohealth/api/models/pharmacy_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/repositories/pharmacy_repository.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
+import 'package:gohealth/src/app/sessions/products/review_add.dart';
 import 'image_carousel.dart';
 import 'product_details.dart';
 import 'description_section.dart';
@@ -41,15 +42,6 @@ class ProductState extends State<ProductPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Produto'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.more_vert),
-            onPressed: () {
-              // Ação de criar uma avaliação
-              
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -57,7 +49,9 @@ class ProductState extends State<ProductPage> {
           children: [
             ImageCarousel(productModels: widget.productModels),
             ProductDetailsPage(productModels: widget.productModels),
+            Divider(),
             DescriptionWidget(productModels: widget.productModels),
+            ReviewAdd(productModels: widget.productModels),
           ],
         ),
       ),
