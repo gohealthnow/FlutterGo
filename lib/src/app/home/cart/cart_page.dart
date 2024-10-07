@@ -49,7 +49,7 @@ class _CartPageState extends State<CartPage> {
 
                       if (user != null && user.id != null) {
                         for (var item in cartItens) {
-                          await _repositoryUser.buy(
+                          await _repositoryUser.purchaseItem(
                               id: user.id!,
                               productId: item.product.id!,
                               quantity: item.quantity,
