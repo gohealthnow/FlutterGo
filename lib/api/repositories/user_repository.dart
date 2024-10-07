@@ -20,7 +20,7 @@ class UserRepository implements IUser {
       'password': password,
     });
 
-    if (response.statusCode == 401) {
+    if(response.statusCode == 401) {
       throw Exception('Erro ao logar');
     }
 
