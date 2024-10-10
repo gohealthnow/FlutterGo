@@ -1,4 +1,4 @@
-name: Flutter
+name: Flutter CI
 
 on:
   push:
@@ -25,13 +25,21 @@ jobs:
           path: ~/.pub-cache
           key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
 
+      # Instalar o dotenv para carregar as variáveis do .env
+      - name: Install dotenv package
+        run: flutter pub add flutter_dotenv
+
       # Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
-      # Verify formatting
-      # - name: Verify formatting
-      #   run: flutter format --set-exit-if-changed .
+      # Configurar variáveis de ambiente com dotenv
+      - name: Setup environment variables
+        run: echo "BASE_URL=${{ secrets.BASE_URL }}" > .env
+
+      # Verificar formatação
+      - name: Verify formatting
+        run: flutter format --set-exit-if-changed .
 
       # Analyze project source
       - name: Analyze project source
