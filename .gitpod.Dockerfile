@@ -1,7 +1,7 @@
 FROM gitpod/workspace-full-vnc:2022-07-20-05-50-58
 SHELL ["/bin/bash", "-c"]
 ENV ANDROID_HOME=$HOME/androidsdk \
-    FLUTTER_VERSION=3.0.2-stable \
+    FLUTTER_VERSION=3.4.3-stable \
     QTWEBENGINE_DISABLE_SANDBOX=1
 ENV PATH="$HOME/flutter/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
 
@@ -15,11 +15,11 @@ RUN install-packages openjdk-8-jdk -y \
     && update-java-alternatives --set java-1.8.0-openjdk-amd64
 
 # Make some changes for our vnc client and flutter chrome
-# RUN sed -i 's|resize=scale|resize=remote|g' /opt/novnc/index.html \
-#     && _gc_path="$(command -v google-chrome)" \
-#     && rm "$_gc_path" && printf '%s\n' '#!/usr/bin/env bash' \
-#                                         'chromium --start-fullscreen "$@"' > "$_gc_path" \
-#     && chmod +x "$_gc_path" 
+ RUN sed -i 's|resize=scale|resize=remote|g' /opt/novnc/index.html \
+     && _gc_path="$(command -v google-chrome)" \
+     && rm "$_gc_path" && printf '%s\n' '#!/usr/bin/env bash' \
+                                         'chromium --start-fullscreen "$@"' > "$_gc_path" \
+     && chmod +x "$_gc_path" 
 
 # Insall flutter and dependencies
 USER gitpod
