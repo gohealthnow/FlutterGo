@@ -6,6 +6,7 @@ import 'package:gohealth/src/app/home/profile/forms/pharmacy_form_create.dart';
 import 'package:gohealth/src/app/home/profile/forms/product_form_create.dart';
 import 'package:gohealth/src/app/home/profile/forms/product_promotion_add.dart';
 import 'package:gohealth/src/app/home/profile/forms/stock_update.dart';
+import 'package:gohealth/src/app/home/profile/report/report_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -59,6 +60,19 @@ class _ProfilePageState extends State<ProfilePage> {
                           Padding(
                               padding: EdgeInsets.all(12),
                               child: ProductPromotionAdd()),
+                          Divider(),
+                          Padding(
+                            padding: EdgeInsets.all(12),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ReportPage()),
+                                );
+                              },
+                              child: Text('Ir para Report Page'),
+                            ),
+                          ),
                         ]
                       ],
                     );
