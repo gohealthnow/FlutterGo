@@ -179,8 +179,8 @@ class LoginPageState extends State<LoginPage> {
                         .then((value) => value)
                         .catchError((error) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Erro ao fazer login'),
+                            SnackBar(
+                              content: Text(error.toString()),
                               backgroundColor: Colors.redAccent,
                             ),
                           );
