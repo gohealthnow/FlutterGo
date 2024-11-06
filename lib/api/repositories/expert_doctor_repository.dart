@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:gohealth/api/services/http_client.dart';
 
-class expertDoctor {
+class ExpertDoctor {
   late MedicalExpertService userNetworkClient;
 
-  expertDoctor() {
+  ExpertDoctor() {
     userNetworkClient = MedicalExpertService();
   }
 
