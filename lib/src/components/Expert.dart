@@ -9,19 +9,20 @@ class Expert extends StatefulWidget {
 
 class _ExpertState extends State<Expert> {
   final TextEditingController _controller = TextEditingController();
-  late final expertDoctor;
+  late final ExpertDoctor expertDoctor;
 
   Future<Response> texto = Future.value(Response('', 200));
 
   @override
   void initState() {
     super.initState();
-    expertDoctor = expertDoctor();
+    expertDoctor = ExpertDoctor();
   }
   
   void getSymptoms(String prompt) {
+    if (!mounted) return; // Verifica se o widget ainda está montado
     setState(() {
-      texto = expertDoctor.getSymptoms(prompt);
+      texto = expertDoctor.getSymptoms(prompt) as Future<Response>;
     });
   }
 
@@ -39,7 +40,7 @@ class _ExpertState extends State<Expert> {
                 } else if (snapshot.hasError) {
                   return Text('Erro: ${snapshot.error}');
                 } else {
-                  if (!snapshot.hasData || (snapshot.data!.body as List).isEmpty) {
+                  if (!snapshot.hasData || snapshot.data!.body.isEmpty) {
                     return const Center(child: Text('Nenhum produto encontrado.'));
                   } else {
                     return Text(snapshot.data.toString());
