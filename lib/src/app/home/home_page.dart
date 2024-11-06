@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/src/components/Expert.dart';
 import 'package:gohealth/src/components/banner.dart';
 import 'package:gohealth/src/components/pharmacy.dart';
 import 'package:gohealth/src/components/side_menu.dart';
@@ -70,7 +71,7 @@ class HomepageState extends State<Homepage> {
                 constraints: BoxConstraints(
                   maxHeight: screenHeight * 0.2, // 60% da altura da tela
                 ),
-                child: const BannerComponent(hasPromotion: true),
+                child: Expert(),
               ),
             ],
           ),
