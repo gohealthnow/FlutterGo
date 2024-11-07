@@ -20,7 +20,6 @@ class _ExpertState extends State<Expert> {
   }
   
   void getSymptoms(String prompt) {
-    if (!mounted) return; // Verifica se o widget ainda está montado
     setState(() {
       texto = expertDoctor.getSymptoms(prompt) as Future<Response>;
     });
@@ -41,7 +40,7 @@ class _ExpertState extends State<Expert> {
                   return Text('Erro: ${snapshot.error}');
                 } else {
                   if (!snapshot.hasData || snapshot.data!.body.isEmpty) {
-                    return const Center(child: Text('Nenhum produto encontrado.'));
+                    return const SizedBox();
                   } else {
                     return Text(snapshot.data.toString());
                   }
