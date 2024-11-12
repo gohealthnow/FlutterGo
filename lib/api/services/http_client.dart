@@ -19,9 +19,9 @@ class HttpClient {
 class MedicalExpertService {
   late Dio client;
 
-  HttpClient() {
+  MedicalExpertService() {
     client = Dio(BaseOptions(
-      baseUrl: dotenv.env['BASE_URL_IA'] ?? 'http://127.0.0.1:8000',
+      baseUrl: dotenv.env['BASE_URL_IA'] ?? 'http://10.0.2.2:8000',
       headers: {
         'Content-Type': 'application/json',
       },

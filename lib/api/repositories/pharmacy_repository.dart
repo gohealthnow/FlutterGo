@@ -57,7 +57,7 @@ class PharmacyRepository implements IPharmacy {
 
   Future<List<PharmacyModels>> getPharmacyByName(String text) async {
     var response =
-        await repositoryHttpClient.client.get('/pharmacy/name/$text');
+        await repositoryHttpClient.client.get('/pharmacy/search/$text');
 
     List<PharmacyModels> model = [];
 

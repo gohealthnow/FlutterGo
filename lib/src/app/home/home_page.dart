@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/components/Expert.dart';
+import 'package:gohealth/src/components/checklist/Expert.dart';
 import 'package:gohealth/src/components/banner.dart';
 import 'package:gohealth/src/components/pharmacy.dart';
 import 'package:gohealth/src/components/side_menu.dart';
@@ -69,7 +69,7 @@ class HomepageState extends State<Homepage> {
               Divider(),
               ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: screenHeight * 0.2, // 60% da altura da tela
+                  maxHeight: screenHeight * 0.3, // 60% da altura da tela
                 ),
                 child: Expert(),
               ),

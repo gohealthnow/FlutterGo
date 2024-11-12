@@ -10,6 +10,12 @@
       "type": "dart"
     },
     {
+      
+      "name": "Flutter attach",
+      "request": "attach", // Attach instead of launching
+      "type": "dart",
+    },
+    {
       "name": "FlutterGo (profile mode)",
       "request": "launch",
       "type": "dart",
