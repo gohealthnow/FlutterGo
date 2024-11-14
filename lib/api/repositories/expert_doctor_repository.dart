@@ -20,8 +20,17 @@ class ExpertDoctor {
         },
       );
 
+      if (response.data == null) {
+        throw Exception('Erro ao buscar os sintomas');
+      }
+
+      if (response.statusCode != 200) {
+        throw Exception('Erro ao buscar os sintomas');
+      }
+
       return SymptomsDataRequest.fromJson(response.data);
     } catch (e) {
+      print(e.toString());
       rethrow;
     }
   }
