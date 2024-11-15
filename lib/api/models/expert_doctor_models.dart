@@ -13,3 +13,19 @@ class SymptomsDataRequest {
     return data;
   }
 }
+
+class DiagnosticDataRequest {
+  final String title;
+  final String description;
+  final String score;
+
+  DiagnosticDataRequest({required this.title, required this.description, required this.score});
+
+  factory DiagnosticDataRequest.fromJson(Map<String, dynamic> json) {
+    return DiagnosticDataRequest(
+      title: json['title'],
+      description: json['description'],
+      score: json['score'],
+    );
+  }
+}

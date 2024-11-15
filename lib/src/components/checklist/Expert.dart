@@ -21,8 +21,17 @@ class _ExpertState extends State<Expert> {
   }
 
   Future<void> _fetchSymptoms() async {
-    symptoms = await _expertDoctor.getSymptoms(_textController.text);
-    setState(() {});
+    try {
+      symptoms = await _expertDoctor.getSymptoms(_textController.text);
+      setState(() {});
+    } catch (e) {
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text('Erro: ${e.toString()}'),
+        ),
+      );
+    }
   }
 
   @override

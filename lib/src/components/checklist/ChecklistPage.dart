@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/expert_doctor_models.dart';
+import 'package:gohealth/src/components/checklist/Diagnois.dart';
 
 class ChecklistPage extends StatefulWidget {
   final SymptomsDataRequest symptoms;
@@ -40,8 +41,21 @@ class _ChecklistPageState extends State<ChecklistPage> {
       ),
     floatingActionButton: FloatingActionButton(
       onPressed: () {
-        // Implement your logic to send the suspicion and return the result
-        // For example, you can navigate to another page or show a dialog with the result
+
+        List<String> array = [];
+
+        for (int i = 0; i < _checked.length; i++) {
+          if (_checked[i] == true) {
+            array.add(widget.symptoms.sintomas![i]);
+          }
+        }
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Diagnois(array: array),
+          ),
+        );
       },
       child: const Icon(Icons.send),
     ),
