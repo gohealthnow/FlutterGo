@@ -28,7 +28,7 @@ class _ExpertState extends State<Expert> {
       final scaffoldMessenger = ScaffoldMessenger.of(context);
       scaffoldMessenger.showSnackBar(
         SnackBar(
-          content: Text('Erro: ${e.toString()}'),
+          content: Text('Erro ao tentar gerar os sintomas. Tente novamente.'),
         ),
       );
     }
