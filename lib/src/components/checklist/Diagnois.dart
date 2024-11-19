@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:gohealth/api/models/expert_doctor_models.dart';
 import 'package:gohealth/api/repositories/expert_doctor_repository.dart';
 
@@ -13,7 +14,7 @@ class Diagnois extends StatefulWidget {
 
 class _DiagnoisState extends State<Diagnois> {
   final ExpertDoctor _expertDoctor = ExpertDoctor();
-  late DiagnosticDataRequest _diagnosticDataRequest;
+  DiagnosticDataRequest? _diagnosticDataRequest;
 
   @override
   void initState() {
@@ -28,8 +29,12 @@ class _DiagnoisState extends State<Diagnois> {
         _diagnosticDataRequest = result;
       });
     } catch (e) {
-      _fetchSymptoms();
-      rethrow;
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text('Erro ao tentar gerar os sintomas. Tente novamente.'),
+        ),
+      );
     }
   }
 
@@ -40,31 +45,41 @@ class _DiagnoisState extends State<Diagnois> {
         title: const Text('Diagnóstico'),
       ),
       body: _diagnosticDataRequest == null
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    'Diagnóstico: ${_diagnosticDataRequest.title}',
-                    style: const TextStyle(fontSize: 20),
+          ? Center(child: CircularProgressIndicator())
+          : Column(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: 16),
+                  child: Image.asset(
+                    'assets/images/title_image.png',
+                    height: 100,
+                    width: 100,
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Descrição: ${_diagnosticDataRequest.description}',
-                    style: const TextStyle(fontSize: 20),
+                ),
+                Text(
+                  'Titulo: ${_diagnosticDataRequest!.title}',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Porcentagem: ${_diagnosticDataRequest.score} / 10',
-                    style: const TextStyle(fontSize: 20),
+                ),
+                Text(
+                  'Probabilidade: ${_diagnosticDataRequest!.score}',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.green,
                   ),
-                ],
-              ),
-            ),
-
+                ),
+                Text(
+                  'Descrição: ${_diagnosticDataRequest!.description}',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+          )
     );
   }
 }
