@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/expert_doctor_models.dart';
+import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/components/checklist/Diagnois.dart';
 
 class ChecklistPage extends StatefulWidget {
@@ -16,6 +17,13 @@ class _ChecklistPageState extends State<ChecklistPage> {
   @override
   void initState() {
     super.initState();
+    if (widget.symptoms.sintomas == null)
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Homepage()
+        ),
+      );
     _checked = List<bool?>.filled(widget.symptoms.sintomas!.length, false);
   }
 
