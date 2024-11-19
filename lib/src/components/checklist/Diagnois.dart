@@ -13,7 +13,7 @@ class Diagnois extends StatefulWidget {
 
 class _DiagnoisState extends State<Diagnois> {
   final ExpertDoctor _expertDoctor = ExpertDoctor();
-  late final DiagnosticDataRequest _diagnosticDataRequest;
+  late DiagnosticDataRequest _diagnosticDataRequest;
 
   @override
   void initState() {
