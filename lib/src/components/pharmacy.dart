@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gohealth/api/layout/pharmacy_view_model.dart';
 import 'package:gohealth/api/models/pharmacy_model.dart';
 import 'package:gohealth/api/repositories/pharmacy_repository.dart';
+import 'package:gohealth/src/app/sessions/pharmacy/pharmacy_page.dart';
 
 class PharmacyComponentState extends StatefulWidget {
   const PharmacyComponentState({super.key});
@@ -47,23 +48,34 @@ class PharmacyComponent extends State<PharmacyComponentState> {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Column(
                           children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 50,
-                              child: snapshot.data![index].image != null
-                                  ? ClipOval(
-                                      child: Image.network(
-                                        snapshot.data![index].image!,
-                                        fit: BoxFit.cover,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PharmacyPage(
+                                        pharmacy: snapshot.data![index]),
+                                  ),
+                                );
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 50,
+                                child: snapshot.data![index].image != null
+                                    ? ClipOval(
+                                        child: Image.network(
+                                          snapshot.data![index].image!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : Text(
+                                        snapshot.data![index].name!,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10,
+                                        ),
                                       ),
-                                    )
-                                  : Text(
-                                      snapshot.data![index].name!,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10,
-                                      ),
-                                    ),
+                              ),
                             ),
                           ],
                         ),
