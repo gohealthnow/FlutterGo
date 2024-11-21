@@ -66,13 +66,12 @@ class HomepageState extends State<Homepage> {
                 ),
                 child: const BannerComponent(hasPromotion: true),
               ),
-              Divider(),
               ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: screenHeight * 0.3, // 60% da altura da tela
-                ),
-                child: Expert(),
-              ),
+                  constraints: BoxConstraints(
+                    maxHeight: screenHeight * 0.2, // 20% da altura da tela
+                  ),
+                  child: const Divider()),
+              Expert(),
             ],
           ),
         ),
