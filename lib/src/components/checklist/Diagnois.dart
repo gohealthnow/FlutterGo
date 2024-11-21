@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import 'package:gohealth/api/models/expert_doctor_models.dart';
 import 'package:gohealth/api/repositories/expert_doctor_repository.dart';
 

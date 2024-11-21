@@ -36,7 +36,8 @@ class _ExpertState extends State<Expert> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return (_expertDoctor.isConnected() == true)
+        ? Scaffold(
       appBar: AppBar(
         title: const Text('GoHealth - Especialista'),
       ),
@@ -88,6 +89,14 @@ class _ExpertState extends State<Expert> {
           ],
         ),
       ),
+          )
+        : Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text('Aplicação em manutenção'),
+              ],
+            ),
     );
   }
 }

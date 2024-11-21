@@ -10,6 +10,14 @@ class ExpertDoctor {
     userNetworkClient = MedicalExpertService();
   }
 
+  Future<bool> isConnected() {
+    return userNetworkClient.client.get('/').then((response) {
+      return response.statusCode == 200;
+    }).catchError((error) {
+      return false;
+    });
+  }
+
   // O expertDoctor é uma classe que irá representar a API da Inteligencia artificial que irá retornar os dados de cada função
 
   // ! Esta função recebe um prompt do usuário e a IA retorna um checklist de sintomas. O usuário deve marcar os sintomas que está sentindo, conforme o texto que ele escreveu e que gerou o checklist.
