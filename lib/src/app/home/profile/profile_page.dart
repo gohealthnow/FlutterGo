@@ -40,9 +40,92 @@ class _ProfilePageState extends State<ProfilePage> {
                   if (snapshot.data != null) {
                     return Column(
                       children: [
-                        Text('Nome: ${snapshot.data!.name}'),
-                        Text('Email: ${snapshot.data!.email}'),
-                        Divider(),
+                        Container(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              // Foto de perfil
+                              CircleAvatar(
+                                radius: 60,
+                                backgroundImage: snapshot.data?.avatar != null
+                                    ? NetworkImage(snapshot.data!.avatar!)
+                                    : const NetworkImage(
+                                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'),
+                              ),
+                              const SizedBox(height: 24),
+
+                              // Informações do usuário
+                              Card(
+                                elevation: 4,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        snapshot.data!.name!.split(" ")[0],
+                                        style: const TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        "E-mail",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey[800],
+                                        ),
+                                      ),
+                                      Text(
+                                        snapshot.data!.email!,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        "Bio",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey[800],
+                                        ),
+                                      ),
+                                      Text(
+                                        snapshot.data!.bio!,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        "Role",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey[800],
+                                        ),
+                                      ),
+                                      Text(
+                                        snapshot.data!.role.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const Divider(
+                                height: 32,
+                                thickness: 1,
+                              ),
+                            ],
+                          ),
+                        ),
                         if (snapshot.data!.role == Role.ADMIN) ...[
                           Padding(
                               padding: EdgeInsets.all(12),
