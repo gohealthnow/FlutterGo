@@ -58,7 +58,6 @@ void onStart(ServiceInstance service) async {
   });
 
   socket.onConnect((_) async {
-    print('Connected. Socket ID: ${socket.id}');
     var user = await SharedLocalStorageService().getProfile();
 
     if (user != null && user.id != null) {
@@ -69,14 +68,12 @@ void onStart(ServiceInstance service) async {
   });
 
   socket.onDisconnect((_) {
-    print('Disconnected');
   });
 
   socket.on('productAvailable', (data) async {
     final product = await ProductRepository().getbyId(data['productId']);
     final pharmacy =
         await PharmacyRepository().getPharmacyById(data['pharmacyId']);
-    print('Produto disponível: $data');
 
     // Enviar uma notificação para o usuário mesmo inativo ou ativo
     await NotificationService.showNotification(
@@ -88,7 +85,6 @@ void onStart(ServiceInstance service) async {
 
   service.on("stop").listen((event) {
     service.stopSelf();
-    print("background process is now stopped");
   });
 
   service.on("start").listen((event) {});

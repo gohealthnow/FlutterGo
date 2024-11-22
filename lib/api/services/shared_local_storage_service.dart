@@ -109,6 +109,7 @@ class SharedLocalStorageService implements ILocalStorage {
     var shared = SharedPreferences.getInstance();
     return shared.then((value) {
       var products = value.getString('cart');
+      print("Produtos que deveriam estar no carrinho: $products");
       List<CartItem> list = [];
       if (products != null) {
         var decoded = jsonDecode(products) as List;
@@ -159,7 +160,6 @@ class SharedLocalStorageService implements ILocalStorage {
         pharmacy.id!,
         product.id!,
       ));
-
       // Verificar se a quantidade solicitada é maior que a disponível
       if (quantity > availableQuantity || availableQuantity <= 0) {
         throw Exception('Quantidade indisponível');
