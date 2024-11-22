@@ -1,11 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:gohealth/api/models/pharmacy_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/repositories/product_repository.dart';
-import 'package:gohealth/api/services/http_client.dart';
 import 'package:gohealth/src/app/sessions/pharmacy/pharmacy_controller.dart';
 import 'package:gohealth/src/app/sessions/products/product_page.dart';
 
