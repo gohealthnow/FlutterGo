@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/models/user_models.dart';
+import 'package:gohealth/api/repositories/product_repository.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 import 'package:gohealth/src/app/home/profile/forms/pharmacy_form_create.dart';
@@ -47,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               // Foto de perfil
                               CircleAvatar(
                                 radius: 60,
-                                backgroundImage: snapshot.data?.avatar != null
+                                backgroundImage: snapshot.data?.avatar == null
                                     ? NetworkImage(snapshot.data!.avatar!)
                                     : const NetworkImage(
                                         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'),
@@ -125,6 +127,52 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ],
                           ),
+                        ),
+                        // capturar todas as vendas realizadas pelo usuário
+                        FutureBuilder<List<Order>>(
+                          future:
+                              _repositoryUser.getOrder(user: snapshot.data!),
+                          builder: (context, orderSnapshot) {
+                            if (orderSnapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            if (orderSnapshot.hasError) {
+                              return Text(
+                                  'Erro ao carregar pedidos: ${orderSnapshot.error}');
+                            }
+                            if (!orderSnapshot.hasData ||
+                                orderSnapshot.data!.isEmpty) {
+                              return const Text('Nenhum pedido encontrado');
+                            }
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: orderSnapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                final order = orderSnapshot.data![index];
+                                return FutureBuilder<ProductModels>(
+                                  future: ProductRepository()
+                                      .getbyId(order.productId),
+                                  builder: (context, productSnapshot) {
+                                    if (productSnapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const ListTile(
+                                        title: Text("Carregando..."),
+                                      );
+                                    }
+                                    return ListTile(
+                                      title: Text(
+                                          "Pedido #${order.id.split("-")[0]}"),
+                                      subtitle: Text(
+                                          'Produto: ${productSnapshot.data?.name} - Quantidade: ${order.quantity}'),
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          },
                         ),
                         if (snapshot.data!.role == Role.ADMIN) ...[
                           Padding(
