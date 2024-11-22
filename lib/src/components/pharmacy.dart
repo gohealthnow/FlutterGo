@@ -77,6 +77,14 @@ class PharmacyComponent extends State<PharmacyComponentState> {
                                       ),
                               ),
                             ),
+                            const SizedBox(height: 8),
+                            Text(
+                              snapshot.data![index].name!,
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey[600],
+                              ),
+                            ),
                           ],
                         ),
                       );
