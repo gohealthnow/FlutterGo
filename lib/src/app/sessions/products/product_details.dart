@@ -21,20 +21,29 @@ class ProductDetails extends State<ProductDetailsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  Icon(Icons.medication,
-                      color:
-                          Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-                              .withOpacity(1.0)),
-                  SizedBox(width: 8),
-                  Text(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Icon(
+                  Icons.medication,
+                  color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+                      .withOpacity(1.0),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
                     "${widget.productModels.name!}",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
-                ],
-              )),
+                ),
+              ],
+            ),
+          ),
           SizedBox(height: 8),
           Text(
             "R\$${widget.productModels.price.toString()}",
