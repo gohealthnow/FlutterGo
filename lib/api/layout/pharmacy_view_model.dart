@@ -11,9 +11,6 @@ class PharmacyViewModel extends ValueNotifier<PharmacyModels> {
 
   Future<List<PharmacyModels>> loadPharmacies() async {
     List<PharmacyModels> model = await repository.getAll();
-    if (kDebugMode) {
-      print(model.toString());
-    }
     return model;
   }
 

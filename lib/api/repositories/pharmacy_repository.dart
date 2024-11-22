@@ -50,8 +50,6 @@ class PharmacyRepository implements IPharmacy {
       'email': email,
     });
 
-    print(response.data);
-
     return response.statusCode == 200 || response.statusCode == 201;
   }
 
