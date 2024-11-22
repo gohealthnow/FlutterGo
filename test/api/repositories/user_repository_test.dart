@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gohealth/api/models/user_models.dart';
@@ -9,10 +8,6 @@ void main() async {
   test('capturar os valores dentro do usuario', () async {
     final repository = UserRepository();
     final user = await repository.login('joaoaugusto@gmail.com', '123456');
-
-    if (kDebugMode) {
-      print(user.toJson());
-    }
 
     expect(user, isA<UserModels>());
   });
