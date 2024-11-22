@@ -55,7 +55,6 @@ class ProductRepository implements IProduct {
       if (item['productId'] != null) {
         var productIdentifier = item['productId'];
         var product = await getbyId(productIdentifier);
-        print(product.toString());
         model.add(product);
       }
     }

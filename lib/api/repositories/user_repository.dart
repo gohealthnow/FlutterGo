@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:gohealth/api/interfaces/user_interface.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/models/user_models.dart';
@@ -72,9 +71,6 @@ class UserRepository implements IUser {
     }
     try {
       var response = await userNetworkClient.client.get('/user/$id');
-      if (kDebugMode) {
-        print(response.data);
-      }
       final user = response.data['user'];
       final products = user['Product'];
       return products == null || products.isEmpty;
@@ -85,6 +81,11 @@ class UserRepository implements IUser {
         rethrow;
       }
     }
+  }
+
+  void unlinkProductinUser(ProductModels product, int user) async {
+    await userNetworkClient.client
+        .post('/user/product/unlink', data: {'prodid': product.id, 'id': user});
   }
 
   void linkProductinUser(ProductModels product, int user) async {
@@ -127,7 +128,6 @@ class UserRepository implements IUser {
     List<Order> model = [];
 
     for (var item in response.data['order']) {
-      print(item);
       model.add(Order.fromJson(item));
     }
 
