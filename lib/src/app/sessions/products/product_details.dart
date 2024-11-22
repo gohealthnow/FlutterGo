@@ -88,31 +88,38 @@ class ProductDetails extends State<ProductDetailsPage> {
                     ...widget.productModels.reviews!.take(2).map((review) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Row(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize
+                              .min, // Importante: não expande infinitamente
                           children: [
+                            Text(
+                              review.title.split(" ")[2],
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w300),
+                            ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: List.generate(5, (index) {
-                              return Icon(
-                                Icons.star,
-                                color: index < review.rating.clamp(0, 5).toInt()
-                                  ? Colors.yellow
-                                  : Colors.grey,
-                                size: 30,
-                              );
+                                return Icon(
+                                  Icons.star,
+                                  color:
+                                      index < review.rating.clamp(0, 5).toInt()
+                                          ? Colors.amber
+                                          : Colors.grey,
+                                  size: 15,
+                                );
                               }),
                             ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    review.body,
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ],
-                              ),
+                            
+                            const SizedBox(height: 8), // Espaçamento
+                            Text(
+                              review.body,
+                              style: TextStyle(fontSize: 16),
                             ),
+                            const SizedBox(
+                                height: 16), // Espaçamento entre reviews
                           ],
                         ),
                       );

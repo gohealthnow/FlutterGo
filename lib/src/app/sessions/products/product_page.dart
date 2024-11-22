@@ -119,13 +119,16 @@ class ProductState extends State<ProductPage> {
                                     Navigator.of(context).pop();
 
                                     try {
+                                      
+                                      print(
+                                          'Adicionando ao carrinho o produto ${widget.productModels.name} na farmácia ${pharmacy.name}\n ID: ${pharmacy.id} & ${widget.productModels.id}');
+
                                       SharedLocalStorageService()
                                           .addProductToCart(
-                                            product: widget.productModels,
-                                            pharmacy: pharmacy,
-                                            quantity: 1,
-                                          )
-                                          .toString();
+                                        product: widget.productModels,
+                                        pharmacy: pharmacy,
+                                        quantity: 1,
+                                      );
 
                                       final product = widget.productModels.name;
 
