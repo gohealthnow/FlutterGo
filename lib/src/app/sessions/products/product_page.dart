@@ -81,6 +81,20 @@ class ProductState extends State<ProductPage> {
                           ),
                         ],
                       );
+                    } else if (snapshot.data!.isEmpty) {
+                      return AlertDialog(
+                        title: Text('Aviso'),
+                        content: Text(
+                            'Não há farmácias disponíveis com este produto.'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
                     } else {
                       return AlertDialog(
                         title: Text('Escolha uma farmácia'),
