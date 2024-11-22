@@ -32,10 +32,10 @@ class ProductDetails extends State<ProductDetailsPage> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    "${widget.productModels.name!}",
+                    "${widget.productModels.name!.split(" ").first}",
                     style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -46,9 +46,33 @@ class ProductDetails extends State<ProductDetailsPage> {
           ),
           SizedBox(height: 8),
           Text(
-            "R\$${widget.productModels.price.toString()}",
-            style: TextStyle(fontSize: 20, color: Colors.grey),
+            "${widget.productModels.name!.split(" ").skip(1).join(" ")}",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w100),
           ),
+          if (widget.productModels.promotion != null &&
+              widget.productModels.promotion!)
+            Row(
+              children: [
+                Text(
+                  "R\$${(widget.productModels.price! * 100 / 25)}",
+                  style: TextStyle(
+                      fontSize: 20,
+                      decoration: TextDecoration.lineThrough,
+                      color: Colors.grey,
+                      decorationColor: Colors.grey),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  "R\$${widget.productModels.price.toString()}",
+                  style: TextStyle(fontSize: 20, color: Colors.green),
+                ),
+              ],
+            )
+          else
+            Text(
+              "R\$${widget.productModels.price.toString()}",
+              style: TextStyle(fontSize: 20, color: Colors.grey),
+            ),
           SizedBox(height: 16),
           widget.productModels.reviews != null &&
                   widget.productModels.reviews!.isNotEmpty
