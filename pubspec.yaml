@@ -22,6 +22,7 @@ dependencies:
   socket_io_client: ^3.0.0-beta.2
   flutter_background_service: ^5.0.10
   flutter_local_notifications: ^17.2.2
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
