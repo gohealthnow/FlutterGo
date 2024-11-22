@@ -17,6 +17,7 @@ class BannerComponent extends StatefulWidget {
 }
 
 class _BannerComponentState extends State<BannerComponent> {
+  
   final _repository = ProductRepository();
   final _viewModel = ProductsViewModel(ProductRepository());
 
@@ -84,7 +85,17 @@ class _BannerComponentState extends State<BannerComponent> {
                                         ),
                                       )
                                     : Text(
-                                        snapshot.data![index].name!,
+                                        (snapshot.data![index].name ?? '')
+                                            .split(' ')
+                                            .first
+                                            .substring(
+                                                0,
+                                                min(
+                                                    10,
+                                                    snapshot.data![index].name!
+                                                        .split(' ')
+                                                        .first
+                                                        .length)),
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 10,
