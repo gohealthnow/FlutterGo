@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/models/user_models.dart';
 import 'package:gohealth/api/repositories/product_repository.dart';
+import 'package:gohealth/api/repositories/user_repository.dart';
 import 'package:gohealth/api/services/shared_local_storage_service.dart';
 import 'package:gohealth/src/app/sessions/products/product_page.dart';
 import 'package:gohealth/src/components/header_bar.dart';
@@ -20,6 +21,8 @@ class ProductReserve extends StatefulWidget {
 class _ProductReserveState extends State<ProductReserve> {
   final _repository = ProductRepository();
   final _viewModel = ProductsViewModel(ProductRepository());
+
+  final _repositoryUser = UserRepository();
 
   Future<List<ProductModels>>? products;
 
@@ -79,9 +82,9 @@ class _ProductReserveState extends State<ProductReserve> {
                         onPressed: () {
                           setState(() {
                             snapshot.data!.removeAt(index);
-                            SharedLocalStorageService()
-                                .removeProductTocart(id: product.id!);
                           });
+                          _repositoryUser.unlinkProductinUser(
+                              product, widget.userModels.id!);
                         },
                       ),
                     ),

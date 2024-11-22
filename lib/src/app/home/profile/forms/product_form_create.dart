@@ -70,7 +70,6 @@ class _ProductFormState extends State<ProductForm> {
         });
       }
 
-      print(Imagem);
     } catch (e) {
       print(e);
     }
