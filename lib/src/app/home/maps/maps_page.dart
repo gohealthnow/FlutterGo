@@ -88,7 +88,6 @@ class _MapsPageState extends State<MapsPage> {
           height: 80,
           child: GestureDetector(
             onTap: () {
-              print('Marcador clicado');
             },
             child: Column(children: [
               Container(
