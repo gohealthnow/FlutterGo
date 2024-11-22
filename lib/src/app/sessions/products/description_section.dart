@@ -24,7 +24,7 @@ class DescriptionSectionState extends State<DescriptionWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Descrição',
+                      'Detalhe do Produto',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
