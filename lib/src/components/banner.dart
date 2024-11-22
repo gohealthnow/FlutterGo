@@ -17,7 +17,7 @@ class BannerComponent extends StatefulWidget {
 }
 
 class _BannerComponentState extends State<BannerComponent> {
-  
+
   final _repository = ProductRepository();
   final _viewModel = ProductsViewModel(ProductRepository());
 
@@ -85,30 +85,25 @@ class _BannerComponentState extends State<BannerComponent> {
                                         ),
                                       )
                                     : Text(
-                                        (snapshot.data![index].name ?? '')
-                                            .split(' ')
-                                            .first
-                                            .substring(
-                                                0,
-                                                min(
-                                                    10,
-                                                    snapshot.data![index].name!
-                                                        .split(' ')
-                                                        .first
-                                                        .length)),
+                                        snapshot.data![index].name!,
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 10,
                                         ),
                                       ),
                               ),
-                              Text(snapshot.data![index].name!),
+                              Text(snapshot.data![index].name!.split(" ")[0],
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  )),
                               const SizedBox(height: 5),
                               Text(
                                 "R\$" + snapshot.data![index].price!.toString(),
                                 style: const TextStyle(
+                                  color: Colors.grey,
                                   fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w100,
                                 ),
                               ),
                               const SizedBox(height: 5),
