@@ -12,9 +12,6 @@ class RegisterController {
   Future<UserModels> registerUser(
       String email, String name, String password) async {
     await _repository.registerUser(email, name, password);
-    if (kDebugMode) {
-      print(userModels.value.toJson());
-    }
     return userModels.value;
   }
 

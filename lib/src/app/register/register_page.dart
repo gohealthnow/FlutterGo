@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/layout/user_view_model.dart';
 import 'package:gohealth/api/models/user_models.dart';
@@ -209,9 +208,6 @@ class RegisterPageState extends State<RegisterPage> {
                 onPressed: () async {
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
-                    if (kDebugMode) {
-                      print("Formulário validado com sucesso");
-                    }
                     try {
                       final user = await _controller
                           .registerUser(
@@ -231,9 +227,6 @@ class RegisterPageState extends State<RegisterPage> {
                     });
                 
                       if (user.id != null) {
-                        if (kDebugMode) {
-                          print(user.toJson());
-                        }
                 
                         await Navigator.push(
                           context,
