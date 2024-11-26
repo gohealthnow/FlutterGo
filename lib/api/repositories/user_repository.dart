@@ -83,6 +83,18 @@ class UserRepository implements IUser {
     }
   }
 
+  Future<Map<String, String>> resetPassword(String email) async {
+    var response = await userNetworkClient.client.post('/user/forget', data: {
+      'email': email,
+    });
+
+    if (response.statusCode != 200) {
+      throw Exception('Erro ao resetar senha');
+    }
+
+    return response.data;
+  }
+
   void unlinkProductinUser(ProductModels product, int user) async {
     await userNetworkClient.client
         .post('/user/product/unlink', data: {'prodid': product.id, 'id': user});

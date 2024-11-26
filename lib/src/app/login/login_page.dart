@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gohealth/api/layout/user_view_model.dart';
 import 'package:gohealth/api/models/user_models.dart';
+import 'package:gohealth/src/app/auth/forget.dart';
 import 'package:gohealth/src/app/login/login_controller.dart';
 import 'package:gohealth/src/app/register/register_page.dart';
 import 'package:gohealth/api/repositories/user_repository.dart';
@@ -139,7 +140,12 @@ class LoginPageState extends State<LoginPage> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      // Implementar ação de recuperação de senha
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Forget(),
+                        ),
+                      );
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: const Color.fromRGBO(
