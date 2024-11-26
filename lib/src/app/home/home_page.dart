@@ -42,7 +42,7 @@ class HomepageState extends State<Homepage> {
                   ),
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: screenHeight * 0.2, // 20% da altura da tela
+                      maxHeight: screenHeight * 0.2,
                     ),
                     child: const PharmacyComponentState(),
                   ),
@@ -57,7 +57,7 @@ class HomepageState extends State<Homepage> {
                   ),
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: screenHeight * 0.2, // 60% da altura da tela
+                      maxHeight: screenHeight * 0.2,
                     ),
                     child: const BannerComponent(hasPromotion: false),
                   ),
@@ -70,15 +70,16 @@ class HomepageState extends State<Homepage> {
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
+                  // Exibição de catalogo de varios tipo de produtos
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: screenHeight * 0.2, // 60% da altura da tela
+                      maxHeight: screenHeight * 0.2,
                     ),
                     child: const BannerComponent(hasPromotion: true),
                   ),
                   ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxHeight: screenHeight * 0.2, // 20% da altura da tela
+                        maxHeight: screenHeight * 0.2,
                       ),
                       child: const Divider()),
                   Expert(),
