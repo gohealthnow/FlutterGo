@@ -37,13 +37,7 @@ class _ExpertState extends State<Expert> {
   @override
   Widget build(BuildContext context) {
     return (_expertDoctor.isConnected() == true)
-        ? Scaffold(
-      appBar: AppBar(
-        title: const Text('GoHealth - Especialista'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
+        ? Column(
           children: <Widget>[
             TextField(
               controller: _textController,
@@ -86,9 +80,7 @@ class _ExpertState extends State<Expert> {
                     )
                   : const Text('Enviar'),
             ),
-          ],
-        ),
-      ),
+            ],
           )
         : Center(
             child: Column(
