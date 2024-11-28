@@ -17,7 +17,7 @@ class HeaderBarState extends StatefulWidget implements PreferredSizeWidget {
 
 class _HeaderBarState extends State<HeaderBarState> {
   final _repository = SharedLocalStorageService();
-
+  final _searchController = TextEditingController();
   String? name;
   UserModels? profile;
   String? productLength;
@@ -38,144 +38,141 @@ class _HeaderBarState extends State<HeaderBarState> {
     });
   }
 
+  void _handleSearch(String value) {
+    if (value.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Digite algo para pesquisar'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    if (value.contains(RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]'))) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Caracteres especiais não são permitidos'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProductsListPage(
+          searchText: value,
+        ),
+      ),
+    );
+  }
+
+  void _navigateToCart() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CartPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Theme.of(context).primaryColor,
-      toolbarHeight: 85.0,
-      title: Row(
-        children: <Widget>[
-          Expanded(
-            child: SizedBox(
-              height: 43,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 0),
-                child: TextField(
-                  textAlignVertical: TextAlignVertical
-                      .center, // Alinha o texto verticalmente ao centro
-                  decoration: InputDecoration(
-                    hintText: 'Pesquise aqui',
-                    hintStyle: const TextStyle(
-                        color: Colors.white), // Define a cor do texto do hint
-                    prefixIcon: const Icon(Icons.search,
-                        color: Colors.white), // Define a cor do ícone
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                          color: Colors.white), // Define a cor da borda
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                          color: Colors
-                              .white), // Define a cor da borda quando habilitado
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                          color: Colors
-                              .white), // Define a cor da borda quando focado
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10.0), // Ajusta o preenchimento interno
-                  ),
-                  style: const TextStyle(
-                      color: Colors.white), // Define a cor do texto
-                  onSubmitted: (value) {
-                    if (value.isEmpty) {
-                      return;
-                    }
-
-                    if (value.length < 3) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Digite pelo menos 3 caracteres'),
-                          backgroundColor: Colors.red,
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                      return;
-                    }
-
-                    if (value.contains(
-                        RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]'))) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content:
-                              Text('Caracteres especiais não são permitidos'),
-                          backgroundColor: Colors.red,
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                      return;
-                    }
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => ProductsListPage(
-                          searchText: value,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
+      foregroundColor: Colors.white,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xFF00A3FF),
+              const Color(0xFF0072BB),
+            ],
           ),
-        ],
+        ),
+      ),
+      elevation: 4,
+      toolbarHeight: 85.0,
+      title: SizedBox(
+        height: 43,
+        child: TextField(
+          controller: _searchController,
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            hintText: 'Pesquisar produtos...',
+            prefixIcon: Icon(Icons.search, color: Colors.grey),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
+            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+          ),
+          onSubmitted: _handleSearch,
+        ),
       ),
       actions: [
-        IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => const CartPage()));
-            },
-            icon: const Icon(Icons.shopping_cart)),
         Stack(
-          children: <Widget>[
+          alignment: Alignment.center,
+          children: [
             IconButton(
-              icon: Icon(Icons.notifications),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        ProductReserve(userModels: profile!),
-                  ),
-                );
-              },
+              icon: Icon(
+                Icons.shopping_cart_outlined,
+                color: Colors.white,
+                size: 28,
+              ),
+              onPressed: _navigateToCart,
             ),
-            Positioned(
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.all(0.7),
-                decoration: (profile?.products == true)
-                    ? BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(6),
-                      )
-                    : null,
-                constraints: BoxConstraints(
-                  minWidth: 12,
-                  minHeight: 12,
-                ),
-                child: Text(
-                  productLength ?? '',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 8,
+            if (productLength != null && productLength!.isNotEmpty)
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
                   ),
-                  textAlign: TextAlign.center,
+                  child: Text(
+                    productLength!,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
-            ),
           ],
-        )
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.notifications_outlined,
+            color: Colors.white,
+            size: 28,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProductReserve(userModels: profile!)),
+            );
+          },
+        ),
+        const SizedBox(width: 8),
       ],
-      iconTheme: const IconThemeData(color: Colors.white),
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }

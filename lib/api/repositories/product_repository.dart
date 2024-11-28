@@ -82,7 +82,7 @@ class ProductRepository implements IProduct {
 
     List<ProductModels> model = [];
 
-    for (var item in response.data['products']) {
+    for (var item in response.data['product']) {
       model.add(ProductModels.fromJson(item));
     }
 

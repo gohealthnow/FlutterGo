@@ -48,33 +48,101 @@ class _DiagnoisState extends State<Diagnois> {
           : Column(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(top: 16),
-                  child: Image.asset(
-                    'assets/images/title_image.png',
-                    height: 100,
-                    width: 100,
+                    width: 300,
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        'assets/images/Final_Diagnosis.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                ),
-                Text(
-                  'Titulo: ${_diagnosticDataRequest!.title}',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                ),
-                Text(
-                  'Probabilidade: ${_diagnosticDataRequest!.score}',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.green,
-                  ),
-                ),
-                Text(
-                  'Descrição: ${_diagnosticDataRequest!.description}',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.blue[50]!, Colors.white],
+                      ),
+                    ),
+                    child: Card(
+                      elevation: 8,
+                      margin: EdgeInsets.all(16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: Colors.blue[100]!,
+                            width: 1,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.medical_services_outlined,
+                                    color: Colors.blue[700],
+                                    size: 28,
+                                  ),
+                                  SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      '${_diagnosticDataRequest!.title}',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blue[700],
+                                        letterSpacing: 0.5,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16),
+                              Container(
+                                padding: EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[50],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Diagnóstico Sugerido',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.blue[900],
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      '${_diagnosticDataRequest!.description}',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.grey[800],
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                   ),
                 ),
               ],

@@ -77,12 +77,6 @@ class HomepageState extends State<Homepage> {
                     ),
                     child: const BannerComponent(hasPromotion: true),
                   ),
-                  ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: screenHeight * 0.2,
-                      ),
-                      child: const Divider()),
-                  Expert(),
                 ],
               ),
             ),

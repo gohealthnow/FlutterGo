@@ -6,6 +6,7 @@ import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/home/maps/maps_page.dart';
 import 'package:gohealth/src/app/home/profile/profile_page.dart';
 import 'package:gohealth/src/app/splash_page.dart';
+import 'package:gohealth/src/components/checklist/Expert.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -84,9 +85,12 @@ class SideMenuState extends State<SideMenu> {
             },
           ),
           ListTile(
-            title: const Text('Configuração', style: textStyle),
+            title: const Text('Diagnostico Online', style: textStyle),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => Expert()));
             },
           ),
           ListTile(
