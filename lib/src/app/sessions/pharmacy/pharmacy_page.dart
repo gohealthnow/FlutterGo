@@ -130,8 +130,9 @@ class _PharmacyPageState extends State<PharmacyPage> {
                                   onTap: () => _launchMaps(widget.pharmacy.geolocation!.address ?? ""),
                                   child: Text(
                                     (widget.pharmacy.geolocation!.address ?? "").length > 19
-                                        ? "${widget.pharmacy.geolocation!.address!.substring(0, 19)}..."
+                                        ? "${widget.pharmacy.geolocation!.address!.substring(0, 12)}.."
                                         : widget.pharmacy.geolocation!.address ?? "",
+                                    maxLines: 1,
                                     style: TextStyle(
                                       color: Color(0xff1d1b20),
                                       fontSize: 12,
@@ -152,17 +153,6 @@ class _PharmacyPageState extends State<PharmacyPage> {
                     ),
                   ),
                   SizedBox(height: 16),
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Buscar produtos...',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -243,16 +233,15 @@ class _PharmacyPageState extends State<PharmacyPage> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
                                         ),
-                                        maxLines: 2,
+                                        maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       SizedBox(height: 8),
                                       Text(
                                         "R\$ ${products[index].price!.toStringAsFixed(2)}",
                                         style: TextStyle(
-                                          color: Colors.blue,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 18,
+                                          fontSize: 12,
                                         ),
                                       ),
                                     ],
@@ -268,12 +257,6 @@ class _PharmacyPageState extends State<PharmacyPage> {
                   ),
                 ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        label: Text('Carrinho'),
-        icon: Icon(Icons.shopping_cart),
-        backgroundColor: Colors.blue,
       ),
     );
   }
