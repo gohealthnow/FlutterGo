@@ -87,12 +87,12 @@ class _HeaderBarState extends State<HeaderBarState> {
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
+            colors: [
+              Color.fromARGB(255, 0, 91, 226),
+              Color.fromARGB(255, 0, 91, 226),
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              const Color(0xFF00A3FF),
-              const Color(0xFF0072BB),
-            ],
           ),
         ),
       ),
