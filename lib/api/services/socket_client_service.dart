@@ -79,7 +79,7 @@ void onStart(ServiceInstance service) async {
     await NotificationService.showNotification(
       0, // ID da notificação
       'Produto Disponível', // Título da notificação
-      '${product.name} disponível na farmácia ${pharmacy.name}', // Corpo da notificação
+      '${product.name!.split(" ")[0]} disponível na farmácia ${pharmacy.name}', // Corpo da notificação
     );
   });
 
