@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gohealth/src/components/checklist/Expert.dart';
 import 'package:gohealth/src/components/banner.dart';
 import 'package:gohealth/src/components/pharmacy.dart';
 import 'package:gohealth/src/components/side_menu.dart';
