@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gohealth/api/models/pharmacy_model.dart';
 import 'package:gohealth/api/repositories/pharmacy_repository.dart';
-import 'package:gohealth/api/repositories/product_repository.dart';
 import 'package:gohealth/src/app/home/profile/report/generated_report_page.dart';
 
 class ReportPage extends StatefulWidget {
@@ -12,9 +12,6 @@ class ReportPage extends StatefulWidget {
 
 // Page de relatórios de vendas e estoque de acordo com a farmacia
 class _ReportPageState extends State<ReportPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameControllerPharmacyInput = TextEditingController();
-  final _repository = ProductRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -23,55 +20,40 @@ class _ReportPageState extends State<ReportPage> {
         title: const Text('Relatórios'),
       ),
       body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
           child: Column(
             children: [
               const Text('Relatório de Vendas e Estoque',
                   style: TextStyle(fontSize: 20)),
-              TextFormField(
-                controller: _nameControllerPharmacyInput,
-                decoration:
-                    const InputDecoration(labelText: 'Nome da Farmácia'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Nome da farmácia é obrigatório';
-                  }
-                  return null;
-                },
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    PharmacyRepository()
-                        .getPharmacyByName(_nameControllerPharmacyInput.text)
-                        .then((pharmacyList) {
-                      if (pharmacyList.isNotEmpty) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GeneratedReportPage(
-                                pharmacy: pharmacyList.first),
-                          ),
+          const SizedBox(height: 20),
+          FutureBuilder(
+            future: PharmacyRepository().getAll(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                final pharmacies = snapshot.data as List<PharmacyModels>;
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: pharmacies.length,
+                  itemBuilder: (context, index) {
+                    final pharmacy = pharmacies[index];
+                    return ListTile(
+                      title: Text(pharmacy.name!),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                GeneratedReportPage(pharmacy: pharmacy)));
+                      },
                         );
-                      } else {
-                        // Handle the case where no pharmacy is found
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Nenhuma farmácia encontrada'),
-                            backgroundColor: Colors.redAccent,
-                          ),
-                        );
-                      }
-                    });
+                  },
+                );
                   }
-                },
-                child: const Text('Gerar Relatório'),
+            },
               ),
             ],
-          ),
-        ),
-      ),
+      )),
     );
   }
 }
