@@ -63,9 +63,7 @@ class _StockUpdateState extends State<StockUpdate> {
             items: pharmacies.map((PharmacyModels pharmacy) {
               return DropdownMenuItem<PharmacyModels>(
                 value: pharmacy,
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(pharmacy.image!),
-                ),
+                child: Text(pharmacy.name!),
               );
             }).toList(),
             onChanged: (PharmacyModels? newValue) {
