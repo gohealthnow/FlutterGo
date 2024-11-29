@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/repositories/product_repository.dart';
-import 'package:gohealth/src/app/home/home_page.dart';
 import 'package:gohealth/src/app/sessions/products/product_page.dart';
 import 'package:gohealth/src/components/header_bar.dart';
 import 'package:gohealth/src/components/side_menu.dart';
