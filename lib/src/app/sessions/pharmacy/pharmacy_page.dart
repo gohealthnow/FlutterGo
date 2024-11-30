@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gohealth/api/models/pharmacy_model.dart';
 import 'package:gohealth/api/models/product_models.dart';
 import 'package:gohealth/api/repositories/product_repository.dart';
+import 'package:gohealth/src/app/home/maps/maps_page.dart';
 import 'package:gohealth/src/app/sessions/pharmacy/pharmacy_controller.dart';
 import 'package:gohealth/src/app/sessions/products/product_page.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -40,6 +41,18 @@ class _PharmacyPageState extends State<PharmacyPage> {
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     }
+  }
+
+  // In pharmacy_page.dart - update the address click handler
+  void _handleAddressClick() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapsPage(
+          query: widget.pharmacy.geolocation!.address,
+        ),
+      ),
+    );
   }
 
   @override
@@ -127,7 +140,7 @@ class _PharmacyPageState extends State<PharmacyPage> {
                                 Icon(Icons.location_on, color: Colors.blue),
                                 SizedBox(width: 8),
                                 GestureDetector(
-                                  onTap: () => _launchMaps(widget.pharmacy.geolocation!.address ?? ""),
+                                  onTap: () => _handleAddressClick(),
                                   child: Text(
                                     (widget.pharmacy.geolocation!.address ?? "").length > 19
                                         ? "${widget.pharmacy.geolocation!.address!.substring(0, 12)}.."
