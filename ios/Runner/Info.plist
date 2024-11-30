@@ -59,5 +59,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	    <string>google.navigation</string>
+	    <string>comgooglemaps</string>
+	    <string>https</string>
+	</array>
 </dict>
 </plist>
