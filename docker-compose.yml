@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  flutter:
+    # Supondo que você tenha um Dockerfile configurado para o ambiente Flutter
+    build:
+      context: ./flutter-app
+    volumes:
+      - ./flutter-app:/app
+    # Se precisar de um emulador ou dispositivo, considere soluções externas
+
+  express-api:
+    build:
+      context: ./express-api
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: expressdb
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: expressdb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  fastapi:
+    build:
+      context: ./fastapi-app
+    command: >
+      sh -c "pip install -r requirements.txt &&
+             huggingface-cli login &&
+             uvicorn main:app --host 0.0.0.0 --port 8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./fastapi-app:/app
+
+volumes:
+  db-data:
