@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gohealth/api/repositories/pharmacy_repository.dart';
@@ -29,11 +30,11 @@ Future<void> initializeService() async {
       onBackground: onIosBackground,
     ),
     androidConfiguration: AndroidConfiguration(
-      autoStart: true,
-      onStart: onStart,
-      isForegroundMode: false,
-      autoStartOnBoot: true,
-    ),
+        autoStart: true,
+        onStart: onStart,
+        autoStartOnBoot: true,
+        isForegroundMode: false
+      ),
   );
 }
 
@@ -61,6 +62,7 @@ void onStart(ServiceInstance service) async {
     var user = await SharedLocalStorageService().getProfile();
 
     if (user != null && user.id != null) {
+      print('connect in socket');
       socket.emit("id", user.id);
     } else {
       return;
@@ -68,6 +70,7 @@ void onStart(ServiceInstance service) async {
   });
 
   socket.onDisconnect((_) {
+    print('disconnect in socket');
   });
 
   socket.on('productAvailable', (data) async {

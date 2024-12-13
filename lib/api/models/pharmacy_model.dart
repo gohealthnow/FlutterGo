@@ -1,4 +1,3 @@
-import 'package:gohealth/api/models/product_models.dart';
 
 class PharmacyModels {
   int? id;

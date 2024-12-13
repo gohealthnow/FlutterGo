@@ -121,4 +121,16 @@ class ProductRepository implements IProduct {
     return response.statusCode == 200 || response.statusCode == 201;
   }
 
+  Future<List<ProductModels>> getProductsByUser(int i) async {
+    var response = await repositoryHttpClient.client.get('/user/$i');
+
+    List<ProductModels> model = [];
+
+    for (var item in response.data['user']['Product']) {
+      print(item);
+      model.add(ProductModels.fromJson(item));
+    }
+
+    return model;
+  }
 }

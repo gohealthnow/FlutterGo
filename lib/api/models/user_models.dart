@@ -41,8 +41,8 @@ class UserModels {
       bio: json['bio'],
       role:
           Role.values.firstWhere((e) => e.toString() == 'Role.' + json['role']),
-      products: json['products'] != null
-          ? (json['products'] as List)
+      products: json['Product'] != null
+          ? (json['Product'] as List)
               .map((i) => ProductModels.fromJson(i))
               .toList()
           : null,
